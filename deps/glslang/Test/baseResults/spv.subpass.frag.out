@@ -10,10 +10,11 @@ Linked fragment stage:
 // Id's are bound by 70
 
                               Capability Shader
+                              Capability InputAttachment
                1:             ExtInstImport  "GLSL.std.450"
                               MemoryModel Logical GLSL450
                               EntryPoint Fragment 4  "main" 15 27 54
-                              ExecutionMode 4 OriginLowerLeft
+                              ExecutionMode 4 OriginUpperLeft
                               Source GLSL 400
                               Name 4  "main"
                               Name 11  "foo(iIPM1;"
@@ -29,11 +30,17 @@ Linked fragment stage:
                               Name 62  "usubMS"
                               Name 67  "param"
                               Decorate 30(sub) DescriptorSet 0
+                              Decorate 30(sub) InputAttachmentIndex 1
                               Decorate 35(subMS) DescriptorSet 0
+                              Decorate 35(subMS) InputAttachmentIndex 2
                               Decorate 42(isub) DescriptorSet 0
+                              Decorate 42(isub) InputAttachmentIndex 3
                               Decorate 46(isubMS) DescriptorSet 0
+                              Decorate 46(isubMS) InputAttachmentIndex 4
                               Decorate 57(usub) DescriptorSet 0
+                              Decorate 57(usub) InputAttachmentIndex 5
                               Decorate 62(usubMS) DescriptorSet 0
+                              Decorate 62(usubMS) InputAttachmentIndex 6
                2:             TypeVoid
                3:             TypeFunction 2
                6:             TypeInt 32 1

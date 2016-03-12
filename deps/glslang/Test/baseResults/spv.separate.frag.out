@@ -10,10 +10,15 @@ Linked fragment stage:
 // Id's are bound by 319
 
                               Capability Shader
+                              Capability SampledRect
+                              Capability Sampled1D
+                              Capability SampledCubeArray
+                              Capability SampledBuffer
+                              Capability ImageMSArray
                1:             ExtInstImport  "GLSL.std.450"
                               MemoryModel Logical GLSL450
                               EntryPoint Fragment 4  "main" 11 34
-                              ExecutionMode 4 OriginLowerLeft
+                              ExecutionMode 4 OriginUpperLeft
                               Source GLSL 400
                               Name 4  "main"
                               Name 6  "foo("

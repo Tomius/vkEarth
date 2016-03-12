@@ -10,10 +10,14 @@ Linked fragment stage:
 // Id's are bound by 360
 
                               Capability Shader
+                              Capability SampledRect
+                              Capability SparseResidency
+                              Capability MinLod
+                              Capability SampledCubeArray
                1:             ExtInstImport  "GLSL.std.450"
                               MemoryModel Logical GLSL450
                               EntryPoint Fragment 4  "main" 33 36 51 95 345
-                              ExecutionMode 4 OriginLowerLeft
+                              ExecutionMode 4 OriginUpperLeft
                               Source GLSL 450
                               SourceExtension  "GL_ARB_sparse_texture_clamp"
                               Name 4  "main"

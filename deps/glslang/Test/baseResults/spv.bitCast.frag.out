@@ -13,7 +13,7 @@ Linked fragment stage:
                1:             ExtInstImport  "GLSL.std.450"
                               MemoryModel Logical GLSL450
                               EntryPoint Fragment 4  "main" 14 26 37 48 89 98 107 116 122 130 139 148 154
-                              ExecutionMode 4 OriginLowerLeft
+                              ExecutionMode 4 OriginUpperLeft
                               Source GLSL 450
                               Name 4  "main"
                               Name 9  "idata"

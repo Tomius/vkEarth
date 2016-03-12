@@ -24,3 +24,16 @@ layout(binding = 0) uniform atomic_uint aui;   // ERROR, no atomics in Vulkan
 layout(shared) uniform ub1n { int a; } ub1i;   // ERROR, no shared
 layout(packed) uniform ub2n { int a; } ub2i;   // ERROR, no packed
 
+layout(constant_id=222) const int arraySize = 4;
+
+void foo()
+{
+    int a1[arraySize];
+    int a2[arraySize] = a1;  // ERROR, can't use in initializer
+
+    a1 = a2;      // ERROR, can't assign, even though the same type
+    if (a1 == a2) // ERROR, can't compare either
+        ++color;
+}
+
+layout(set = 1, push_constant) uniform badpc { int a; } badpcI;  // ERROR, no descriptor set with push_constant

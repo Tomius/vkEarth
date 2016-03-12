@@ -1,19 +1,19 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 2.7.  */
 
 /* Bison implementation for Yacc-like parsers in C
-
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
-
+   
+      Copyright (C) 1984, 1989-1990, 2000-2012 Free Software Foundation, Inc.
+   
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-
+   
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-
+   
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -26,7 +26,7 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-
+   
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.2"
+#define YYBISON_VERSION "2.7"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -62,7 +62,8 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 41 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:339  */
+/* Line 371 of yacc.c  */
+#line 41 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
 
 
 /* Based on:
@@ -87,13 +88,14 @@ Jutta Degener, 1995
 using namespace glslang;
 
 
-#line 91 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:339  */
+/* Line 371 of yacc.c  */
+#line 93 "C:/Projects/glslang/glslang/MachineIndependent/glslang_tab.cpp"
 
-# ifndef YY_NULLPTR
+# ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
-#   define YY_NULLPTR nullptr
+#   define YY_NULL nullptr
 #  else
-#   define YY_NULLPTR 0
+#   define YY_NULL 0
 #  endif
 # endif
 
@@ -107,9 +109,9 @@ using namespace glslang;
 
 /* In a future release of Bison, this section will be replaced
    by #include "glslang_tab.cpp.h".  */
-#ifndef YY_YY_HOME_ICECOOL_DOWNLOADS_VULKANSDK_1_0_3_1_SOURCE_GLSLANG_GLSLANG_MACHINEINDEPENDENT_GLSLANG_TAB_CPP_H_INCLUDED
-# define YY_YY_HOME_ICECOOL_DOWNLOADS_VULKANSDK_1_0_3_1_SOURCE_GLSLANG_GLSLANG_MACHINEINDEPENDENT_GLSLANG_TAB_CPP_H_INCLUDED
-/* Debug traces.  */
+#ifndef YY_YY_C_PROJECTS_GLSLANG_GLSLANG_MACHINEINDEPENDENT_GLSLANG_TAB_CPP_H_INCLUDED
+# define YY_YY_C_PROJECTS_GLSLANG_GLSLANG_MACHINEINDEPENDENT_GLSLANG_TAB_CPP_H_INCLUDED
+/* Enabling traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 1
 #endif
@@ -117,277 +119,278 @@ using namespace glslang;
 extern int yydebug;
 #endif
 
-/* Token type.  */
+/* Tokens.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-  enum yytokentype
-  {
-    ATTRIBUTE = 258,
-    VARYING = 259,
-    CONST = 260,
-    BOOL = 261,
-    FLOAT = 262,
-    DOUBLE = 263,
-    INT = 264,
-    UINT = 265,
-    BREAK = 266,
-    CONTINUE = 267,
-    DO = 268,
-    ELSE = 269,
-    FOR = 270,
-    IF = 271,
-    DISCARD = 272,
-    RETURN = 273,
-    SWITCH = 274,
-    CASE = 275,
-    DEFAULT = 276,
-    SUBROUTINE = 277,
-    BVEC2 = 278,
-    BVEC3 = 279,
-    BVEC4 = 280,
-    IVEC2 = 281,
-    IVEC3 = 282,
-    IVEC4 = 283,
-    UVEC2 = 284,
-    UVEC3 = 285,
-    UVEC4 = 286,
-    VEC2 = 287,
-    VEC3 = 288,
-    VEC4 = 289,
-    MAT2 = 290,
-    MAT3 = 291,
-    MAT4 = 292,
-    CENTROID = 293,
-    IN = 294,
-    OUT = 295,
-    INOUT = 296,
-    UNIFORM = 297,
-    PATCH = 298,
-    SAMPLE = 299,
-    BUFFER = 300,
-    SHARED = 301,
-    COHERENT = 302,
-    VOLATILE = 303,
-    RESTRICT = 304,
-    READONLY = 305,
-    WRITEONLY = 306,
-    DVEC2 = 307,
-    DVEC3 = 308,
-    DVEC4 = 309,
-    DMAT2 = 310,
-    DMAT3 = 311,
-    DMAT4 = 312,
-    NOPERSPECTIVE = 313,
-    FLAT = 314,
-    SMOOTH = 315,
-    LAYOUT = 316,
-    MAT2X2 = 317,
-    MAT2X3 = 318,
-    MAT2X4 = 319,
-    MAT3X2 = 320,
-    MAT3X3 = 321,
-    MAT3X4 = 322,
-    MAT4X2 = 323,
-    MAT4X3 = 324,
-    MAT4X4 = 325,
-    DMAT2X2 = 326,
-    DMAT2X3 = 327,
-    DMAT2X4 = 328,
-    DMAT3X2 = 329,
-    DMAT3X3 = 330,
-    DMAT3X4 = 331,
-    DMAT4X2 = 332,
-    DMAT4X3 = 333,
-    DMAT4X4 = 334,
-    ATOMIC_UINT = 335,
-    SAMPLER1D = 336,
-    SAMPLER2D = 337,
-    SAMPLER3D = 338,
-    SAMPLERCUBE = 339,
-    SAMPLER1DSHADOW = 340,
-    SAMPLER2DSHADOW = 341,
-    SAMPLERCUBESHADOW = 342,
-    SAMPLER1DARRAY = 343,
-    SAMPLER2DARRAY = 344,
-    SAMPLER1DARRAYSHADOW = 345,
-    SAMPLER2DARRAYSHADOW = 346,
-    ISAMPLER1D = 347,
-    ISAMPLER2D = 348,
-    ISAMPLER3D = 349,
-    ISAMPLERCUBE = 350,
-    ISAMPLER1DARRAY = 351,
-    ISAMPLER2DARRAY = 352,
-    USAMPLER1D = 353,
-    USAMPLER2D = 354,
-    USAMPLER3D = 355,
-    USAMPLERCUBE = 356,
-    USAMPLER1DARRAY = 357,
-    USAMPLER2DARRAY = 358,
-    SAMPLER2DRECT = 359,
-    SAMPLER2DRECTSHADOW = 360,
-    ISAMPLER2DRECT = 361,
-    USAMPLER2DRECT = 362,
-    SAMPLERBUFFER = 363,
-    ISAMPLERBUFFER = 364,
-    USAMPLERBUFFER = 365,
-    SAMPLERCUBEARRAY = 366,
-    SAMPLERCUBEARRAYSHADOW = 367,
-    ISAMPLERCUBEARRAY = 368,
-    USAMPLERCUBEARRAY = 369,
-    SAMPLER2DMS = 370,
-    ISAMPLER2DMS = 371,
-    USAMPLER2DMS = 372,
-    SAMPLER2DMSARRAY = 373,
-    ISAMPLER2DMSARRAY = 374,
-    USAMPLER2DMSARRAY = 375,
-    SAMPLEREXTERNALOES = 376,
-    SAMPLER = 377,
-    SAMPLERSHADOW = 378,
-    TEXTURE1D = 379,
-    TEXTURE2D = 380,
-    TEXTURE3D = 381,
-    TEXTURECUBE = 382,
-    TEXTURE1DARRAY = 383,
-    TEXTURE2DARRAY = 384,
-    ITEXTURE1D = 385,
-    ITEXTURE2D = 386,
-    ITEXTURE3D = 387,
-    ITEXTURECUBE = 388,
-    ITEXTURE1DARRAY = 389,
-    ITEXTURE2DARRAY = 390,
-    UTEXTURE1D = 391,
-    UTEXTURE2D = 392,
-    UTEXTURE3D = 393,
-    UTEXTURECUBE = 394,
-    UTEXTURE1DARRAY = 395,
-    UTEXTURE2DARRAY = 396,
-    TEXTURE2DRECT = 397,
-    ITEXTURE2DRECT = 398,
-    UTEXTURE2DRECT = 399,
-    TEXTUREBUFFER = 400,
-    ITEXTUREBUFFER = 401,
-    UTEXTUREBUFFER = 402,
-    TEXTURECUBEARRAY = 403,
-    ITEXTURECUBEARRAY = 404,
-    UTEXTURECUBEARRAY = 405,
-    TEXTURE2DMS = 406,
-    ITEXTURE2DMS = 407,
-    UTEXTURE2DMS = 408,
-    TEXTURE2DMSARRAY = 409,
-    ITEXTURE2DMSARRAY = 410,
-    UTEXTURE2DMSARRAY = 411,
-    SUBPASSINPUT = 412,
-    SUBPASSINPUTMS = 413,
-    ISUBPASSINPUT = 414,
-    ISUBPASSINPUTMS = 415,
-    USUBPASSINPUT = 416,
-    USUBPASSINPUTMS = 417,
-    IMAGE1D = 418,
-    IIMAGE1D = 419,
-    UIMAGE1D = 420,
-    IMAGE2D = 421,
-    IIMAGE2D = 422,
-    UIMAGE2D = 423,
-    IMAGE3D = 424,
-    IIMAGE3D = 425,
-    UIMAGE3D = 426,
-    IMAGE2DRECT = 427,
-    IIMAGE2DRECT = 428,
-    UIMAGE2DRECT = 429,
-    IMAGECUBE = 430,
-    IIMAGECUBE = 431,
-    UIMAGECUBE = 432,
-    IMAGEBUFFER = 433,
-    IIMAGEBUFFER = 434,
-    UIMAGEBUFFER = 435,
-    IMAGE1DARRAY = 436,
-    IIMAGE1DARRAY = 437,
-    UIMAGE1DARRAY = 438,
-    IMAGE2DARRAY = 439,
-    IIMAGE2DARRAY = 440,
-    UIMAGE2DARRAY = 441,
-    IMAGECUBEARRAY = 442,
-    IIMAGECUBEARRAY = 443,
-    UIMAGECUBEARRAY = 444,
-    IMAGE2DMS = 445,
-    IIMAGE2DMS = 446,
-    UIMAGE2DMS = 447,
-    IMAGE2DMSARRAY = 448,
-    IIMAGE2DMSARRAY = 449,
-    UIMAGE2DMSARRAY = 450,
-    STRUCT = 451,
-    VOID = 452,
-    WHILE = 453,
-    IDENTIFIER = 454,
-    TYPE_NAME = 455,
-    FLOATCONSTANT = 456,
-    DOUBLECONSTANT = 457,
-    INTCONSTANT = 458,
-    UINTCONSTANT = 459,
-    BOOLCONSTANT = 460,
-    LEFT_OP = 461,
-    RIGHT_OP = 462,
-    INC_OP = 463,
-    DEC_OP = 464,
-    LE_OP = 465,
-    GE_OP = 466,
-    EQ_OP = 467,
-    NE_OP = 468,
-    AND_OP = 469,
-    OR_OP = 470,
-    XOR_OP = 471,
-    MUL_ASSIGN = 472,
-    DIV_ASSIGN = 473,
-    ADD_ASSIGN = 474,
-    MOD_ASSIGN = 475,
-    LEFT_ASSIGN = 476,
-    RIGHT_ASSIGN = 477,
-    AND_ASSIGN = 478,
-    XOR_ASSIGN = 479,
-    OR_ASSIGN = 480,
-    SUB_ASSIGN = 481,
-    LEFT_PAREN = 482,
-    RIGHT_PAREN = 483,
-    LEFT_BRACKET = 484,
-    RIGHT_BRACKET = 485,
-    LEFT_BRACE = 486,
-    RIGHT_BRACE = 487,
-    DOT = 488,
-    COMMA = 489,
-    COLON = 490,
-    EQUAL = 491,
-    SEMICOLON = 492,
-    BANG = 493,
-    DASH = 494,
-    TILDE = 495,
-    PLUS = 496,
-    STAR = 497,
-    SLASH = 498,
-    PERCENT = 499,
-    LEFT_ANGLE = 500,
-    RIGHT_ANGLE = 501,
-    VERTICAL_BAR = 502,
-    CARET = 503,
-    AMPERSAND = 504,
-    QUESTION = 505,
-    INVARIANT = 506,
-    PRECISE = 507,
-    HIGH_PRECISION = 508,
-    MEDIUM_PRECISION = 509,
-    LOW_PRECISION = 510,
-    PRECISION = 511,
-    PACKED = 512,
-    RESOURCE = 513,
-    SUPERP = 514
-  };
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     ATTRIBUTE = 258,
+     VARYING = 259,
+     CONST = 260,
+     BOOL = 261,
+     FLOAT = 262,
+     DOUBLE = 263,
+     INT = 264,
+     UINT = 265,
+     BREAK = 266,
+     CONTINUE = 267,
+     DO = 268,
+     ELSE = 269,
+     FOR = 270,
+     IF = 271,
+     DISCARD = 272,
+     RETURN = 273,
+     SWITCH = 274,
+     CASE = 275,
+     DEFAULT = 276,
+     SUBROUTINE = 277,
+     BVEC2 = 278,
+     BVEC3 = 279,
+     BVEC4 = 280,
+     IVEC2 = 281,
+     IVEC3 = 282,
+     IVEC4 = 283,
+     UVEC2 = 284,
+     UVEC3 = 285,
+     UVEC4 = 286,
+     VEC2 = 287,
+     VEC3 = 288,
+     VEC4 = 289,
+     MAT2 = 290,
+     MAT3 = 291,
+     MAT4 = 292,
+     CENTROID = 293,
+     IN = 294,
+     OUT = 295,
+     INOUT = 296,
+     UNIFORM = 297,
+     PATCH = 298,
+     SAMPLE = 299,
+     BUFFER = 300,
+     SHARED = 301,
+     COHERENT = 302,
+     VOLATILE = 303,
+     RESTRICT = 304,
+     READONLY = 305,
+     WRITEONLY = 306,
+     DVEC2 = 307,
+     DVEC3 = 308,
+     DVEC4 = 309,
+     DMAT2 = 310,
+     DMAT3 = 311,
+     DMAT4 = 312,
+     NOPERSPECTIVE = 313,
+     FLAT = 314,
+     SMOOTH = 315,
+     LAYOUT = 316,
+     MAT2X2 = 317,
+     MAT2X3 = 318,
+     MAT2X4 = 319,
+     MAT3X2 = 320,
+     MAT3X3 = 321,
+     MAT3X4 = 322,
+     MAT4X2 = 323,
+     MAT4X3 = 324,
+     MAT4X4 = 325,
+     DMAT2X2 = 326,
+     DMAT2X3 = 327,
+     DMAT2X4 = 328,
+     DMAT3X2 = 329,
+     DMAT3X3 = 330,
+     DMAT3X4 = 331,
+     DMAT4X2 = 332,
+     DMAT4X3 = 333,
+     DMAT4X4 = 334,
+     ATOMIC_UINT = 335,
+     SAMPLER1D = 336,
+     SAMPLER2D = 337,
+     SAMPLER3D = 338,
+     SAMPLERCUBE = 339,
+     SAMPLER1DSHADOW = 340,
+     SAMPLER2DSHADOW = 341,
+     SAMPLERCUBESHADOW = 342,
+     SAMPLER1DARRAY = 343,
+     SAMPLER2DARRAY = 344,
+     SAMPLER1DARRAYSHADOW = 345,
+     SAMPLER2DARRAYSHADOW = 346,
+     ISAMPLER1D = 347,
+     ISAMPLER2D = 348,
+     ISAMPLER3D = 349,
+     ISAMPLERCUBE = 350,
+     ISAMPLER1DARRAY = 351,
+     ISAMPLER2DARRAY = 352,
+     USAMPLER1D = 353,
+     USAMPLER2D = 354,
+     USAMPLER3D = 355,
+     USAMPLERCUBE = 356,
+     USAMPLER1DARRAY = 357,
+     USAMPLER2DARRAY = 358,
+     SAMPLER2DRECT = 359,
+     SAMPLER2DRECTSHADOW = 360,
+     ISAMPLER2DRECT = 361,
+     USAMPLER2DRECT = 362,
+     SAMPLERBUFFER = 363,
+     ISAMPLERBUFFER = 364,
+     USAMPLERBUFFER = 365,
+     SAMPLERCUBEARRAY = 366,
+     SAMPLERCUBEARRAYSHADOW = 367,
+     ISAMPLERCUBEARRAY = 368,
+     USAMPLERCUBEARRAY = 369,
+     SAMPLER2DMS = 370,
+     ISAMPLER2DMS = 371,
+     USAMPLER2DMS = 372,
+     SAMPLER2DMSARRAY = 373,
+     ISAMPLER2DMSARRAY = 374,
+     USAMPLER2DMSARRAY = 375,
+     SAMPLEREXTERNALOES = 376,
+     SAMPLER = 377,
+     SAMPLERSHADOW = 378,
+     TEXTURE1D = 379,
+     TEXTURE2D = 380,
+     TEXTURE3D = 381,
+     TEXTURECUBE = 382,
+     TEXTURE1DARRAY = 383,
+     TEXTURE2DARRAY = 384,
+     ITEXTURE1D = 385,
+     ITEXTURE2D = 386,
+     ITEXTURE3D = 387,
+     ITEXTURECUBE = 388,
+     ITEXTURE1DARRAY = 389,
+     ITEXTURE2DARRAY = 390,
+     UTEXTURE1D = 391,
+     UTEXTURE2D = 392,
+     UTEXTURE3D = 393,
+     UTEXTURECUBE = 394,
+     UTEXTURE1DARRAY = 395,
+     UTEXTURE2DARRAY = 396,
+     TEXTURE2DRECT = 397,
+     ITEXTURE2DRECT = 398,
+     UTEXTURE2DRECT = 399,
+     TEXTUREBUFFER = 400,
+     ITEXTUREBUFFER = 401,
+     UTEXTUREBUFFER = 402,
+     TEXTURECUBEARRAY = 403,
+     ITEXTURECUBEARRAY = 404,
+     UTEXTURECUBEARRAY = 405,
+     TEXTURE2DMS = 406,
+     ITEXTURE2DMS = 407,
+     UTEXTURE2DMS = 408,
+     TEXTURE2DMSARRAY = 409,
+     ITEXTURE2DMSARRAY = 410,
+     UTEXTURE2DMSARRAY = 411,
+     SUBPASSINPUT = 412,
+     SUBPASSINPUTMS = 413,
+     ISUBPASSINPUT = 414,
+     ISUBPASSINPUTMS = 415,
+     USUBPASSINPUT = 416,
+     USUBPASSINPUTMS = 417,
+     IMAGE1D = 418,
+     IIMAGE1D = 419,
+     UIMAGE1D = 420,
+     IMAGE2D = 421,
+     IIMAGE2D = 422,
+     UIMAGE2D = 423,
+     IMAGE3D = 424,
+     IIMAGE3D = 425,
+     UIMAGE3D = 426,
+     IMAGE2DRECT = 427,
+     IIMAGE2DRECT = 428,
+     UIMAGE2DRECT = 429,
+     IMAGECUBE = 430,
+     IIMAGECUBE = 431,
+     UIMAGECUBE = 432,
+     IMAGEBUFFER = 433,
+     IIMAGEBUFFER = 434,
+     UIMAGEBUFFER = 435,
+     IMAGE1DARRAY = 436,
+     IIMAGE1DARRAY = 437,
+     UIMAGE1DARRAY = 438,
+     IMAGE2DARRAY = 439,
+     IIMAGE2DARRAY = 440,
+     UIMAGE2DARRAY = 441,
+     IMAGECUBEARRAY = 442,
+     IIMAGECUBEARRAY = 443,
+     UIMAGECUBEARRAY = 444,
+     IMAGE2DMS = 445,
+     IIMAGE2DMS = 446,
+     UIMAGE2DMS = 447,
+     IMAGE2DMSARRAY = 448,
+     IIMAGE2DMSARRAY = 449,
+     UIMAGE2DMSARRAY = 450,
+     STRUCT = 451,
+     VOID = 452,
+     WHILE = 453,
+     IDENTIFIER = 454,
+     TYPE_NAME = 455,
+     FLOATCONSTANT = 456,
+     DOUBLECONSTANT = 457,
+     INTCONSTANT = 458,
+     UINTCONSTANT = 459,
+     BOOLCONSTANT = 460,
+     LEFT_OP = 461,
+     RIGHT_OP = 462,
+     INC_OP = 463,
+     DEC_OP = 464,
+     LE_OP = 465,
+     GE_OP = 466,
+     EQ_OP = 467,
+     NE_OP = 468,
+     AND_OP = 469,
+     OR_OP = 470,
+     XOR_OP = 471,
+     MUL_ASSIGN = 472,
+     DIV_ASSIGN = 473,
+     ADD_ASSIGN = 474,
+     MOD_ASSIGN = 475,
+     LEFT_ASSIGN = 476,
+     RIGHT_ASSIGN = 477,
+     AND_ASSIGN = 478,
+     XOR_ASSIGN = 479,
+     OR_ASSIGN = 480,
+     SUB_ASSIGN = 481,
+     LEFT_PAREN = 482,
+     RIGHT_PAREN = 483,
+     LEFT_BRACKET = 484,
+     RIGHT_BRACKET = 485,
+     LEFT_BRACE = 486,
+     RIGHT_BRACE = 487,
+     DOT = 488,
+     COMMA = 489,
+     COLON = 490,
+     EQUAL = 491,
+     SEMICOLON = 492,
+     BANG = 493,
+     DASH = 494,
+     TILDE = 495,
+     PLUS = 496,
+     STAR = 497,
+     SLASH = 498,
+     PERCENT = 499,
+     LEFT_ANGLE = 500,
+     RIGHT_ANGLE = 501,
+     VERTICAL_BAR = 502,
+     CARET = 503,
+     AMPERSAND = 504,
+     QUESTION = 505,
+     INVARIANT = 506,
+     PRECISE = 507,
+     HIGH_PRECISION = 508,
+     MEDIUM_PRECISION = 509,
+     LOW_PRECISION = 510,
+     PRECISION = 511,
+     PACKED = 512,
+     RESOURCE = 513,
+     SUPERP = 514
+   };
 #endif
 
-/* Value type.  */
+
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE YYSTYPE;
-union YYSTYPE
+typedef union YYSTYPE
 {
-#line 66 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:355  */
+/* Line 387 of yacc.c  */
+#line 66 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
 
     struct {
         glslang::TSourceLoc loc;
@@ -419,20 +422,35 @@ union YYSTYPE
         };
     } interm;
 
-#line 423 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:355  */
-};
+
+/* Line 387 of yacc.c  */
+#line 428 "C:/Projects/glslang/glslang/MachineIndependent/glslang_tab.cpp"
+} YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
+# define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
 
-
+#ifdef YYPARSE_PARAM
+#if defined __STDC__ || defined __cplusplus
+int yyparse (void *YYPARSE_PARAM);
+#else
+int yyparse ();
+#endif
+#else /* ! YYPARSE_PARAM */
+#if defined __STDC__ || defined __cplusplus
 int yyparse (glslang::TParseContext* pParseContext);
+#else
+int yyparse ();
+#endif
+#endif /* ! YYPARSE_PARAM */
 
-#endif /* !YY_YY_HOME_ICECOOL_DOWNLOADS_VULKANSDK_1_0_3_1_SOURCE_GLSLANG_GLSLANG_MACHINEINDEPENDENT_GLSLANG_TAB_CPP_H_INCLUDED  */
+#endif /* !YY_YY_C_PROJECTS_GLSLANG_GLSLANG_MACHINEINDEPENDENT_GLSLANG_TAB_CPP_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
-#line 98 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:358  */
+/* Line 390 of yacc.c  */
+#line 98 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
 
 
 /* windows only pragma */
@@ -448,7 +466,8 @@ int yyparse (glslang::TParseContext* pParseContext);
 extern int yylex(YYSTYPE*, TParseContext&);
 
 
-#line 452 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:358  */
+/* Line 390 of yacc.c  */
+#line 471 "C:/Projects/glslang/glslang/MachineIndependent/glslang_tab.cpp"
 
 #ifdef short
 # undef short
@@ -462,8 +481,11 @@ typedef unsigned char yytype_uint8;
 
 #ifdef YYTYPE_INT8
 typedef YYTYPE_INT8 yytype_int8;
-#else
+#elif (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 typedef signed char yytype_int8;
+#else
+typedef short int yytype_int8;
 #endif
 
 #ifdef YYTYPE_UINT16
@@ -483,7 +505,8 @@ typedef short int yytype_int16;
 #  define YYSIZE_T __SIZE_TYPE__
 # elif defined size_t
 #  define YYSIZE_T size_t
-# elif ! defined YYSIZE_T
+# elif ! defined YYSIZE_T && (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 #  include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYSIZE_T size_t
 # else
@@ -505,33 +528,6 @@ typedef short int yytype_int16;
 # endif
 #endif
 
-#ifndef YY_ATTRIBUTE
-# if (defined __GNUC__                                               \
-      && (2 < __GNUC__ || (__GNUC__ == 2 && 96 <= __GNUC_MINOR__)))  \
-     || defined __SUNPRO_C && 0x5110 <= __SUNPRO_C
-#  define YY_ATTRIBUTE(Spec) __attribute__(Spec)
-# else
-#  define YY_ATTRIBUTE(Spec) /* empty */
-# endif
-#endif
-
-#ifndef YY_ATTRIBUTE_PURE
-# define YY_ATTRIBUTE_PURE   YY_ATTRIBUTE ((__pure__))
-#endif
-
-#ifndef YY_ATTRIBUTE_UNUSED
-# define YY_ATTRIBUTE_UNUSED YY_ATTRIBUTE ((__unused__))
-#endif
-
-#if !defined _Noreturn \
-     && (!defined __STDC_VERSION__ || __STDC_VERSION__ < 201112)
-# if defined _MSC_VER && 1200 <= _MSC_VER
-#  define _Noreturn __declspec (noreturn)
-# else
-#  define _Noreturn YY_ATTRIBUTE ((__noreturn__))
-# endif
-#endif
-
 /* Suppress unused-variable warnings by "using" E.  */
 #if ! defined lint || defined __GNUC__
 # define YYUSE(E) ((void) (E))
@@ -539,25 +535,23 @@ typedef short int yytype_int16;
 # define YYUSE(E) /* empty */
 #endif
 
-#if defined __GNUC__ && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
-/* Suppress an incorrect diagnostic about yylval being uninitialized.  */
-# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN \
-    _Pragma ("GCC diagnostic push") \
-    _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")\
-    _Pragma ("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
-# define YY_IGNORE_MAYBE_UNINITIALIZED_END \
-    _Pragma ("GCC diagnostic pop")
+/* Identity function, used to suppress warnings about constant conditions.  */
+#ifndef lint
+# define YYID(N) (N)
 #else
-# define YY_INITIAL_VALUE(Value) Value
+#if (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
+static int
+YYID (int yyi)
+#else
+static int
+YYID (yyi)
+    int yyi;
 #endif
-#ifndef YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-# define YY_IGNORE_MAYBE_UNINITIALIZED_END
+{
+  return yyi;
+}
 #endif
-#ifndef YY_INITIAL_VALUE
-# define YY_INITIAL_VALUE(Value) /* Nothing. */
-#endif
-
 
 #if ! defined yyoverflow || YYERROR_VERBOSE
 
@@ -576,7 +570,8 @@ typedef short int yytype_int16;
 #    define alloca _alloca
 #   else
 #    define YYSTACK_ALLOC alloca
-#    if ! defined _ALLOCA_H && ! defined EXIT_SUCCESS
+#    if ! defined _ALLOCA_H && ! defined EXIT_SUCCESS && (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 #     include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
       /* Use EXIT_SUCCESS as a witness for stdlib.h.  */
 #     ifndef EXIT_SUCCESS
@@ -588,8 +583,8 @@ typedef short int yytype_int16;
 # endif
 
 # ifdef YYSTACK_ALLOC
-   /* Pacify GCC's 'empty if-body' warning.  */
-#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (0)
+   /* Pacify GCC's `empty if-body' warning.  */
+#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (YYID (0))
 #  ifndef YYSTACK_ALLOC_MAXIMUM
     /* The OS might guarantee only one guard page at the bottom of the stack,
        and a page size can be as small as 4096 bytes.  So we cannot safely
@@ -605,7 +600,7 @@ typedef short int yytype_int16;
 #  endif
 #  if (defined __cplusplus && ! defined EXIT_SUCCESS \
        && ! ((defined YYMALLOC || defined malloc) \
-             && (defined YYFREE || defined free)))
+	     && (defined YYFREE || defined free)))
 #   include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
 #   ifndef EXIT_SUCCESS
 #    define EXIT_SUCCESS 0
@@ -613,13 +608,15 @@ typedef short int yytype_int16;
 #  endif
 #  ifndef YYMALLOC
 #   define YYMALLOC malloc
-#   if ! defined malloc && ! defined EXIT_SUCCESS
+#   if ! defined malloc && ! defined EXIT_SUCCESS && (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 void *malloc (YYSIZE_T); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 #  ifndef YYFREE
 #   define YYFREE free
-#   if ! defined free && ! defined EXIT_SUCCESS
+#   if ! defined free && ! defined EXIT_SUCCESS && (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 void free (void *); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
@@ -629,7 +626,7 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-         || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+	 || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -654,16 +651,16 @@ union yyalloc
    elements in the stack, and YYPTR gives the new location of the
    stack.  Advance YYPTR to a properly aligned location for the next
    stack.  */
-# define YYSTACK_RELOCATE(Stack_alloc, Stack)                           \
-    do                                                                  \
-      {                                                                 \
-        YYSIZE_T yynewbytes;                                            \
-        YYCOPY (&yyptr->Stack_alloc, Stack, yysize);                    \
-        Stack = &yyptr->Stack_alloc;                                    \
-        yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
-        yyptr += yynewbytes / sizeof (*yyptr);                          \
-      }                                                                 \
-    while (0)
+# define YYSTACK_RELOCATE(Stack_alloc, Stack)				\
+    do									\
+      {									\
+	YYSIZE_T yynewbytes;						\
+	YYCOPY (&yyptr->Stack_alloc, Stack, yysize);			\
+	Stack = &yyptr->Stack_alloc;					\
+	yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
+	yyptr += yynewbytes / sizeof (*yyptr);				\
+      }									\
+    while (YYID (0))
 
 #endif
 
@@ -682,7 +679,7 @@ union yyalloc
           for (yyi = 0; yyi < (Count); yyi++)   \
             (Dst)[yyi] = (Src)[yyi];            \
         }                                       \
-      while (0)
+      while (YYID (0))
 #  endif
 # endif
 #endif /* !YYCOPY_NEEDED */
@@ -698,19 +695,17 @@ union yyalloc
 #define YYNNTS  100
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  411
-/* YYNSTATES -- Number of states.  */
+/* YYNRULES -- Number of states.  */
 #define YYNSTATES  543
 
-/* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
-   by yylex, with out-of-bounds checking.  */
+/* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   514
 
-#define YYTRANSLATE(YYX)                                                \
+#define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
 
-/* YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to TOKEN-NUM
-   as returned by yylex, without out-of-bounds checking.  */
+/* YYTRANSLATE[YYLEX] -- Bison symbol number corresponding to YYLEX.  */
 static const yytype_uint16 yytranslate[] =
 {
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -768,7 +763,165 @@ static const yytype_uint16 yytranslate[] =
 };
 
 #if YYDEBUG
-  /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
+/* YYPRHS[YYN] -- Index of the first RHS symbol of rule number YYN in
+   YYRHS.  */
+static const yytype_uint16 yyprhs[] =
+{
+       0,     0,     3,     5,     7,     9,    11,    13,    15,    17,
+      21,    23,    28,    30,    34,    37,    40,    42,    44,    46,
+      49,    52,    55,    57,    60,    64,    67,    69,    71,    73,
+      76,    79,    82,    84,    86,    88,    90,    92,    96,   100,
+     104,   106,   110,   114,   116,   120,   124,   126,   130,   134,
+     138,   142,   144,   148,   152,   154,   158,   160,   164,   166,
+     170,   172,   176,   178,   182,   184,   188,   190,   191,   198,
+     200,   204,   206,   208,   210,   212,   214,   216,   218,   220,
+     222,   224,   226,   228,   232,   234,   237,   240,   245,   248,
+     252,   257,   260,   264,   269,   270,   277,   280,   284,   287,
+     289,   291,   294,   298,   302,   305,   309,   312,   314,   317,
+     319,   321,   323,   327,   332,   339,   345,   347,   350,   354,
+     360,   365,   367,   370,   372,   374,   376,   378,   383,   385,
+     389,   391,   395,   397,   399,   401,   404,   406,   408,   410,
+     412,   414,   416,   418,   420,   422,   424,   426,   428,   430,
+     432,   434,   436,   438,   440,   442,   444,   446,   448,   450,
+     452,   457,   459,   463,   465,   468,   471,   475,   479,   484,
+     486,   488,   490,   492,   494,   496,   498,   500,   502,   504,
+     506,   508,   510,   512,   514,   516,   518,   520,   522,   524,
+     526,   528,   530,   532,   534,   536,   538,   540,   542,   544,
+     546,   548,   550,   552,   554,   556,   558,   560,   562,   564,
+     566,   568,   570,   572,   574,   576,   578,   580,   582,   584,
+     586,   588,   590,   592,   594,   596,   598,   600,   602,   604,
+     606,   608,   610,   612,   614,   616,   618,   620,   622,   624,
+     626,   628,   630,   632,   634,   636,   638,   640,   642,   644,
+     646,   648,   650,   652,   654,   656,   658,   660,   662,   664,
+     666,   668,   670,   672,   674,   676,   678,   680,   682,   684,
+     686,   688,   690,   692,   694,   696,   698,   700,   702,   704,
+     706,   708,   710,   712,   714,   716,   718,   720,   722,   724,
+     726,   728,   730,   732,   734,   736,   738,   740,   742,   744,
+     746,   748,   750,   752,   754,   756,   758,   760,   762,   764,
+     766,   768,   770,   772,   774,   776,   778,   780,   782,   784,
+     786,   788,   790,   792,   794,   796,   798,   800,   802,   804,
+     806,   808,   810,   812,   814,   816,   817,   824,   825,   831,
+     833,   836,   840,   845,   847,   851,   853,   856,   858,   862,
+     867,   869,   873,   875,   877,   879,   881,   883,   885,   887,
+     889,   891,   893,   896,   897,   898,   904,   906,   908,   909,
+     912,   913,   916,   919,   923,   925,   928,   930,   933,   939,
+     943,   945,   947,   952,   953,   962,   963,   965,   969,   972,
+     973,   980,   981,   990,   991,   999,  1001,  1003,  1005,  1006,
+    1009,  1013,  1016,  1019,  1022,  1026,  1029,  1031,  1034,  1036,
+    1038,  1039
+};
+
+/* YYRHS -- A `-1'-separated list of the rules' RHS.  */
+static const yytype_int16 yyrhs[] =
+{
+     356,     0,    -1,   199,    -1,   261,    -1,   203,    -1,   204,
+      -1,   201,    -1,   202,    -1,   205,    -1,   227,   289,   228,
+      -1,   262,    -1,   263,   229,   264,   230,    -1,   265,    -1,
+     263,   233,   199,    -1,   263,   208,    -1,   263,   209,    -1,
+     289,    -1,   266,    -1,   267,    -1,   269,   228,    -1,   268,
+     228,    -1,   270,   197,    -1,   270,    -1,   270,   287,    -1,
+     269,   234,   287,    -1,   271,   227,    -1,   315,    -1,   263,
+      -1,   263,    -1,   208,   272,    -1,   209,   272,    -1,   273,
+     272,    -1,   241,    -1,   239,    -1,   238,    -1,   240,    -1,
+     272,    -1,   274,   242,   272,    -1,   274,   243,   272,    -1,
+     274,   244,   272,    -1,   274,    -1,   275,   241,   274,    -1,
+     275,   239,   274,    -1,   275,    -1,   276,   206,   275,    -1,
+     276,   207,   275,    -1,   276,    -1,   277,   245,   276,    -1,
+     277,   246,   276,    -1,   277,   210,   276,    -1,   277,   211,
+     276,    -1,   277,    -1,   278,   212,   277,    -1,   278,   213,
+     277,    -1,   278,    -1,   279,   249,   278,    -1,   279,    -1,
+     280,   248,   279,    -1,   280,    -1,   281,   247,   280,    -1,
+     281,    -1,   282,   214,   281,    -1,   282,    -1,   283,   216,
+     282,    -1,   283,    -1,   284,   215,   283,    -1,   284,    -1,
+      -1,   284,   250,   286,   289,   235,   287,    -1,   285,    -1,
+     272,   288,   287,    -1,   236,    -1,   217,    -1,   218,    -1,
+     220,    -1,   219,    -1,   226,    -1,   221,    -1,   222,    -1,
+     223,    -1,   224,    -1,   225,    -1,   287,    -1,   289,   234,
+     287,    -1,   285,    -1,   295,   237,    -1,   302,   237,    -1,
+     256,   318,   315,   237,    -1,   292,   237,    -1,   292,   199,
+     237,    -1,   292,   199,   316,   237,    -1,   311,   237,    -1,
+     311,   199,   237,    -1,   311,   199,   294,   237,    -1,    -1,
+     311,   199,   231,   293,   322,   232,    -1,   234,   199,    -1,
+     294,   234,   199,    -1,   296,   228,    -1,   298,    -1,   297,
+      -1,   298,   300,    -1,   297,   234,   300,    -1,   304,   199,
+     227,    -1,   315,   199,    -1,   315,   199,   316,    -1,   311,
+     299,    -1,   299,    -1,   311,   301,    -1,   301,    -1,   315,
+      -1,   303,    -1,   302,   234,   199,    -1,   302,   234,   199,
+     316,    -1,   302,   234,   199,   316,   236,   326,    -1,   302,
+     234,   199,   236,   326,    -1,   304,    -1,   304,   199,    -1,
+     304,   199,   316,    -1,   304,   199,   316,   236,   326,    -1,
+     304,   199,   236,   326,    -1,   315,    -1,   311,   315,    -1,
+     251,    -1,    60,    -1,    59,    -1,    58,    -1,    61,   227,
+     308,   228,    -1,   309,    -1,   308,   234,   309,    -1,   199,
+      -1,   199,   236,   290,    -1,    46,    -1,   252,    -1,   312,
+      -1,   311,   312,    -1,   313,    -1,   307,    -1,   318,    -1,
+     306,    -1,   305,    -1,   310,    -1,     5,    -1,     3,    -1,
+       4,    -1,    41,    -1,    39,    -1,    40,    -1,    38,    -1,
+      43,    -1,    44,    -1,    42,    -1,    45,    -1,    46,    -1,
+      47,    -1,    48,    -1,    49,    -1,    50,    -1,    51,    -1,
+      22,    -1,    22,   227,   314,   228,    -1,   200,    -1,   314,
+     234,   200,    -1,   317,    -1,   317,   316,    -1,   229,   230,
+      -1,   229,   285,   230,    -1,   316,   229,   230,    -1,   316,
+     229,   285,   230,    -1,   197,    -1,     7,    -1,     8,    -1,
+       9,    -1,    10,    -1,     6,    -1,    32,    -1,    33,    -1,
+      34,    -1,    52,    -1,    53,    -1,    54,    -1,    23,    -1,
+      24,    -1,    25,    -1,    26,    -1,    27,    -1,    28,    -1,
+      29,    -1,    30,    -1,    31,    -1,    35,    -1,    36,    -1,
+      37,    -1,    62,    -1,    63,    -1,    64,    -1,    65,    -1,
+      66,    -1,    67,    -1,    68,    -1,    69,    -1,    70,    -1,
+      55,    -1,    56,    -1,    57,    -1,    71,    -1,    72,    -1,
+      73,    -1,    74,    -1,    75,    -1,    76,    -1,    77,    -1,
+      78,    -1,    79,    -1,    80,    -1,    81,    -1,    82,    -1,
+      83,    -1,    84,    -1,    85,    -1,    86,    -1,    87,    -1,
+      88,    -1,    89,    -1,    90,    -1,    91,    -1,   111,    -1,
+     112,    -1,    92,    -1,    93,    -1,    94,    -1,    95,    -1,
+      96,    -1,    97,    -1,   113,    -1,    98,    -1,    99,    -1,
+     100,    -1,   101,    -1,   102,    -1,   103,    -1,   114,    -1,
+     104,    -1,   105,    -1,   106,    -1,   107,    -1,   108,    -1,
+     109,    -1,   110,    -1,   115,    -1,   116,    -1,   117,    -1,
+     118,    -1,   119,    -1,   120,    -1,   122,    -1,   123,    -1,
+     124,    -1,   125,    -1,   126,    -1,   127,    -1,   128,    -1,
+     129,    -1,   148,    -1,   130,    -1,   131,    -1,   132,    -1,
+     133,    -1,   134,    -1,   135,    -1,   149,    -1,   136,    -1,
+     137,    -1,   138,    -1,   139,    -1,   140,    -1,   141,    -1,
+     150,    -1,   142,    -1,   143,    -1,   144,    -1,   145,    -1,
+     146,    -1,   147,    -1,   151,    -1,   152,    -1,   153,    -1,
+     154,    -1,   155,    -1,   156,    -1,   163,    -1,   164,    -1,
+     165,    -1,   166,    -1,   167,    -1,   168,    -1,   169,    -1,
+     170,    -1,   171,    -1,   172,    -1,   173,    -1,   174,    -1,
+     175,    -1,   176,    -1,   177,    -1,   178,    -1,   179,    -1,
+     180,    -1,   181,    -1,   182,    -1,   183,    -1,   184,    -1,
+     185,    -1,   186,    -1,   187,    -1,   188,    -1,   189,    -1,
+     190,    -1,   191,    -1,   192,    -1,   193,    -1,   194,    -1,
+     195,    -1,   121,    -1,   157,    -1,   158,    -1,   159,    -1,
+     160,    -1,   161,    -1,   162,    -1,   319,    -1,   200,    -1,
+     253,    -1,   254,    -1,   255,    -1,    -1,   196,   199,   231,
+     320,   322,   232,    -1,    -1,   196,   231,   321,   322,   232,
+      -1,   323,    -1,   322,   323,    -1,   315,   324,   237,    -1,
+     311,   315,   324,   237,    -1,   325,    -1,   324,   234,   325,
+      -1,   199,    -1,   199,   316,    -1,   287,    -1,   231,   327,
+     232,    -1,   231,   327,   234,   232,    -1,   326,    -1,   327,
+     234,   326,    -1,   291,    -1,   331,    -1,   330,    -1,   328,
+      -1,   340,    -1,   341,    -1,   344,    -1,   347,    -1,   348,
+      -1,   355,    -1,   231,   232,    -1,    -1,    -1,   231,   332,
+     339,   333,   232,    -1,   338,    -1,   330,    -1,    -1,   336,
+     331,    -1,    -1,   337,   330,    -1,   231,   232,    -1,   231,
+     339,   232,    -1,   329,    -1,   339,   329,    -1,   237,    -1,
+     289,   237,    -1,    16,   227,   289,   228,   342,    -1,   335,
+      14,   335,    -1,   335,    -1,   289,    -1,   304,   199,   236,
+     326,    -1,    -1,    19,   227,   289,   228,   345,   231,   346,
+     232,    -1,    -1,   339,    -1,    20,   289,   235,    -1,    21,
+     235,    -1,    -1,   198,   227,   349,   343,   228,   334,    -1,
+      -1,    13,   350,   329,   198,   227,   289,   228,   237,    -1,
+      -1,    15,   227,   351,   352,   354,   228,   334,    -1,   340,
+      -1,   328,    -1,   343,    -1,    -1,   353,   237,    -1,   353,
+     237,   289,    -1,    12,   237,    -1,    11,   237,    -1,    18,
+     237,    -1,    18,   289,   237,    -1,    17,   237,    -1,   357,
+      -1,   356,   357,    -1,   358,    -1,   291,    -1,    -1,   295,
+     359,   338,    -1
+};
+
+/* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
        0,   244,   244,   250,   253,   256,   260,   263,   267,   270,
@@ -776,43 +929,43 @@ static const yytype_uint16 yyrline[] =
      327,   334,   337,   343,   350,   360,   368,   373,   403,   409,
      413,   417,   437,   438,   439,   440,   446,   447,   452,   457,
      466,   467,   472,   480,   481,   487,   496,   497,   502,   507,
-     512,   520,   521,   528,   538,   539,   548,   549,   558,   559,
-     568,   569,   577,   578,   586,   587,   595,   596,   596,   614,
-     615,   629,   633,   637,   641,   646,   650,   654,   658,   662,
-     666,   670,   677,   680,   690,   697,   702,   707,   715,   719,
-     723,   727,   732,   737,   746,   746,   757,   761,   768,   775,
-     778,   785,   793,   813,   831,   846,   869,   880,   890,   900,
-     910,   919,   922,   926,   930,   935,   943,   948,   953,   958,
-     963,   972,   983,  1010,  1019,  1026,  1033,  1043,  1049,  1052,
-    1059,  1063,  1067,  1075,  1081,  1084,  1095,  1098,  1101,  1104,
-    1108,  1112,  1119,  1123,  1135,  1149,  1154,  1160,  1166,  1173,
-    1179,  1184,  1189,  1194,  1201,  1205,  1209,  1213,  1217,  1221,
-    1227,  1239,  1242,  1247,  1251,  1260,  1265,  1273,  1277,  1287,
-    1291,  1295,  1300,  1304,  1309,  1313,  1318,  1323,  1328,  1334,
-    1340,  1346,  1351,  1356,  1361,  1366,  1371,  1376,  1382,  1388,
-    1394,  1399,  1404,  1409,  1414,  1419,  1424,  1429,  1434,  1439,
-    1444,  1449,  1454,  1460,  1466,  1472,  1478,  1484,  1490,  1496,
-    1502,  1508,  1514,  1520,  1526,  1531,  1536,  1541,  1546,  1551,
-    1556,  1561,  1566,  1571,  1576,  1581,  1586,  1591,  1596,  1601,
-    1606,  1611,  1616,  1621,  1626,  1631,  1636,  1641,  1646,  1651,
-    1656,  1661,  1666,  1671,  1676,  1681,  1686,  1691,  1696,  1701,
-    1706,  1711,  1716,  1721,  1726,  1731,  1736,  1741,  1746,  1751,
-    1756,  1761,  1766,  1771,  1776,  1781,  1786,  1791,  1796,  1801,
-    1806,  1811,  1816,  1821,  1826,  1831,  1836,  1841,  1846,  1851,
-    1856,  1861,  1866,  1871,  1876,  1881,  1886,  1891,  1896,  1901,
-    1906,  1911,  1916,  1921,  1926,  1931,  1936,  1941,  1946,  1951,
-    1956,  1961,  1966,  1971,  1976,  1981,  1986,  1991,  1996,  2001,
-    2006,  2011,  2016,  2021,  2026,  2031,  2036,  2041,  2046,  2051,
-    2056,  2061,  2066,  2071,  2077,  2083,  2089,  2095,  2101,  2107,
-    2113,  2118,  2134,  2140,  2146,  2155,  2155,  2166,  2166,  2176,
-    2179,  2192,  2210,  2234,  2238,  2244,  2249,  2260,  2263,  2269,
-    2278,  2281,  2287,  2291,  2292,  2298,  2299,  2300,  2301,  2302,
-    2303,  2304,  2308,  2309,  2313,  2309,  2325,  2326,  2330,  2330,
-    2337,  2337,  2351,  2354,  2362,  2370,  2381,  2382,  2386,  2393,
-    2397,  2405,  2409,  2422,  2422,  2442,  2445,  2451,  2463,  2475,
-    2475,  2490,  2490,  2506,  2506,  2527,  2530,  2536,  2539,  2545,
-    2549,  2556,  2561,  2566,  2573,  2591,  2600,  2604,  2611,  2614,
-    2620,  2620
+     512,   520,   521,   529,   540,   541,   550,   551,   560,   561,
+     570,   571,   579,   580,   588,   589,   597,   598,   598,   616,
+     617,   632,   636,   640,   644,   649,   653,   657,   661,   665,
+     669,   673,   680,   683,   693,   700,   705,   710,   718,   722,
+     726,   730,   735,   740,   749,   749,   760,   764,   771,   778,
+     781,   788,   796,   816,   834,   849,   872,   883,   893,   903,
+     913,   922,   925,   929,   933,   938,   946,   951,   956,   961,
+     966,   975,   986,  1013,  1022,  1029,  1036,  1046,  1052,  1055,
+    1062,  1066,  1070,  1078,  1084,  1087,  1098,  1101,  1104,  1107,
+    1111,  1115,  1122,  1126,  1138,  1152,  1157,  1163,  1169,  1176,
+    1182,  1187,  1192,  1197,  1204,  1208,  1212,  1216,  1220,  1224,
+    1230,  1242,  1245,  1250,  1254,  1263,  1268,  1276,  1280,  1290,
+    1294,  1298,  1303,  1307,  1312,  1316,  1321,  1326,  1331,  1337,
+    1343,  1349,  1354,  1359,  1364,  1369,  1374,  1379,  1385,  1391,
+    1397,  1402,  1407,  1412,  1417,  1422,  1427,  1432,  1437,  1442,
+    1447,  1452,  1457,  1463,  1469,  1475,  1481,  1487,  1493,  1499,
+    1505,  1511,  1517,  1523,  1529,  1534,  1539,  1544,  1549,  1554,
+    1559,  1564,  1569,  1574,  1579,  1584,  1589,  1594,  1599,  1604,
+    1609,  1614,  1619,  1624,  1629,  1634,  1639,  1644,  1649,  1654,
+    1659,  1664,  1669,  1674,  1679,  1684,  1689,  1694,  1699,  1704,
+    1709,  1714,  1719,  1724,  1729,  1734,  1739,  1744,  1749,  1754,
+    1759,  1764,  1769,  1774,  1779,  1784,  1789,  1794,  1799,  1804,
+    1809,  1814,  1819,  1824,  1829,  1834,  1839,  1844,  1849,  1854,
+    1859,  1864,  1869,  1874,  1879,  1884,  1889,  1894,  1899,  1904,
+    1909,  1914,  1919,  1924,  1929,  1934,  1939,  1944,  1949,  1954,
+    1959,  1964,  1969,  1974,  1979,  1984,  1989,  1994,  1999,  2004,
+    2009,  2014,  2019,  2024,  2029,  2034,  2039,  2044,  2049,  2054,
+    2059,  2064,  2069,  2074,  2080,  2086,  2092,  2098,  2104,  2110,
+    2116,  2121,  2137,  2143,  2149,  2158,  2158,  2169,  2169,  2179,
+    2182,  2195,  2213,  2237,  2241,  2247,  2252,  2263,  2266,  2272,
+    2281,  2284,  2290,  2294,  2295,  2301,  2302,  2303,  2304,  2305,
+    2306,  2307,  2311,  2312,  2316,  2312,  2328,  2329,  2333,  2333,
+    2340,  2340,  2354,  2357,  2365,  2373,  2384,  2385,  2389,  2396,
+    2400,  2408,  2412,  2425,  2425,  2445,  2448,  2454,  2466,  2478,
+    2478,  2493,  2493,  2509,  2509,  2530,  2533,  2539,  2542,  2548,
+    2552,  2559,  2564,  2569,  2576,  2594,  2603,  2607,  2614,  2617,
+    2623,  2623
 };
 #endif
 
@@ -906,13 +1059,13 @@ static const char *const yytname[] =
   "switch_statement_list", "case_label", "iteration_statement", "$@10",
   "$@11", "$@12", "for_init_statement", "conditionopt",
   "for_rest_statement", "jump_statement", "translation_unit",
-  "external_declaration", "function_definition", "$@13", YY_NULLPTR
+  "external_declaration", "function_definition", "$@13", YY_NULL
 };
 #endif
 
 # ifdef YYPRINT
-/* YYTOKNUM[NUM] -- (External) token number corresponding to the
-   (internal) symbol number NUM (which must be that of a token).  */
+/* YYTOKNUM[YYLEX-NUM] -- Internal token number corresponding to
+   token YYLEX-NUM.  */
 static const yytype_uint16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
@@ -944,80 +1097,103 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -466
-
-#define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-466)))
-
-#define YYTABLE_NINF -369
-
-#define yytable_value_is_error(Yytable_value) \
-  0
-
-  /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
-     STATE-NUM.  */
-static const yytype_int16 yypact[] =
+/* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
+static const yytype_uint16 yyr1[] =
 {
-    2275,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -205,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -192,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -179,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -122,  -466,  -186,  -198,  -173,  -175,  3686,  -194,  -466,
-    -121,  -466,  -466,  -466,  -466,  2749,  -466,  -466,  -466,  -141,
-    -466,  -466,   527,  -466,  -466,   -97,   -37,  -117,  -466,  5459,
-    -200,  -466,  -466,  -112,  -466,  3686,  -466,  -466,  -466,  3686,
-     -71,   -44,  -466,  -191,  -142,  -466,  -466,  -466,  4117,   -82,
-    -466,  -466,  -466,  -202,  -466,   -76,  -137,  -466,  -466,  3686,
-     -73,  -466,  -196,   781,  -466,  -466,  -466,  -466,  -141,  -155,
-    -466,  4342,  -152,  -466,   -38,  -466,  -177,  -466,  -466,  -466,
-    -466,  -466,  -466,  5015,  5015,  5015,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -185,  -466,  -466,  -466,   -63,  -128,  5237,
-     -61,  -466,  5015,  -106,  -100,  -157,  -183,   -78,   -81,   -79,
-     -80,   -43,   -46,  -197,   -58,  -466,  4568,  -466,   -27,  5015,
-    -466,   -37,  3686,  3686,   -25,  2984,  -466,  -466,  -466,   -62,
-     -57,  -466,   -51,   -48,   -56,  4793,   -45,  5015,   -50,   -40,
-     -41,  -466,  -466,  -153,  -466,  -466,  -147,  -466,  -198,   -39,
-    -466,  -466,  -466,  -466,  1035,  -466,  -466,  -466,  -466,  -466,
-    -466,   -82,  4342,  -143,  4342,  -466,  -466,  4342,  3686,  -466,
-     -15,  -466,  -466,  -466,  -126,  -466,  -466,  5015,   -10,  -466,
-    -466,  5015,   -36,  -466,  -466,  -466,  5015,  5015,  5015,  5015,
-    5015,  5015,  5015,  5015,  5015,  5015,  5015,  5015,  5015,  5015,
-    5015,  5015,  5015,  5015,  5015,  -466,  -466,  -466,   -35,  -466,
-    -466,  -466,  -466,  3218,   -25,  -141,  -127,  -466,  -466,  -466,
-    -466,  -466,  1289,  -466,  5015,  -466,  -466,  -108,  5015,   -91,
-    -466,  -466,  -466,  1289,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  5015,  5015,  -466,  -466,  -466,
-    -466,  4342,  -466,   -92,  -466,  3452,  -466,  -466,   -34,   -31,
-    -466,  -466,  -466,  -466,  -466,  -106,  -106,  -100,  -100,  -157,
-    -157,  -157,  -157,  -183,  -183,   -78,   -81,   -79,   -80,   -43,
-     -46,  5015,  -466,  -466,  -107,   -82,   -25,  -466,    -4,  2036,
-    -123,  -466,  -116,  -466,  2510,  1289,  -466,  -466,  -466,  -466,
-    3890,  -466,  -466,   -83,  -466,  -466,   -29,  -466,  -466,  2510,
-     -32,  -466,   -31,     1,  3686,   -24,   -26,  -466,  -466,  5015,
-    5015,  -466,   -30,   -19,   196,   -20,  1797,  -466,   -18,   -22,
-    1543,  -466,  -466,  -113,  5015,  1543,   -32,  -466,  -466,  1289,
-    4342,  -466,  -466,  -466,   -17,   -31,  -466,  -466,  1289,   -14,
-    -466,  -466,  -466
+       0,   260,   261,   262,   262,   262,   262,   262,   262,   262,
+     263,   263,   263,   263,   263,   263,   264,   265,   266,   267,
+     267,   268,   268,   269,   269,   270,   271,   271,   272,   272,
+     272,   272,   273,   273,   273,   273,   274,   274,   274,   274,
+     275,   275,   275,   276,   276,   276,   277,   277,   277,   277,
+     277,   278,   278,   278,   279,   279,   280,   280,   281,   281,
+     282,   282,   283,   283,   284,   284,   285,   286,   285,   287,
+     287,   288,   288,   288,   288,   288,   288,   288,   288,   288,
+     288,   288,   289,   289,   290,   291,   291,   291,   291,   291,
+     291,   291,   291,   291,   293,   292,   294,   294,   295,   296,
+     296,   297,   297,   298,   299,   299,   300,   300,   300,   300,
+     301,   302,   302,   302,   302,   302,   303,   303,   303,   303,
+     303,   304,   304,   305,   306,   306,   306,   307,   308,   308,
+     309,   309,   309,   310,   311,   311,   312,   312,   312,   312,
+     312,   312,   313,   313,   313,   313,   313,   313,   313,   313,
+     313,   313,   313,   313,   313,   313,   313,   313,   313,   313,
+     313,   314,   314,   315,   315,   316,   316,   316,   316,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
+     317,   317,   318,   318,   318,   320,   319,   321,   319,   322,
+     322,   323,   323,   324,   324,   325,   325,   326,   326,   326,
+     327,   327,   328,   329,   329,   330,   330,   330,   330,   330,
+     330,   330,   331,   332,   333,   331,   334,   334,   336,   335,
+     337,   335,   338,   338,   339,   339,   340,   340,   341,   342,
+     342,   343,   343,   345,   344,   346,   346,   347,   347,   349,
+     348,   350,   348,   351,   348,   352,   352,   353,   353,   354,
+     354,   355,   355,   355,   355,   355,   356,   356,   357,   357,
+     359,   358
 };
 
-  /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
-     Performed when YYTABLE does not specify something else to do.  Zero
-     means the default is an error.  */
+/* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
+static const yytype_uint8 yyr2[] =
+{
+       0,     2,     1,     1,     1,     1,     1,     1,     1,     3,
+       1,     4,     1,     3,     2,     2,     1,     1,     1,     2,
+       2,     2,     1,     2,     3,     2,     1,     1,     1,     2,
+       2,     2,     1,     1,     1,     1,     1,     3,     3,     3,
+       1,     3,     3,     1,     3,     3,     1,     3,     3,     3,
+       3,     1,     3,     3,     1,     3,     1,     3,     1,     3,
+       1,     3,     1,     3,     1,     3,     1,     0,     6,     1,
+       3,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     3,     1,     2,     2,     4,     2,     3,
+       4,     2,     3,     4,     0,     6,     2,     3,     2,     1,
+       1,     2,     3,     3,     2,     3,     2,     1,     2,     1,
+       1,     1,     3,     4,     6,     5,     1,     2,     3,     5,
+       4,     1,     2,     1,     1,     1,     1,     4,     1,     3,
+       1,     3,     1,     1,     1,     2,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       4,     1,     3,     1,     2,     2,     3,     3,     4,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     0,     6,     0,     5,     1,
+       2,     3,     4,     1,     3,     1,     2,     1,     3,     4,
+       1,     3,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     2,     0,     0,     5,     1,     1,     0,     2,
+       0,     2,     2,     3,     1,     2,     1,     2,     5,     3,
+       1,     1,     4,     0,     8,     0,     1,     3,     2,     0,
+       6,     0,     8,     0,     7,     1,     1,     1,     0,     2,
+       3,     2,     2,     2,     3,     2,     1,     2,     1,     1,
+       0,     3
+};
+
+/* YYDEFACT[STATE-NAME] -- Default reduction number in state STATE-NUM.
+   Performed when YYTABLE doesn't specify something else to do.  Zero
+   means the default is an error.  */
 static const yytype_uint16 yydefact[] =
 {
        0,   143,   144,   142,   174,   170,   171,   172,   173,   159,
@@ -1077,22 +1253,7 @@ static const yytype_uint16 yydefact[] =
      382,   392,   384
 };
 
-  /* YYPGOTO[NTERM-NUM].  */
-static const yytype_int16 yypgoto[] =
-{
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,   -52,  -466,  -226,  -225,  -261,  -229,  -166,  -164,
-    -167,  -165,  -162,  -161,  -466,  -227,  -466,  -258,  -466,  -269,
-    -466,     4,  -466,  -466,  -466,     5,  -466,  -466,  -466,    -1,
-       9,     6,  -466,  -466,  -465,  -466,  -466,  -466,  -466,   -75,
-    -466,  -195,  -204,  -466,  -466,     0,  -212,  -466,    46,  -466,
-    -466,  -466,  -297,  -299,  -160,  -238,  -340,  -466,  -240,  -337,
-    -440,  -273,  -466,  -466,  -282,  -281,  -466,  -466,    23,  -413,
-    -232,  -466,  -466,  -251,  -466,  -466,  -466,  -466,  -466,  -466,
-    -466,  -466,  -466,  -466,  -466,  -466,  -466,    40,  -466,  -466
-};
-
-  /* YYDEFGOTO[NTERM-NUM].  */
+/* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int16 yydefgoto[] =
 {
       -1,   281,   282,   283,   448,   284,   285,   286,   287,   288,
@@ -1107,9 +1268,87 @@ static const yytype_int16 yydefgoto[] =
      412,   479,   499,   512,   513,   350,   212,   213,   214,   223
 };
 
-  /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
-     positive, shift that token.  If negative, reduce the rule whose
-     number is the opposite.  If YYTABLE_NINF, syntax error.  */
+/* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
+   STATE-NUM.  */
+#define YYPACT_NINF -466
+static const yytype_int16 yypact[] =
+{
+    2275,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -205,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -192,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -179,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -122,  -466,  -186,  -198,  -173,  -175,  3686,  -194,  -466,
+    -121,  -466,  -466,  -466,  -466,  2749,  -466,  -466,  -466,  -141,
+    -466,  -466,   527,  -466,  -466,   -97,   -37,  -117,  -466,  5459,
+    -200,  -466,  -466,  -112,  -466,  3686,  -466,  -466,  -466,  3686,
+     -71,   -44,  -466,  -191,  -142,  -466,  -466,  -466,  4117,   -82,
+    -466,  -466,  -466,  -202,  -466,   -76,  -137,  -466,  -466,  3686,
+     -73,  -466,  -196,   781,  -466,  -466,  -466,  -466,  -141,  -155,
+    -466,  4342,  -152,  -466,   -38,  -466,  -177,  -466,  -466,  -466,
+    -466,  -466,  -466,  5015,  5015,  5015,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -185,  -466,  -466,  -466,   -63,  -128,  5237,
+     -61,  -466,  5015,  -106,  -100,  -157,  -183,   -78,   -81,   -79,
+     -80,   -43,   -46,  -197,   -58,  -466,  4568,  -466,   -27,  5015,
+    -466,   -37,  3686,  3686,   -25,  2984,  -466,  -466,  -466,   -62,
+     -57,  -466,   -51,   -48,   -56,  4793,   -45,  5015,   -50,   -40,
+     -41,  -466,  -466,  -153,  -466,  -466,  -147,  -466,  -198,   -39,
+    -466,  -466,  -466,  -466,  1035,  -466,  -466,  -466,  -466,  -466,
+    -466,   -82,  4342,  -143,  4342,  -466,  -466,  4342,  3686,  -466,
+     -15,  -466,  -466,  -466,  -126,  -466,  -466,  5015,   -10,  -466,
+    -466,  5015,   -36,  -466,  -466,  -466,  5015,  5015,  5015,  5015,
+    5015,  5015,  5015,  5015,  5015,  5015,  5015,  5015,  5015,  5015,
+    5015,  5015,  5015,  5015,  5015,  -466,  -466,  -466,   -35,  -466,
+    -466,  -466,  -466,  3218,   -25,  -141,  -127,  -466,  -466,  -466,
+    -466,  -466,  1289,  -466,  5015,  -466,  -466,  -108,  5015,   -91,
+    -466,  -466,  -466,  1289,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  5015,  5015,  -466,  -466,  -466,
+    -466,  4342,  -466,   -92,  -466,  3452,  -466,  -466,   -34,   -31,
+    -466,  -466,  -466,  -466,  -466,  -106,  -106,  -100,  -100,  -157,
+    -157,  -157,  -157,  -183,  -183,   -78,   -81,   -79,   -80,   -43,
+     -46,  5015,  -466,  -466,  -107,   -82,   -25,  -466,    -4,  2036,
+    -123,  -466,  -116,  -466,  2510,  1289,  -466,  -466,  -466,  -466,
+    3890,  -466,  -466,   -83,  -466,  -466,   -29,  -466,  -466,  2510,
+     -32,  -466,   -31,     1,  3686,   -24,   -26,  -466,  -466,  5015,
+    5015,  -466,   -30,   -19,   196,   -20,  1797,  -466,   -18,   -22,
+    1543,  -466,  -466,  -113,  5015,  1543,   -32,  -466,  -466,  1289,
+    4342,  -466,  -466,  -466,   -17,   -31,  -466,  -466,  1289,   -14,
+    -466,  -466,  -466
+};
+
+/* YYPGOTO[NTERM-NUM].  */
+static const yytype_int16 yypgoto[] =
+{
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,   -52,  -466,  -226,  -225,  -261,  -229,  -166,  -164,
+    -167,  -165,  -162,  -161,  -466,  -227,  -466,  -258,  -466,  -269,
+    -466,     4,  -466,  -466,  -466,     5,  -466,  -466,  -466,    -1,
+       9,     6,  -466,  -466,  -465,  -466,  -466,  -466,  -466,   -75,
+    -466,  -195,  -204,  -466,  -466,     0,  -212,  -466,    46,  -466,
+    -466,  -466,  -297,  -299,  -160,  -238,  -340,  -466,  -240,  -337,
+    -440,  -273,  -466,  -466,  -282,  -281,  -466,  -466,    23,  -413,
+    -232,  -466,  -466,  -251,  -466,  -466,  -466,  -466,  -466,  -466,
+    -466,  -466,  -466,  -466,  -466,  -466,  -466,    40,  -466,  -466
+};
+
+/* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
+   positive, shift that token.  If negative, reduce the rule which
+   number is the opposite.  If YYTABLE_NINF, syntax error.  */
+#define YYTABLE_NINF -369
 static const yytype_int16 yytable[] =
 {
      208,   236,   229,   355,   192,   194,   364,   439,   252,   244,
@@ -1679,6 +1918,12 @@ static const yytype_int16 yytable[] =
      168,   169,   170,   171,   172,   173,   174,   175,   176,   177,
      178,   179,   180,   181,   182,   183,   184,     0,     0,   185
 };
+
+#define yypact_value_is_default(Yystate) \
+  (!!((Yystate) == (-466)))
+
+#define yytable_value_is_error(Yytable_value) \
+  YYID (0)
 
 static const yytype_int16 yycheck[] =
 {
@@ -2250,8 +2495,8 @@ static const yytype_int16 yycheck[] =
      191,   192,   193,   194,   195,   196,   197,    -1,    -1,   200
 };
 
-  /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
-     symbol of state STATE-NUM.  */
+/* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
+   symbol of state STATE-NUM.  */
 static const yytype_uint16 yystos[] =
 {
        0,     3,     4,     5,     6,     7,     8,     9,    10,    22,
@@ -2311,110 +2556,30 @@ static const yytype_uint16 yystos[] =
      326,   237,   232
 };
 
-  /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
-static const yytype_uint16 yyr1[] =
-{
-       0,   260,   261,   262,   262,   262,   262,   262,   262,   262,
-     263,   263,   263,   263,   263,   263,   264,   265,   266,   267,
-     267,   268,   268,   269,   269,   270,   271,   271,   272,   272,
-     272,   272,   273,   273,   273,   273,   274,   274,   274,   274,
-     275,   275,   275,   276,   276,   276,   277,   277,   277,   277,
-     277,   278,   278,   278,   279,   279,   280,   280,   281,   281,
-     282,   282,   283,   283,   284,   284,   285,   286,   285,   287,
-     287,   288,   288,   288,   288,   288,   288,   288,   288,   288,
-     288,   288,   289,   289,   290,   291,   291,   291,   291,   291,
-     291,   291,   291,   291,   293,   292,   294,   294,   295,   296,
-     296,   297,   297,   298,   299,   299,   300,   300,   300,   300,
-     301,   302,   302,   302,   302,   302,   303,   303,   303,   303,
-     303,   304,   304,   305,   306,   306,   306,   307,   308,   308,
-     309,   309,   309,   310,   311,   311,   312,   312,   312,   312,
-     312,   312,   313,   313,   313,   313,   313,   313,   313,   313,
-     313,   313,   313,   313,   313,   313,   313,   313,   313,   313,
-     313,   314,   314,   315,   315,   316,   316,   316,   316,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   317,   317,   317,   317,   317,   317,   317,   317,
-     317,   317,   318,   318,   318,   320,   319,   321,   319,   322,
-     322,   323,   323,   324,   324,   325,   325,   326,   326,   326,
-     327,   327,   328,   329,   329,   330,   330,   330,   330,   330,
-     330,   330,   331,   332,   333,   331,   334,   334,   336,   335,
-     337,   335,   338,   338,   339,   339,   340,   340,   341,   342,
-     342,   343,   343,   345,   344,   346,   346,   347,   347,   349,
-     348,   350,   348,   351,   348,   352,   352,   353,   353,   354,
-     354,   355,   355,   355,   355,   355,   356,   356,   357,   357,
-     359,   358
-};
+#define yyerrok		(yyerrstatus = 0)
+#define yyclearin	(yychar = YYEMPTY)
+#define YYEMPTY		(-2)
+#define YYEOF		0
 
-  /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
-static const yytype_uint8 yyr2[] =
-{
-       0,     2,     1,     1,     1,     1,     1,     1,     1,     3,
-       1,     4,     1,     3,     2,     2,     1,     1,     1,     2,
-       2,     2,     1,     2,     3,     2,     1,     1,     1,     2,
-       2,     2,     1,     1,     1,     1,     1,     3,     3,     3,
-       1,     3,     3,     1,     3,     3,     1,     3,     3,     3,
-       3,     1,     3,     3,     1,     3,     1,     3,     1,     3,
-       1,     3,     1,     3,     1,     3,     1,     0,     6,     1,
-       3,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     3,     1,     2,     2,     4,     2,     3,
-       4,     2,     3,     4,     0,     6,     2,     3,     2,     1,
-       1,     2,     3,     3,     2,     3,     2,     1,     2,     1,
-       1,     1,     3,     4,     6,     5,     1,     2,     3,     5,
-       4,     1,     2,     1,     1,     1,     1,     4,     1,     3,
-       1,     3,     1,     1,     1,     2,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       4,     1,     3,     1,     2,     2,     3,     3,     4,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     0,     6,     0,     5,     1,
-       2,     3,     4,     1,     3,     1,     2,     1,     3,     4,
-       1,     3,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     2,     0,     0,     5,     1,     1,     0,     2,
-       0,     2,     2,     3,     1,     2,     1,     2,     5,     3,
-       1,     1,     4,     0,     8,     0,     1,     3,     2,     0,
-       6,     0,     8,     0,     7,     1,     1,     1,     0,     2,
-       3,     2,     2,     2,     3,     2,     1,     2,     1,     1,
-       0,     3
-};
+#define YYACCEPT	goto yyacceptlab
+#define YYABORT		goto yyabortlab
+#define YYERROR		goto yyerrorlab
 
 
-#define yyerrok         (yyerrstatus = 0)
-#define yyclearin       (yychar = YYEMPTY)
-#define YYEMPTY         (-2)
-#define YYEOF           0
+/* Like YYERROR except do call yyerror.  This remains here temporarily
+   to ease the transition to the new meaning of YYERROR, for GCC.
+   Once GCC version 2 has supplanted version 1, this can go.  However,
+   YYFAIL appears to be in use.  Nevertheless, it is formally deprecated
+   in Bison 2.4.2's NEWS entry, where a plan to phase it out is
+   discussed.  */
 
-#define YYACCEPT        goto yyacceptlab
-#define YYABORT         goto yyabortlab
-#define YYERROR         goto yyerrorlab
-
+#define YYFAIL		goto yyerrlab
+#if defined YYFAIL
+  /* This is here to suppress warnings from the GCC cpp's
+     -Wunused-macros.  Normally we don't worry about that warning, but
+     some users do, and we want to make it easy for users to remove
+     YYFAIL uses, which will produce warnings from Bison 2.5.  */
+#endif
 
 #define YYRECOVERING()  (!!yyerrstatus)
 
@@ -2431,15 +2596,27 @@ do                                                              \
   else                                                          \
     {                                                           \
       yyerror (pParseContext, YY_("syntax error: cannot back up")); \
-      YYERROR;                                                  \
-    }                                                           \
-while (0)
+      YYERROR;							\
+    }								\
+while (YYID (0))
 
 /* Error token number */
-#define YYTERROR        1
-#define YYERRCODE       256
+#define YYTERROR	1
+#define YYERRCODE	256
 
 
+/* This macro is provided for backward compatibility. */
+#ifndef YY_LOCATION_PRINT
+# define YY_LOCATION_PRINT(File, Loc) ((void) 0)
+#endif
+
+
+/* YYLEX -- calling `yylex' with the right arguments.  */
+#ifdef YYLEX_PARAM
+# define YYLEX yylex (&yylval, YYLEX_PARAM)
+#else
+# define YYLEX yylex (&yylval, parseContext)
+#endif
 
 /* Enable debugging if requested.  */
 #if YYDEBUG
@@ -2449,47 +2626,58 @@ while (0)
 #  define YYFPRINTF fprintf
 # endif
 
-# define YYDPRINTF(Args)                        \
-do {                                            \
-  if (yydebug)                                  \
-    YYFPRINTF Args;                             \
-} while (0)
+# define YYDPRINTF(Args)			\
+do {						\
+  if (yydebug)					\
+    YYFPRINTF Args;				\
+} while (YYID (0))
 
-/* This macro is provided for backward compatibility. */
-#ifndef YY_LOCATION_PRINT
-# define YY_LOCATION_PRINT(File, Loc) ((void) 0)
-#endif
-
-
-# define YY_SYMBOL_PRINT(Title, Type, Value, Location)                    \
-do {                                                                      \
-  if (yydebug)                                                            \
-    {                                                                     \
-      YYFPRINTF (stderr, "%s ", Title);                                   \
-      yy_symbol_print (stderr,                                            \
-                  Type, Value, pParseContext); \
-      YYFPRINTF (stderr, "\n");                                           \
-    }                                                                     \
-} while (0)
+# define YY_SYMBOL_PRINT(Title, Type, Value, Location)			  \
+do {									  \
+  if (yydebug)								  \
+    {									  \
+      YYFPRINTF (stderr, "%s ", Title);					  \
+      yy_symbol_print (stderr,						  \
+		  Type, Value, pParseContext); \
+      YYFPRINTF (stderr, "\n");						  \
+    }									  \
+} while (YYID (0))
 
 
-/*----------------------------------------.
-| Print this symbol's value on YYOUTPUT.  |
-`----------------------------------------*/
+/*--------------------------------.
+| Print this symbol on YYOUTPUT.  |
+`--------------------------------*/
 
+/*ARGSUSED*/
+#if (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 static void
 yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, glslang::TParseContext* pParseContext)
+#else
+static void
+yy_symbol_value_print (yyoutput, yytype, yyvaluep, pParseContext)
+    FILE *yyoutput;
+    int yytype;
+    YYSTYPE const * const yyvaluep;
+    glslang::TParseContext* pParseContext;
+#endif
 {
   FILE *yyo = yyoutput;
   YYUSE (yyo);
-  YYUSE (pParseContext);
   if (!yyvaluep)
     return;
+  YYUSE (pParseContext);
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
     YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
+# else
+  YYUSE (yyoutput);
 # endif
-  YYUSE (yytype);
+  switch (yytype)
+    {
+      default:
+        break;
+    }
 }
 
 
@@ -2497,11 +2685,23 @@ yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvalue
 | Print this symbol on YYOUTPUT.  |
 `--------------------------------*/
 
+#if (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 static void
 yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, glslang::TParseContext* pParseContext)
+#else
+static void
+yy_symbol_print (yyoutput, yytype, yyvaluep, pParseContext)
+    FILE *yyoutput;
+    int yytype;
+    YYSTYPE const * const yyvaluep;
+    glslang::TParseContext* pParseContext;
+#endif
 {
-  YYFPRINTF (yyoutput, "%s %s (",
-             yytype < YYNTOKENS ? "token" : "nterm", yytname[yytype]);
+  if (yytype < YYNTOKENS)
+    YYFPRINTF (yyoutput, "token %s (", yytname[yytype]);
+  else
+    YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
   yy_symbol_value_print (yyoutput, yytype, yyvaluep, pParseContext);
   YYFPRINTF (yyoutput, ")");
@@ -2512,8 +2712,16 @@ yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, gls
 | TOP (included).                                                   |
 `------------------------------------------------------------------*/
 
+#if (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 static void
 yy_stack_print (yytype_int16 *yybottom, yytype_int16 *yytop)
+#else
+static void
+yy_stack_print (yybottom, yytop)
+    yytype_int16 *yybottom;
+    yytype_int16 *yytop;
+#endif
 {
   YYFPRINTF (stderr, "Stack now");
   for (; yybottom <= yytop; yybottom++)
@@ -2524,42 +2732,50 @@ yy_stack_print (yytype_int16 *yybottom, yytype_int16 *yytop)
   YYFPRINTF (stderr, "\n");
 }
 
-# define YY_STACK_PRINT(Bottom, Top)                            \
-do {                                                            \
-  if (yydebug)                                                  \
-    yy_stack_print ((Bottom), (Top));                           \
-} while (0)
+# define YY_STACK_PRINT(Bottom, Top)				\
+do {								\
+  if (yydebug)							\
+    yy_stack_print ((Bottom), (Top));				\
+} while (YYID (0))
 
 
 /*------------------------------------------------.
 | Report that the YYRULE is going to be reduced.  |
 `------------------------------------------------*/
 
+#if (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, int yyrule, glslang::TParseContext* pParseContext)
+yy_reduce_print (YYSTYPE *yyvsp, int yyrule, glslang::TParseContext* pParseContext)
+#else
+static void
+yy_reduce_print (yyvsp, yyrule, pParseContext)
+    YYSTYPE *yyvsp;
+    int yyrule;
+    glslang::TParseContext* pParseContext;
+#endif
 {
-  unsigned long int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
   int yyi;
+  unsigned long int yylno = yyrline[yyrule];
   YYFPRINTF (stderr, "Reducing stack by rule %d (line %lu):\n",
-             yyrule - 1, yylno);
+	     yyrule - 1, yylno);
   /* The symbols being reduced.  */
   for (yyi = 0; yyi < yynrhs; yyi++)
     {
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
-      yy_symbol_print (stderr,
-                       yystos[yyssp[yyi + 1 - yynrhs]],
-                       &(yyvsp[(yyi + 1) - (yynrhs)])
-                                              , pParseContext);
+      yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
+		       &(yyvsp[(yyi + 1) - (yynrhs)])
+		       		       , pParseContext);
       YYFPRINTF (stderr, "\n");
     }
 }
 
-# define YY_REDUCE_PRINT(Rule)          \
-do {                                    \
-  if (yydebug)                          \
-    yy_reduce_print (yyssp, yyvsp, Rule, pParseContext); \
-} while (0)
+# define YY_REDUCE_PRINT(Rule)		\
+do {					\
+  if (yydebug)				\
+    yy_reduce_print (yyvsp, Rule, pParseContext); \
+} while (YYID (0))
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
@@ -2573,7 +2789,7 @@ int yydebug;
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
-#ifndef YYINITDEPTH
+#ifndef	YYINITDEPTH
 # define YYINITDEPTH 200
 #endif
 
@@ -2596,8 +2812,15 @@ int yydebug;
 #   define yystrlen strlen
 #  else
 /* Return the length of YYSTR.  */
+#if (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 static YYSIZE_T
 yystrlen (const char *yystr)
+#else
+static YYSIZE_T
+yystrlen (yystr)
+    const char *yystr;
+#endif
 {
   YYSIZE_T yylen;
   for (yylen = 0; yystr[yylen]; yylen++)
@@ -2613,8 +2836,16 @@ yystrlen (const char *yystr)
 #  else
 /* Copy YYSRC to YYDEST, returning the address of the terminating '\0' in
    YYDEST.  */
+#if (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 static char *
 yystpcpy (char *yydest, const char *yysrc)
+#else
+static char *
+yystpcpy (yydest, yysrc)
+    char *yydest;
+    const char *yysrc;
+#endif
 {
   char *yyd = yydest;
   const char *yys = yysrc;
@@ -2644,27 +2875,27 @@ yytnamerr (char *yyres, const char *yystr)
       char const *yyp = yystr;
 
       for (;;)
-        switch (*++yyp)
-          {
-          case '\'':
-          case ',':
-            goto do_not_strip_quotes;
+	switch (*++yyp)
+	  {
+	  case '\'':
+	  case ',':
+	    goto do_not_strip_quotes;
 
-          case '\\':
-            if (*++yyp != '\\')
-              goto do_not_strip_quotes;
-            /* Fall through.  */
-          default:
-            if (yyres)
-              yyres[yyn] = *yyp;
-            yyn++;
-            break;
+	  case '\\':
+	    if (*++yyp != '\\')
+	      goto do_not_strip_quotes;
+	    /* Fall through.  */
+	  default:
+	    if (yyres)
+	      yyres[yyn] = *yyp;
+	    yyn++;
+	    break;
 
-          case '"':
-            if (yyres)
-              yyres[yyn] = '\0';
-            return yyn;
-          }
+	  case '"':
+	    if (yyres)
+	      yyres[yyn] = '\0';
+	    return yyn;
+	  }
     do_not_strip_quotes: ;
     }
 
@@ -2687,11 +2918,11 @@ static int
 yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                 yytype_int16 *yyssp, int yytoken)
 {
-  YYSIZE_T yysize0 = yytnamerr (YY_NULLPTR, yytname[yytoken]);
+  YYSIZE_T yysize0 = yytnamerr (YY_NULL, yytname[yytoken]);
   YYSIZE_T yysize = yysize0;
   enum { YYERROR_VERBOSE_ARGS_MAXIMUM = 5 };
   /* Internationalized format string. */
-  const char *yyformat = YY_NULLPTR;
+  const char *yyformat = YY_NULL;
   /* Arguments of yyformat. */
   char const *yyarg[YYERROR_VERBOSE_ARGS_MAXIMUM];
   /* Number of reported tokens (one for the "unexpected", one per
@@ -2699,6 +2930,10 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
   int yycount = 0;
 
   /* There are many possibilities here to consider:
+     - Assume YYFAIL is not used.  It's too flawed to consider.  See
+       <http://lists.gnu.org/archive/html/bison-patches/2009-12/msg00024.html>
+       for details.  YYERROR is fine as it does not invoke this
+       function.
      - If this state is a consistent state with a default action, then
        the only way this function was invoked is if the default action
        is an error action.  In that case, don't check for expected
@@ -2748,7 +2983,7 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                   }
                 yyarg[yycount++] = yytname[yyx];
                 {
-                  YYSIZE_T yysize1 = yysize + yytnamerr (YY_NULLPTR, yytname[yyx]);
+                  YYSIZE_T yysize1 = yysize + yytnamerr (YY_NULL, yytname[yyx]);
                   if (! (yysize <= yysize1
                          && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
                     return 2;
@@ -2815,18 +3050,33 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
 | Release the memory associated to this symbol.  |
 `-----------------------------------------------*/
 
+/*ARGSUSED*/
+#if (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 static void
 yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, glslang::TParseContext* pParseContext)
+#else
+static void
+yydestruct (yymsg, yytype, yyvaluep, pParseContext)
+    const char *yymsg;
+    int yytype;
+    YYSTYPE *yyvaluep;
+    glslang::TParseContext* pParseContext;
+#endif
 {
   YYUSE (yyvaluep);
   YYUSE (pParseContext);
+
   if (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
 
-  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-  YYUSE (yytype);
-  YY_IGNORE_MAYBE_UNINITIALIZED_END
+  switch (yytype)
+    {
+
+      default:
+        break;
+    }
 }
 
 
@@ -2836,18 +3086,56 @@ yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, glslang::TParseCon
 | yyparse.  |
 `----------*/
 
+#ifdef YYPARSE_PARAM
+#if (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
+int
+yyparse (void *YYPARSE_PARAM)
+#else
+int
+yyparse (YYPARSE_PARAM)
+    void *YYPARSE_PARAM;
+#endif
+#else /* ! YYPARSE_PARAM */
+#if (defined __STDC__ || defined __C99__FUNC__ \
+     || defined __cplusplus || defined _MSC_VER)
 int
 yyparse (glslang::TParseContext* pParseContext)
+#else
+int
+yyparse (pParseContext)
+    glslang::TParseContext* pParseContext;
+#endif
+#endif
 {
 /* The lookahead symbol.  */
 int yychar;
 
 
-/* The semantic value of the lookahead symbol.  */
+#if defined __GNUC__ && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
+/* Suppress an incorrect diagnostic about yylval being uninitialized.  */
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN \
+    _Pragma ("GCC diagnostic push") \
+    _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")\
+    _Pragma ("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END \
+    _Pragma ("GCC diagnostic pop")
+#else
 /* Default value used for initialization, for pacifying older GCCs
    or non-GCC compilers.  */
-YY_INITIAL_VALUE (static YYSTYPE yyval_default;)
-YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
+static YYSTYPE yyval_default;
+# define YY_INITIAL_VALUE(Value) = Value
+#endif
+#ifndef YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END
+#endif
+#ifndef YY_INITIAL_VALUE
+# define YY_INITIAL_VALUE(Value) /* Nothing. */
+#endif
+
+/* The semantic value of the lookahead symbol.  */
+YYSTYPE yylval YY_INITIAL_VALUE(yyval_default);
 
     /* Number of syntax errors so far.  */
     int yynerrs;
@@ -2857,8 +3145,8 @@ YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
     int yyerrstatus;
 
     /* The stacks and their tools:
-       'yyss': related to states.
-       'yyvs': related to semantic values.
+       `yyss': related to states.
+       `yyvs': related to semantic values.
 
        Refer to the stacks through separate pointers, to allow yyoverflow
        to reallocate them elsewhere.  */
@@ -2926,23 +3214,23 @@ YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
 
 #ifdef yyoverflow
       {
-        /* Give user a chance to reallocate the stack.  Use copies of
-           these so that the &'s don't force the real ones into
-           memory.  */
-        YYSTYPE *yyvs1 = yyvs;
-        yytype_int16 *yyss1 = yyss;
+	/* Give user a chance to reallocate the stack.  Use copies of
+	   these so that the &'s don't force the real ones into
+	   memory.  */
+	YYSTYPE *yyvs1 = yyvs;
+	yytype_int16 *yyss1 = yyss;
 
-        /* Each stack pointer address is followed by the size of the
-           data in use in that stack, in bytes.  This used to be a
-           conditional around just the two extra args, but that might
-           be undefined if yyoverflow is a macro.  */
-        yyoverflow (YY_("memory exhausted"),
-                    &yyss1, yysize * sizeof (*yyssp),
-                    &yyvs1, yysize * sizeof (*yyvsp),
-                    &yystacksize);
+	/* Each stack pointer address is followed by the size of the
+	   data in use in that stack, in bytes.  This used to be a
+	   conditional around just the two extra args, but that might
+	   be undefined if yyoverflow is a macro.  */
+	yyoverflow (YY_("memory exhausted"),
+		    &yyss1, yysize * sizeof (*yyssp),
+		    &yyvs1, yysize * sizeof (*yyvsp),
+		    &yystacksize);
 
-        yyss = yyss1;
-        yyvs = yyvs1;
+	yyss = yyss1;
+	yyvs = yyvs1;
       }
 #else /* no yyoverflow */
 # ifndef YYSTACK_RELOCATE
@@ -2950,22 +3238,22 @@ YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
 # else
       /* Extend the stack our own way.  */
       if (YYMAXDEPTH <= yystacksize)
-        goto yyexhaustedlab;
+	goto yyexhaustedlab;
       yystacksize *= 2;
       if (YYMAXDEPTH < yystacksize)
-        yystacksize = YYMAXDEPTH;
+	yystacksize = YYMAXDEPTH;
 
       {
-        yytype_int16 *yyss1 = yyss;
-        union yyalloc *yyptr =
-          (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
-        if (! yyptr)
-          goto yyexhaustedlab;
-        YYSTACK_RELOCATE (yyss_alloc, yyss);
-        YYSTACK_RELOCATE (yyvs_alloc, yyvs);
+	yytype_int16 *yyss1 = yyss;
+	union yyalloc *yyptr =
+	  (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
+	if (! yyptr)
+	  goto yyexhaustedlab;
+	YYSTACK_RELOCATE (yyss_alloc, yyss);
+	YYSTACK_RELOCATE (yyvs_alloc, yyvs);
 #  undef YYSTACK_RELOCATE
-        if (yyss1 != yyssa)
-          YYSTACK_FREE (yyss1);
+	if (yyss1 != yyssa)
+	  YYSTACK_FREE (yyss1);
       }
 # endif
 #endif /* no yyoverflow */
@@ -2974,10 +3262,10 @@ YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
       yyvsp = yyvs + yysize - 1;
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
-                  (unsigned long int) yystacksize));
+		  (unsigned long int) yystacksize));
 
       if (yyss + yystacksize - 1 <= yyssp)
-        YYABORT;
+	YYABORT;
     }
 
   YYDPRINTF ((stderr, "Entering state %d\n", yystate));
@@ -3006,7 +3294,7 @@ yybackup:
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token: "));
-      yychar = yylex (&yylval, parseContext);
+      yychar = YYLEX;
     }
 
   if (yychar <= YYEOF)
@@ -3071,7 +3359,7 @@ yyreduce:
   yylen = yyr2[yyn];
 
   /* If YYLEN is nonzero, implement the default value of the action:
-     '$$ = $1'.
+     `$$ = $1'.
 
      Otherwise, the following line sets YYVAL to garbage.
      This behavior is undocumented and Bison
@@ -3085,229 +3373,230 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 244 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 244 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleVariable((yyvsp[0].lex).loc, (yyvsp[0].lex).symbol, (yyvsp[0].lex).string);
+        (yyval.interm.intermTypedNode) = parseContext.handleVariable((yyvsp[(1) - (1)].lex).loc, (yyvsp[(1) - (1)].lex).symbol, (yyvsp[(1) - (1)].lex).string);
     }
-#line 3093 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 250 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 250 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
+        (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode);
     }
-#line 3101 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 253 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 253 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion((yyvsp[0].lex).i, (yyvsp[0].lex).loc, true);
+        (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion((yyvsp[(1) - (1)].lex).i, (yyvsp[(1) - (1)].lex).loc, true);
     }
-#line 3109 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 256 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 256 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[0].lex).loc, "unsigned literal");
-        (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion((yyvsp[0].lex).u, (yyvsp[0].lex).loc, true);
+        parseContext.fullIntegerCheck((yyvsp[(1) - (1)].lex).loc, "unsigned literal");
+        (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion((yyvsp[(1) - (1)].lex).u, (yyvsp[(1) - (1)].lex).loc, true);
     }
-#line 3118 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 260 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 260 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion((yyvsp[0].lex).d, EbtFloat, (yyvsp[0].lex).loc, true);
+        (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion((yyvsp[(1) - (1)].lex).d, EbtFloat, (yyvsp[(1) - (1)].lex).loc, true);
     }
-#line 3126 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 263 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 263 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double literal");
-        (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion((yyvsp[0].lex).d, EbtDouble, (yyvsp[0].lex).loc, true);
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double literal");
+        (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion((yyvsp[(1) - (1)].lex).d, EbtDouble, (yyvsp[(1) - (1)].lex).loc, true);
     }
-#line 3135 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 267 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 267 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion((yyvsp[0].lex).b, (yyvsp[0].lex).loc, true);
+        (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion((yyvsp[(1) - (1)].lex).b, (yyvsp[(1) - (1)].lex).loc, true);
     }
-#line 3143 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 270 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 270 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = (yyvsp[-1].interm.intermTypedNode);
+        (yyval.interm.intermTypedNode) = (yyvsp[(2) - (3)].interm.intermTypedNode);
         if ((yyval.interm.intermTypedNode)->getAsConstantUnion())
             (yyval.interm.intermTypedNode)->getAsConstantUnion()->setExpression();
     }
-#line 3153 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 278 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 278 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
+        (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode);
     }
-#line 3161 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 281 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 281 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleBracketDereference((yyvsp[-2].lex).loc, (yyvsp[-3].interm.intermTypedNode), (yyvsp[-1].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleBracketDereference((yyvsp[(2) - (4)].lex).loc, (yyvsp[(1) - (4)].interm.intermTypedNode), (yyvsp[(3) - (4)].interm.intermTypedNode));
     }
-#line 3169 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 284 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 284 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
+        (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode);
     }
-#line 3177 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 287 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 287 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleDotDereference((yyvsp[0].lex).loc, (yyvsp[-2].interm.intermTypedNode), *(yyvsp[0].lex).string);
+        (yyval.interm.intermTypedNode) = parseContext.handleDotDereference((yyvsp[(3) - (3)].lex).loc, (yyvsp[(1) - (3)].interm.intermTypedNode), *(yyvsp[(3) - (3)].lex).string);
     }
-#line 3185 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 290 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 290 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.variableCheck((yyvsp[-1].interm.intermTypedNode));
-        parseContext.lValueErrorCheck((yyvsp[0].lex).loc, "++", (yyvsp[-1].interm.intermTypedNode));
-        (yyval.interm.intermTypedNode) = parseContext.handleUnaryMath((yyvsp[0].lex).loc, "++", EOpPostIncrement, (yyvsp[-1].interm.intermTypedNode));
+        parseContext.variableCheck((yyvsp[(1) - (2)].interm.intermTypedNode));
+        parseContext.lValueErrorCheck((yyvsp[(2) - (2)].lex).loc, "++", (yyvsp[(1) - (2)].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleUnaryMath((yyvsp[(2) - (2)].lex).loc, "++", EOpPostIncrement, (yyvsp[(1) - (2)].interm.intermTypedNode));
     }
-#line 3195 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 295 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 295 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.variableCheck((yyvsp[-1].interm.intermTypedNode));
-        parseContext.lValueErrorCheck((yyvsp[0].lex).loc, "--", (yyvsp[-1].interm.intermTypedNode));
-        (yyval.interm.intermTypedNode) = parseContext.handleUnaryMath((yyvsp[0].lex).loc, "--", EOpPostDecrement, (yyvsp[-1].interm.intermTypedNode));
+        parseContext.variableCheck((yyvsp[(1) - (2)].interm.intermTypedNode));
+        parseContext.lValueErrorCheck((yyvsp[(2) - (2)].lex).loc, "--", (yyvsp[(1) - (2)].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleUnaryMath((yyvsp[(2) - (2)].lex).loc, "--", EOpPostDecrement, (yyvsp[(1) - (2)].interm.intermTypedNode));
     }
-#line 3205 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 303 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 303 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.integerCheck((yyvsp[0].interm.intermTypedNode), "[]");
-        (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
+        parseContext.integerCheck((yyvsp[(1) - (1)].interm.intermTypedNode), "[]");
+        (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode);
     }
-#line 3214 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 310 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 310 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleFunctionCall((yyvsp[0].interm).loc, (yyvsp[0].interm).function, (yyvsp[0].interm).intermNode);
-        delete (yyvsp[0].interm).function;
+        (yyval.interm.intermTypedNode) = parseContext.handleFunctionCall((yyvsp[(1) - (1)].interm).loc, (yyvsp[(1) - (1)].interm).function, (yyvsp[(1) - (1)].interm).intermNode);
+        delete (yyvsp[(1) - (1)].interm).function;
     }
-#line 3223 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 317 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 317 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[0].interm);
+        (yyval.interm) = (yyvsp[(1) - (1)].interm);
     }
-#line 3231 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 323 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 323 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[-1].interm);
-        (yyval.interm).loc = (yyvsp[0].lex).loc;
+        (yyval.interm) = (yyvsp[(1) - (2)].interm);
+        (yyval.interm).loc = (yyvsp[(2) - (2)].lex).loc;
     }
-#line 3240 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 327 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 327 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[-1].interm);
-        (yyval.interm).loc = (yyvsp[0].lex).loc;
+        (yyval.interm) = (yyvsp[(1) - (2)].interm);
+        (yyval.interm).loc = (yyvsp[(2) - (2)].lex).loc;
     }
-#line 3249 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 334 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 334 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[-1].interm);
+        (yyval.interm) = (yyvsp[(1) - (2)].interm);
     }
-#line 3257 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 337 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 337 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[0].interm);
+        (yyval.interm) = (yyvsp[(1) - (1)].interm);
     }
-#line 3265 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 343 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 343 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         TParameter param = { 0, new TType };
-        param.type->shallowCopy((yyvsp[0].interm.intermTypedNode)->getType());
-        (yyvsp[-1].interm).function->addParameter(param);
-        (yyval.interm).function = (yyvsp[-1].interm).function;
-        (yyval.interm).intermNode = (yyvsp[0].interm.intermTypedNode);
+        param.type->shallowCopy((yyvsp[(2) - (2)].interm.intermTypedNode)->getType());
+        (yyvsp[(1) - (2)].interm).function->addParameter(param);
+        (yyval.interm).function = (yyvsp[(1) - (2)].interm).function;
+        (yyval.interm).intermNode = (yyvsp[(2) - (2)].interm.intermTypedNode);
     }
-#line 3277 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 350 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 350 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         TParameter param = { 0, new TType };
-        param.type->shallowCopy((yyvsp[0].interm.intermTypedNode)->getType());
-        (yyvsp[-2].interm).function->addParameter(param);
-        (yyval.interm).function = (yyvsp[-2].interm).function;
-        (yyval.interm).intermNode = parseContext.intermediate.growAggregate((yyvsp[-2].interm).intermNode, (yyvsp[0].interm.intermTypedNode), (yyvsp[-1].lex).loc);
+        param.type->shallowCopy((yyvsp[(3) - (3)].interm.intermTypedNode)->getType());
+        (yyvsp[(1) - (3)].interm).function->addParameter(param);
+        (yyval.interm).function = (yyvsp[(1) - (3)].interm).function;
+        (yyval.interm).intermNode = parseContext.intermediate.growAggregate((yyvsp[(1) - (3)].interm).intermNode, (yyvsp[(3) - (3)].interm.intermTypedNode), (yyvsp[(2) - (3)].lex).loc);
     }
-#line 3289 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 360 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 360 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[-1].interm);
+        (yyval.interm) = (yyvsp[(1) - (2)].interm);
     }
-#line 3297 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 368 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 368 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         // Constructor
         (yyval.interm).intermNode = 0;
-        (yyval.interm).function = parseContext.handleConstructorCall((yyvsp[0].interm.type).loc, (yyvsp[0].interm.type));
+        (yyval.interm).function = parseContext.handleConstructorCall((yyvsp[(1) - (1)].interm.type).loc, (yyvsp[(1) - (1)].interm.type));
     }
-#line 3307 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 373 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 373 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         //
         // Should be a method or subroutine call, but we haven't recognized the arguments yet.
@@ -3315,18 +3604,18 @@ yyreduce:
         (yyval.interm).function = 0;
         (yyval.interm).intermNode = 0;
 
-        TIntermMethod* method = (yyvsp[0].interm.intermTypedNode)->getAsMethodNode();
+        TIntermMethod* method = (yyvsp[(1) - (1)].interm.intermTypedNode)->getAsMethodNode();
         if (method) {
             (yyval.interm).function = new TFunction(&method->getMethodName(), TType(EbtInt), EOpArrayLength);
             (yyval.interm).intermNode = method->getObject();
         } else {
-            TIntermSymbol* symbol = (yyvsp[0].interm.intermTypedNode)->getAsSymbolNode();
+            TIntermSymbol* symbol = (yyvsp[(1) - (1)].interm.intermTypedNode)->getAsSymbolNode();
             if (symbol) {
                 parseContext.reservedErrorCheck(symbol->getLoc(), symbol->getName());
                 TFunction *function = new TFunction(&symbol->getName(), TType(EbtVoid));
                 (yyval.interm).function = function;
             } else
-                parseContext.error((yyvsp[0].interm.intermTypedNode)->getLoc(), "function call, method, or subroutine call expected", "", "");
+                parseContext.error((yyvsp[(1) - (1)].interm.intermTypedNode)->getLoc(), "function call, method, or subroutine call expected", "", "");
         }
 
         if ((yyval.interm).function == 0) {
@@ -3335,3604 +3624,3607 @@ yyreduce:
             (yyval.interm).function = new TFunction(&empty, TType(EbtVoid), EOpNull);
         }
     }
-#line 3339 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 403 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 403 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.variableCheck((yyvsp[0].interm.intermTypedNode));
-        (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
-        if (TIntermMethod* method = (yyvsp[0].interm.intermTypedNode)->getAsMethodNode())
-            parseContext.error((yyvsp[0].interm.intermTypedNode)->getLoc(), "incomplete method syntax", method->getMethodName().c_str(), "");
+        parseContext.variableCheck((yyvsp[(1) - (1)].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode);
+        if (TIntermMethod* method = (yyvsp[(1) - (1)].interm.intermTypedNode)->getAsMethodNode())
+            parseContext.error((yyvsp[(1) - (1)].interm.intermTypedNode)->getLoc(), "incomplete method syntax", method->getMethodName().c_str(), "");
     }
-#line 3350 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 409 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 409 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.lValueErrorCheck((yyvsp[-1].lex).loc, "++", (yyvsp[0].interm.intermTypedNode));
-        (yyval.interm.intermTypedNode) = parseContext.handleUnaryMath((yyvsp[-1].lex).loc, "++", EOpPreIncrement, (yyvsp[0].interm.intermTypedNode));
+        parseContext.lValueErrorCheck((yyvsp[(1) - (2)].lex).loc, "++", (yyvsp[(2) - (2)].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleUnaryMath((yyvsp[(1) - (2)].lex).loc, "++", EOpPreIncrement, (yyvsp[(2) - (2)].interm.intermTypedNode));
     }
-#line 3359 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 413 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 413 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.lValueErrorCheck((yyvsp[-1].lex).loc, "--", (yyvsp[0].interm.intermTypedNode));
-        (yyval.interm.intermTypedNode) = parseContext.handleUnaryMath((yyvsp[-1].lex).loc, "--", EOpPreDecrement, (yyvsp[0].interm.intermTypedNode));
+        parseContext.lValueErrorCheck((yyvsp[(1) - (2)].lex).loc, "--", (yyvsp[(2) - (2)].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleUnaryMath((yyvsp[(1) - (2)].lex).loc, "--", EOpPreDecrement, (yyvsp[(2) - (2)].interm.intermTypedNode));
     }
-#line 3368 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 417 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 417 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        if ((yyvsp[-1].interm).op != EOpNull) {
+        if ((yyvsp[(1) - (2)].interm).op != EOpNull) {
             char errorOp[2] = {0, 0};
-            switch((yyvsp[-1].interm).op) {
+            switch((yyvsp[(1) - (2)].interm).op) {
             case EOpNegative:   errorOp[0] = '-'; break;
             case EOpLogicalNot: errorOp[0] = '!'; break;
             case EOpBitwiseNot: errorOp[0] = '~'; break;
             default: break; // some compilers want this
             }
-            (yyval.interm.intermTypedNode) = parseContext.handleUnaryMath((yyvsp[-1].interm).loc, errorOp, (yyvsp[-1].interm).op, (yyvsp[0].interm.intermTypedNode));
+            (yyval.interm.intermTypedNode) = parseContext.handleUnaryMath((yyvsp[(1) - (2)].interm).loc, errorOp, (yyvsp[(1) - (2)].interm).op, (yyvsp[(2) - (2)].interm.intermTypedNode));
         } else {
-            (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
+            (yyval.interm.intermTypedNode) = (yyvsp[(2) - (2)].interm.intermTypedNode);
             if ((yyval.interm.intermTypedNode)->getAsConstantUnion())
                 (yyval.interm.intermTypedNode)->getAsConstantUnion()->setExpression();
         }
     }
-#line 3389 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 437 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm).loc = (yyvsp[0].lex).loc; (yyval.interm).op = EOpNull; }
-#line 3395 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 437 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc; (yyval.interm).op = EOpNull; }
     break;
 
   case 33:
-#line 438 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm).loc = (yyvsp[0].lex).loc; (yyval.interm).op = EOpNegative; }
-#line 3401 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 438 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc; (yyval.interm).op = EOpNegative; }
     break;
 
   case 34:
-#line 439 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm).loc = (yyvsp[0].lex).loc; (yyval.interm).op = EOpLogicalNot; }
-#line 3407 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 439 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc; (yyval.interm).op = EOpLogicalNot; }
     break;
 
   case 35:
-#line 440 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm).loc = (yyvsp[0].lex).loc; (yyval.interm).op = EOpBitwiseNot;
-              parseContext.fullIntegerCheck((yyvsp[0].lex).loc, "bitwise not"); }
-#line 3414 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 440 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc; (yyval.interm).op = EOpBitwiseNot;
+              parseContext.fullIntegerCheck((yyvsp[(1) - (1)].lex).loc, "bitwise not"); }
     break;
 
   case 36:
-#line 446 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3420 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 446 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 37:
-#line 447 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 447 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "*", EOpMul, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "*", EOpMul, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = (yyvsp[-2].interm.intermTypedNode);
+            (yyval.interm.intermTypedNode) = (yyvsp[(1) - (3)].interm.intermTypedNode);
     }
-#line 3430 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 452 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 452 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "/", EOpDiv, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "/", EOpDiv, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = (yyvsp[-2].interm.intermTypedNode);
+            (yyval.interm.intermTypedNode) = (yyvsp[(1) - (3)].interm.intermTypedNode);
     }
-#line 3440 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 457 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 457 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[-1].lex).loc, "%");
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "%", EOpMod, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        parseContext.fullIntegerCheck((yyvsp[(2) - (3)].lex).loc, "%");
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "%", EOpMod, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = (yyvsp[-2].interm.intermTypedNode);
+            (yyval.interm.intermTypedNode) = (yyvsp[(1) - (3)].interm.intermTypedNode);
     }
-#line 3451 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 466 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3457 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 466 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 41:
-#line 467 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 467 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "+", EOpAdd, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "+", EOpAdd, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = (yyvsp[-2].interm.intermTypedNode);
+            (yyval.interm.intermTypedNode) = (yyvsp[(1) - (3)].interm.intermTypedNode);
     }
-#line 3467 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 472 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 472 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "-", EOpSub, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "-", EOpSub, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = (yyvsp[-2].interm.intermTypedNode);
+            (yyval.interm.intermTypedNode) = (yyvsp[(1) - (3)].interm.intermTypedNode);
     }
-#line 3477 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 480 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3483 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 480 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 44:
-#line 481 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 481 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[-1].lex).loc, "bit shift left");
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "<<", EOpLeftShift, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        parseContext.fullIntegerCheck((yyvsp[(2) - (3)].lex).loc, "bit shift left");
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "<<", EOpLeftShift, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = (yyvsp[-2].interm.intermTypedNode);
+            (yyval.interm.intermTypedNode) = (yyvsp[(1) - (3)].interm.intermTypedNode);
     }
-#line 3494 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 487 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 487 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[-1].lex).loc, "bit shift right");
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, ">>", EOpRightShift, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        parseContext.fullIntegerCheck((yyvsp[(2) - (3)].lex).loc, "bit shift right");
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, ">>", EOpRightShift, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = (yyvsp[-2].interm.intermTypedNode);
+            (yyval.interm.intermTypedNode) = (yyvsp[(1) - (3)].interm.intermTypedNode);
     }
-#line 3505 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 496 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3511 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 496 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 47:
-#line 497 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 497 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "<", EOpLessThan, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "<", EOpLessThan, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[-1].lex).loc);
+            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[(2) - (3)].lex).loc);
     }
-#line 3521 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 502 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 502 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, ">", EOpGreaterThan, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, ">", EOpGreaterThan, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[-1].lex).loc);
+            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[(2) - (3)].lex).loc);
     }
-#line 3531 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 507 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 507 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "<=", EOpLessThanEqual, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "<=", EOpLessThanEqual, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[-1].lex).loc);
+            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[(2) - (3)].lex).loc);
     }
-#line 3541 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 512 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 512 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, ">=", EOpGreaterThanEqual, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, ">=", EOpGreaterThanEqual, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[-1].lex).loc);
+            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[(2) - (3)].lex).loc);
     }
-#line 3551 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 520 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3557 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 520 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 52:
-#line 521 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 521 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.arrayObjectCheck((yyvsp[-1].lex).loc, (yyvsp[-2].interm.intermTypedNode)->getType(), "array comparison");
-        parseContext.opaqueCheck((yyvsp[-1].lex).loc, (yyvsp[-2].interm.intermTypedNode)->getType(), "==");
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "==", EOpEqual, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        parseContext.arrayObjectCheck((yyvsp[(2) - (3)].lex).loc, (yyvsp[(1) - (3)].interm.intermTypedNode)->getType(), "array comparison");
+        parseContext.opaqueCheck((yyvsp[(2) - (3)].lex).loc, (yyvsp[(1) - (3)].interm.intermTypedNode)->getType(), "==");
+        parseContext.specializationCheck((yyvsp[(2) - (3)].lex).loc, (yyvsp[(1) - (3)].interm.intermTypedNode)->getType(), "==");
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "==", EOpEqual, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[-1].lex).loc);
+            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[(2) - (3)].lex).loc);
     }
-#line 3569 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 528 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 529 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.arrayObjectCheck((yyvsp[-1].lex).loc, (yyvsp[-2].interm.intermTypedNode)->getType(), "array comparison");
-        parseContext.opaqueCheck((yyvsp[-1].lex).loc, (yyvsp[-2].interm.intermTypedNode)->getType(), "!=");
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "!=", EOpNotEqual, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        parseContext.arrayObjectCheck((yyvsp[(2) - (3)].lex).loc, (yyvsp[(1) - (3)].interm.intermTypedNode)->getType(), "array comparison");
+        parseContext.opaqueCheck((yyvsp[(2) - (3)].lex).loc, (yyvsp[(1) - (3)].interm.intermTypedNode)->getType(), "!=");
+        parseContext.specializationCheck((yyvsp[(2) - (3)].lex).loc, (yyvsp[(1) - (3)].interm.intermTypedNode)->getType(), "!=");
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "!=", EOpNotEqual, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[-1].lex).loc);
+            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[(2) - (3)].lex).loc);
     }
-#line 3581 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 538 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3587 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 540 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 55:
-#line 539 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 541 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[-1].lex).loc, "bitwise and");
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "&", EOpAnd, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        parseContext.fullIntegerCheck((yyvsp[(2) - (3)].lex).loc, "bitwise and");
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "&", EOpAnd, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = (yyvsp[-2].interm.intermTypedNode);
+            (yyval.interm.intermTypedNode) = (yyvsp[(1) - (3)].interm.intermTypedNode);
     }
-#line 3598 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 548 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3604 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 550 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 57:
-#line 549 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 551 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[-1].lex).loc, "bitwise exclusive or");
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "^", EOpExclusiveOr, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        parseContext.fullIntegerCheck((yyvsp[(2) - (3)].lex).loc, "bitwise exclusive or");
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "^", EOpExclusiveOr, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = (yyvsp[-2].interm.intermTypedNode);
+            (yyval.interm.intermTypedNode) = (yyvsp[(1) - (3)].interm.intermTypedNode);
     }
-#line 3615 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 558 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3621 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 560 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 59:
-#line 559 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 561 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[-1].lex).loc, "bitwise inclusive or");
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "|", EOpInclusiveOr, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        parseContext.fullIntegerCheck((yyvsp[(2) - (3)].lex).loc, "bitwise inclusive or");
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "|", EOpInclusiveOr, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = (yyvsp[-2].interm.intermTypedNode);
+            (yyval.interm.intermTypedNode) = (yyvsp[(1) - (3)].interm.intermTypedNode);
     }
-#line 3632 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 568 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3638 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 570 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 61:
-#line 569 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 571 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "&&", EOpLogicalAnd, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "&&", EOpLogicalAnd, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[-1].lex).loc);
+            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[(2) - (3)].lex).loc);
     }
-#line 3648 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 577 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3654 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 579 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 63:
-#line 578 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 580 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "^^", EOpLogicalXor, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "^^", EOpLogicalXor, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[-1].lex).loc);
+            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[(2) - (3)].lex).loc);
     }
-#line 3664 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 586 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3670 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 588 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 65:
-#line 587 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 589 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[-1].lex).loc, "||", EOpLogicalOr, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.handleBinaryMath((yyvsp[(2) - (3)].lex).loc, "||", EOpLogicalOr, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
         if ((yyval.interm.intermTypedNode) == 0)
-            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[-1].lex).loc);
+            (yyval.interm.intermTypedNode) = parseContext.intermediate.addConstantUnion(false, (yyvsp[(2) - (3)].lex).loc);
     }
-#line 3680 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 595 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3686 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 597 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 67:
-#line 596 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 598 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         ++parseContext.controlFlowNestingLevel;
     }
-#line 3694 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 599 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 601 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         --parseContext.controlFlowNestingLevel;
-        parseContext.boolCheck((yyvsp[-4].lex).loc, (yyvsp[-5].interm.intermTypedNode));
-        parseContext.rValueErrorCheck((yyvsp[-4].lex).loc, "?", (yyvsp[-5].interm.intermTypedNode));
-        parseContext.rValueErrorCheck((yyvsp[-1].lex).loc, ":", (yyvsp[-2].interm.intermTypedNode));
-        parseContext.rValueErrorCheck((yyvsp[-1].lex).loc, ":", (yyvsp[0].interm.intermTypedNode));
-        (yyval.interm.intermTypedNode) = parseContext.intermediate.addSelection((yyvsp[-5].interm.intermTypedNode), (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode), (yyvsp[-4].lex).loc);
+        parseContext.boolCheck((yyvsp[(2) - (6)].lex).loc, (yyvsp[(1) - (6)].interm.intermTypedNode));
+        parseContext.rValueErrorCheck((yyvsp[(2) - (6)].lex).loc, "?", (yyvsp[(1) - (6)].interm.intermTypedNode));
+        parseContext.rValueErrorCheck((yyvsp[(5) - (6)].lex).loc, ":", (yyvsp[(4) - (6)].interm.intermTypedNode));
+        parseContext.rValueErrorCheck((yyvsp[(5) - (6)].lex).loc, ":", (yyvsp[(6) - (6)].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.intermediate.addSelection((yyvsp[(1) - (6)].interm.intermTypedNode), (yyvsp[(4) - (6)].interm.intermTypedNode), (yyvsp[(6) - (6)].interm.intermTypedNode), (yyvsp[(2) - (6)].lex).loc);
         if ((yyval.interm.intermTypedNode) == 0) {
-            parseContext.binaryOpError((yyvsp[-4].lex).loc, ":", (yyvsp[-2].interm.intermTypedNode)->getCompleteString(), (yyvsp[0].interm.intermTypedNode)->getCompleteString());
-            (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
+            parseContext.binaryOpError((yyvsp[(2) - (6)].lex).loc, ":", (yyvsp[(4) - (6)].interm.intermTypedNode)->getCompleteString(), (yyvsp[(6) - (6)].interm.intermTypedNode)->getCompleteString());
+            (yyval.interm.intermTypedNode) = (yyvsp[(6) - (6)].interm.intermTypedNode);
         }
     }
-#line 3711 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 614 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode); }
-#line 3717 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 616 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode); }
     break;
 
   case 70:
-#line 615 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 617 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.arrayObjectCheck((yyvsp[-1].interm).loc, (yyvsp[-2].interm.intermTypedNode)->getType(), "array assignment");
-        parseContext.opaqueCheck((yyvsp[-1].interm).loc, (yyvsp[-2].interm.intermTypedNode)->getType(), "=");
-        parseContext.lValueErrorCheck((yyvsp[-1].interm).loc, "assign", (yyvsp[-2].interm.intermTypedNode));
-        parseContext.rValueErrorCheck((yyvsp[-1].interm).loc, "assign", (yyvsp[0].interm.intermTypedNode));
-        (yyval.interm.intermTypedNode) = parseContext.intermediate.addAssign((yyvsp[-1].interm).op, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode), (yyvsp[-1].interm).loc);
+        parseContext.arrayObjectCheck((yyvsp[(2) - (3)].interm).loc, (yyvsp[(1) - (3)].interm.intermTypedNode)->getType(), "array assignment");
+        parseContext.opaqueCheck((yyvsp[(2) - (3)].interm).loc, (yyvsp[(1) - (3)].interm.intermTypedNode)->getType(), "=");
+        parseContext.specializationCheck((yyvsp[(2) - (3)].interm).loc, (yyvsp[(1) - (3)].interm.intermTypedNode)->getType(), "=");
+        parseContext.lValueErrorCheck((yyvsp[(2) - (3)].interm).loc, "assign", (yyvsp[(1) - (3)].interm.intermTypedNode));
+        parseContext.rValueErrorCheck((yyvsp[(2) - (3)].interm).loc, "assign", (yyvsp[(3) - (3)].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.intermediate.addAssign((yyvsp[(2) - (3)].interm).op, (yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode), (yyvsp[(2) - (3)].interm).loc);
         if ((yyval.interm.intermTypedNode) == 0) {
-            parseContext.assignError((yyvsp[-1].interm).loc, "assign", (yyvsp[-2].interm.intermTypedNode)->getCompleteString(), (yyvsp[0].interm.intermTypedNode)->getCompleteString());
-            (yyval.interm.intermTypedNode) = (yyvsp[-2].interm.intermTypedNode);
+            parseContext.assignError((yyvsp[(2) - (3)].interm).loc, "assign", (yyvsp[(1) - (3)].interm.intermTypedNode)->getCompleteString(), (yyvsp[(3) - (3)].interm.intermTypedNode)->getCompleteString());
+            (yyval.interm.intermTypedNode) = (yyvsp[(1) - (3)].interm.intermTypedNode);
         }
     }
-#line 3733 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 629 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 632 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).loc = (yyvsp[0].lex).loc;
+        (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc;
         (yyval.interm).op = EOpAssign;
     }
-#line 3742 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 633 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 636 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).loc = (yyvsp[0].lex).loc;
+        (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc;
         (yyval.interm).op = EOpMulAssign;
     }
-#line 3751 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 637 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 640 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).loc = (yyvsp[0].lex).loc;
+        (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc;
         (yyval.interm).op = EOpDivAssign;
     }
-#line 3760 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 641 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 644 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[0].lex).loc, "%=");
-        (yyval.interm).loc = (yyvsp[0].lex).loc;
+        parseContext.fullIntegerCheck((yyvsp[(1) - (1)].lex).loc, "%=");
+        (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc;
         (yyval.interm).op = EOpModAssign;
     }
-#line 3770 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 646 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 649 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).loc = (yyvsp[0].lex).loc;
+        (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc;
         (yyval.interm).op = EOpAddAssign;
     }
-#line 3779 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 76:
-#line 650 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 653 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).loc = (yyvsp[0].lex).loc;
+        (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc;
         (yyval.interm).op = EOpSubAssign;
     }
-#line 3788 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 654 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 657 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[0].lex).loc, "bit-shift left assign");
-        (yyval.interm).loc = (yyvsp[0].lex).loc; (yyval.interm).op = EOpLeftShiftAssign;
+        parseContext.fullIntegerCheck((yyvsp[(1) - (1)].lex).loc, "bit-shift left assign");
+        (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc; (yyval.interm).op = EOpLeftShiftAssign;
     }
-#line 3797 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 78:
-#line 658 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 661 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[0].lex).loc, "bit-shift right assign");
-        (yyval.interm).loc = (yyvsp[0].lex).loc; (yyval.interm).op = EOpRightShiftAssign;
+        parseContext.fullIntegerCheck((yyvsp[(1) - (1)].lex).loc, "bit-shift right assign");
+        (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc; (yyval.interm).op = EOpRightShiftAssign;
     }
-#line 3806 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 79:
-#line 662 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 665 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[0].lex).loc, "bitwise-and assign");
-        (yyval.interm).loc = (yyvsp[0].lex).loc; (yyval.interm).op = EOpAndAssign;
+        parseContext.fullIntegerCheck((yyvsp[(1) - (1)].lex).loc, "bitwise-and assign");
+        (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc; (yyval.interm).op = EOpAndAssign;
     }
-#line 3815 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 80:
-#line 666 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 669 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[0].lex).loc, "bitwise-xor assign");
-        (yyval.interm).loc = (yyvsp[0].lex).loc; (yyval.interm).op = EOpExclusiveOrAssign;
+        parseContext.fullIntegerCheck((yyvsp[(1) - (1)].lex).loc, "bitwise-xor assign");
+        (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc; (yyval.interm).op = EOpExclusiveOrAssign;
     }
-#line 3824 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 81:
-#line 670 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 673 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[0].lex).loc, "bitwise-or assign");
-        (yyval.interm).loc = (yyvsp[0].lex).loc; (yyval.interm).op = EOpInclusiveOrAssign;
+        parseContext.fullIntegerCheck((yyvsp[(1) - (1)].lex).loc, "bitwise-or assign");
+        (yyval.interm).loc = (yyvsp[(1) - (1)].lex).loc; (yyval.interm).op = EOpInclusiveOrAssign;
     }
-#line 3833 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 82:
-#line 677 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 680 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
+        (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode);
     }
-#line 3841 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 680 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 683 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.intermediate.addComma((yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode), (yyvsp[-1].lex).loc);
+        (yyval.interm.intermTypedNode) = parseContext.intermediate.addComma((yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode), (yyvsp[(2) - (3)].lex).loc);
         if ((yyval.interm.intermTypedNode) == 0) {
-            parseContext.binaryOpError((yyvsp[-1].lex).loc, ",", (yyvsp[-2].interm.intermTypedNode)->getCompleteString(), (yyvsp[0].interm.intermTypedNode)->getCompleteString());
-            (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
+            parseContext.binaryOpError((yyvsp[(2) - (3)].lex).loc, ",", (yyvsp[(1) - (3)].interm.intermTypedNode)->getCompleteString(), (yyvsp[(3) - (3)].interm.intermTypedNode)->getCompleteString());
+            (yyval.interm.intermTypedNode) = (yyvsp[(3) - (3)].interm.intermTypedNode);
         }
     }
-#line 3853 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 84:
-#line 690 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 693 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.constantValueCheck((yyvsp[0].interm.intermTypedNode), "");
-        (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
+        parseContext.constantValueCheck((yyvsp[(1) - (1)].interm.intermTypedNode), "");
+        (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode);
     }
-#line 3862 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 85:
-#line 697 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 700 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.handleFunctionDeclarator((yyvsp[-1].interm).loc, *(yyvsp[-1].interm).function, true /* prototype */);
+        parseContext.handleFunctionDeclarator((yyvsp[(1) - (2)].interm).loc, *(yyvsp[(1) - (2)].interm).function, true /* prototype */);
         (yyval.interm.intermNode) = 0;
         // TODO: 4.0 functionality: subroutines: make the identifier a user type for this signature
     }
-#line 3872 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 86:
-#line 702 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 705 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        if ((yyvsp[-1].interm).intermNode && (yyvsp[-1].interm).intermNode->getAsAggregate())
-            (yyvsp[-1].interm).intermNode->getAsAggregate()->setOperator(EOpSequence);
-        (yyval.interm.intermNode) = (yyvsp[-1].interm).intermNode;
+        if ((yyvsp[(1) - (2)].interm).intermNode && (yyvsp[(1) - (2)].interm).intermNode->getAsAggregate())
+            (yyvsp[(1) - (2)].interm).intermNode->getAsAggregate()->setOperator(EOpSequence);
+        (yyval.interm.intermNode) = (yyvsp[(1) - (2)].interm).intermNode;
     }
-#line 3882 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 87:
-#line 707 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 710 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.profileRequires((yyvsp[-3].lex).loc, ENoProfile, 130, 0, "precision statement");
+        parseContext.profileRequires((yyvsp[(1) - (4)].lex).loc, ENoProfile, 130, 0, "precision statement");
 
         // lazy setting of the previous scope's defaults, has effect only the first time it is called in a particular scope
         parseContext.symbolTable.setPreviousDefaultPrecisions(&parseContext.defaultPrecision[0]);
-        parseContext.setDefaultPrecision((yyvsp[-3].lex).loc, (yyvsp[-1].interm.type), (yyvsp[-2].interm.type).qualifier.precision);
+        parseContext.setDefaultPrecision((yyvsp[(1) - (4)].lex).loc, (yyvsp[(3) - (4)].interm.type), (yyvsp[(2) - (4)].interm.type).qualifier.precision);
         (yyval.interm.intermNode) = 0;
     }
-#line 3895 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 88:
-#line 715 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 718 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.declareBlock((yyvsp[-1].interm).loc, *(yyvsp[-1].interm).typeList);
+        parseContext.declareBlock((yyvsp[(1) - (2)].interm).loc, *(yyvsp[(1) - (2)].interm).typeList);
         (yyval.interm.intermNode) = 0;
     }
-#line 3904 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 719 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 722 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.declareBlock((yyvsp[-2].interm).loc, *(yyvsp[-2].interm).typeList, (yyvsp[-1].lex).string);
+        parseContext.declareBlock((yyvsp[(1) - (3)].interm).loc, *(yyvsp[(1) - (3)].interm).typeList, (yyvsp[(2) - (3)].lex).string);
         (yyval.interm.intermNode) = 0;
     }
-#line 3913 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 90:
-#line 723 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 726 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.declareBlock((yyvsp[-3].interm).loc, *(yyvsp[-3].interm).typeList, (yyvsp[-2].lex).string, (yyvsp[-1].interm).arraySizes);
+        parseContext.declareBlock((yyvsp[(1) - (4)].interm).loc, *(yyvsp[(1) - (4)].interm).typeList, (yyvsp[(2) - (4)].lex).string, (yyvsp[(3) - (4)].interm).arraySizes);
         (yyval.interm.intermNode) = 0;
     }
-#line 3922 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 91:
-#line 727 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 730 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalQualifierFixCheck((yyvsp[-1].interm.type).loc, (yyvsp[-1].interm.type).qualifier);
-        parseContext.updateStandaloneQualifierDefaults((yyvsp[-1].interm.type).loc, (yyvsp[-1].interm.type));
+        parseContext.globalQualifierFixCheck((yyvsp[(1) - (2)].interm.type).loc, (yyvsp[(1) - (2)].interm.type).qualifier);
+        parseContext.updateStandaloneQualifierDefaults((yyvsp[(1) - (2)].interm.type).loc, (yyvsp[(1) - (2)].interm.type));
         (yyval.interm.intermNode) = 0;
     }
-#line 3932 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 92:
-#line 732 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 735 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.checkNoShaderLayouts((yyvsp[-2].interm.type).loc, (yyvsp[-2].interm.type).shaderQualifiers);
-        parseContext.addQualifierToExisting((yyvsp[-2].interm.type).loc, (yyvsp[-2].interm.type).qualifier, *(yyvsp[-1].lex).string);
+        parseContext.checkNoShaderLayouts((yyvsp[(1) - (3)].interm.type).loc, (yyvsp[(1) - (3)].interm.type).shaderQualifiers);
+        parseContext.addQualifierToExisting((yyvsp[(1) - (3)].interm.type).loc, (yyvsp[(1) - (3)].interm.type).qualifier, *(yyvsp[(2) - (3)].lex).string);
         (yyval.interm.intermNode) = 0;
     }
-#line 3942 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 93:
-#line 737 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 740 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.checkNoShaderLayouts((yyvsp[-3].interm.type).loc, (yyvsp[-3].interm.type).shaderQualifiers);
-        (yyvsp[-1].interm.identifierList)->push_back((yyvsp[-2].lex).string);
-        parseContext.addQualifierToExisting((yyvsp[-3].interm.type).loc, (yyvsp[-3].interm.type).qualifier, *(yyvsp[-1].interm.identifierList));
+        parseContext.checkNoShaderLayouts((yyvsp[(1) - (4)].interm.type).loc, (yyvsp[(1) - (4)].interm.type).shaderQualifiers);
+        (yyvsp[(3) - (4)].interm.identifierList)->push_back((yyvsp[(2) - (4)].lex).string);
+        parseContext.addQualifierToExisting((yyvsp[(1) - (4)].interm.type).loc, (yyvsp[(1) - (4)].interm.type).qualifier, *(yyvsp[(3) - (4)].interm.identifierList));
         (yyval.interm.intermNode) = 0;
     }
-#line 3953 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 94:
-#line 746 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { parseContext.nestedBlockCheck((yyvsp[-2].interm.type).loc); }
-#line 3959 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 749 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { parseContext.nestedBlockCheck((yyvsp[(1) - (3)].interm.type).loc); }
     break;
 
   case 95:
-#line 746 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 749 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         --parseContext.structNestingLevel;
-        parseContext.blockName = (yyvsp[-4].lex).string;
-        parseContext.globalQualifierFixCheck((yyvsp[-5].interm.type).loc, (yyvsp[-5].interm.type).qualifier);
-        parseContext.checkNoShaderLayouts((yyvsp[-5].interm.type).loc, (yyvsp[-5].interm.type).shaderQualifiers);
-        parseContext.currentBlockQualifier = (yyvsp[-5].interm.type).qualifier;
-        (yyval.interm).loc = (yyvsp[-5].interm.type).loc;
-        (yyval.interm).typeList = (yyvsp[-1].interm.typeList);
+        parseContext.blockName = (yyvsp[(2) - (6)].lex).string;
+        parseContext.globalQualifierFixCheck((yyvsp[(1) - (6)].interm.type).loc, (yyvsp[(1) - (6)].interm.type).qualifier);
+        parseContext.checkNoShaderLayouts((yyvsp[(1) - (6)].interm.type).loc, (yyvsp[(1) - (6)].interm.type).shaderQualifiers);
+        parseContext.currentBlockQualifier = (yyvsp[(1) - (6)].interm.type).qualifier;
+        (yyval.interm).loc = (yyvsp[(1) - (6)].interm.type).loc;
+        (yyval.interm).typeList = (yyvsp[(5) - (6)].interm.typeList);
     }
-#line 3973 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 96:
-#line 757 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 760 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         (yyval.interm.identifierList) = new TIdentifierList;
-        (yyval.interm.identifierList)->push_back((yyvsp[0].lex).string);
+        (yyval.interm.identifierList)->push_back((yyvsp[(2) - (2)].lex).string);
     }
-#line 3982 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 97:
-#line 761 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 764 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.identifierList) = (yyvsp[-2].interm.identifierList);
-        (yyval.interm.identifierList)->push_back((yyvsp[0].lex).string);
+        (yyval.interm.identifierList) = (yyvsp[(1) - (3)].interm.identifierList);
+        (yyval.interm.identifierList)->push_back((yyvsp[(3) - (3)].lex).string);
     }
-#line 3991 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 98:
-#line 768 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 771 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).function = (yyvsp[-1].interm.function);
-        (yyval.interm).loc = (yyvsp[0].lex).loc;
+        (yyval.interm).function = (yyvsp[(1) - (2)].interm.function);
+        (yyval.interm).loc = (yyvsp[(2) - (2)].lex).loc;
     }
-#line 4000 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 99:
-#line 775 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 778 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.function) = (yyvsp[0].interm.function);
+        (yyval.interm.function) = (yyvsp[(1) - (1)].interm.function);
     }
-#line 4008 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 100:
-#line 778 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 781 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.function) = (yyvsp[0].interm.function);
+        (yyval.interm.function) = (yyvsp[(1) - (1)].interm.function);
     }
-#line 4016 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 101:
-#line 785 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 788 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         // Add the parameter
-        (yyval.interm.function) = (yyvsp[-1].interm.function);
-        if ((yyvsp[0].interm).param.type->getBasicType() != EbtVoid)
-            (yyvsp[-1].interm.function)->addParameter((yyvsp[0].interm).param);
+        (yyval.interm.function) = (yyvsp[(1) - (2)].interm.function);
+        if ((yyvsp[(2) - (2)].interm).param.type->getBasicType() != EbtVoid)
+            (yyvsp[(1) - (2)].interm.function)->addParameter((yyvsp[(2) - (2)].interm).param);
         else
-            delete (yyvsp[0].interm).param.type;
+            delete (yyvsp[(2) - (2)].interm).param.type;
     }
-#line 4029 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 102:
-#line 793 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 796 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         //
         // Only first parameter of one-parameter functions can be void
         // The check for named parameters not being void is done in parameter_declarator
         //
-        if ((yyvsp[0].interm).param.type->getBasicType() == EbtVoid) {
+        if ((yyvsp[(3) - (3)].interm).param.type->getBasicType() == EbtVoid) {
             //
             // This parameter > first is void
             //
-            parseContext.error((yyvsp[-1].lex).loc, "cannot be an argument type except for '(void)'", "void", "");
-            delete (yyvsp[0].interm).param.type;
+            parseContext.error((yyvsp[(2) - (3)].lex).loc, "cannot be an argument type except for '(void)'", "void", "");
+            delete (yyvsp[(3) - (3)].interm).param.type;
         } else {
             // Add the parameter
-            (yyval.interm.function) = (yyvsp[-2].interm.function);
-            (yyvsp[-2].interm.function)->addParameter((yyvsp[0].interm).param);
+            (yyval.interm.function) = (yyvsp[(1) - (3)].interm.function);
+            (yyvsp[(1) - (3)].interm.function)->addParameter((yyvsp[(3) - (3)].interm).param);
         }
     }
-#line 4051 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 103:
-#line 813 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 816 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        if ((yyvsp[-2].interm.type).qualifier.storage != EvqGlobal && (yyvsp[-2].interm.type).qualifier.storage != EvqTemporary) {
-            parseContext.error((yyvsp[-1].lex).loc, "no qualifiers allowed for function return",
-                               GetStorageQualifierString((yyvsp[-2].interm.type).qualifier.storage), "");
+        if ((yyvsp[(1) - (3)].interm.type).qualifier.storage != EvqGlobal && (yyvsp[(1) - (3)].interm.type).qualifier.storage != EvqTemporary) {
+            parseContext.error((yyvsp[(2) - (3)].lex).loc, "no qualifiers allowed for function return",
+                               GetStorageQualifierString((yyvsp[(1) - (3)].interm.type).qualifier.storage), "");
         }
-        if ((yyvsp[-2].interm.type).arraySizes)
-            parseContext.arraySizeRequiredCheck((yyvsp[-2].interm.type).loc, *(yyvsp[-2].interm.type).arraySizes);
+        if ((yyvsp[(1) - (3)].interm.type).arraySizes)
+            parseContext.arraySizeRequiredCheck((yyvsp[(1) - (3)].interm.type).loc, *(yyvsp[(1) - (3)].interm.type).arraySizes);
 
         // Add the function as a prototype after parsing it (we do not support recursion)
         TFunction *function;
-        TType type((yyvsp[-2].interm.type));
-        function = new TFunction((yyvsp[-1].lex).string, type);
+        TType type((yyvsp[(1) - (3)].interm.type));
+        function = new TFunction((yyvsp[(2) - (3)].lex).string, type);
         (yyval.interm.function) = function;
     }
-#line 4070 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 104:
-#line 831 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 834 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        if ((yyvsp[-1].interm.type).arraySizes) {
-            parseContext.profileRequires((yyvsp[-1].interm.type).loc, ENoProfile, 120, E_GL_3DL_array_objects, "arrayed type");
-            parseContext.profileRequires((yyvsp[-1].interm.type).loc, EEsProfile, 300, 0, "arrayed type");
-            parseContext.arraySizeRequiredCheck((yyvsp[-1].interm.type).loc, *(yyvsp[-1].interm.type).arraySizes);
+        if ((yyvsp[(1) - (2)].interm.type).arraySizes) {
+            parseContext.profileRequires((yyvsp[(1) - (2)].interm.type).loc, ENoProfile, 120, E_GL_3DL_array_objects, "arrayed type");
+            parseContext.profileRequires((yyvsp[(1) - (2)].interm.type).loc, EEsProfile, 300, 0, "arrayed type");
+            parseContext.arraySizeRequiredCheck((yyvsp[(1) - (2)].interm.type).loc, *(yyvsp[(1) - (2)].interm.type).arraySizes);
         }
-        if ((yyvsp[-1].interm.type).basicType == EbtVoid) {
-            parseContext.error((yyvsp[0].lex).loc, "illegal use of type 'void'", (yyvsp[0].lex).string->c_str(), "");
+        if ((yyvsp[(1) - (2)].interm.type).basicType == EbtVoid) {
+            parseContext.error((yyvsp[(2) - (2)].lex).loc, "illegal use of type 'void'", (yyvsp[(2) - (2)].lex).string->c_str(), "");
         }
-        parseContext.reservedErrorCheck((yyvsp[0].lex).loc, *(yyvsp[0].lex).string);
+        parseContext.reservedErrorCheck((yyvsp[(2) - (2)].lex).loc, *(yyvsp[(2) - (2)].lex).string);
 
-        TParameter param = {(yyvsp[0].lex).string, new TType((yyvsp[-1].interm.type))};
-        (yyval.interm).loc = (yyvsp[0].lex).loc;
+        TParameter param = {(yyvsp[(2) - (2)].lex).string, new TType((yyvsp[(1) - (2)].interm.type))};
+        (yyval.interm).loc = (yyvsp[(2) - (2)].lex).loc;
         (yyval.interm).param = param;
     }
-#line 4090 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 105:
-#line 846 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 849 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        if ((yyvsp[-2].interm.type).arraySizes) {
-            parseContext.profileRequires((yyvsp[-2].interm.type).loc, ENoProfile, 120, E_GL_3DL_array_objects, "arrayed type");
-            parseContext.profileRequires((yyvsp[-2].interm.type).loc, EEsProfile, 300, 0, "arrayed type");
-            parseContext.arraySizeRequiredCheck((yyvsp[-2].interm.type).loc, *(yyvsp[-2].interm.type).arraySizes);
+        if ((yyvsp[(1) - (3)].interm.type).arraySizes) {
+            parseContext.profileRequires((yyvsp[(1) - (3)].interm.type).loc, ENoProfile, 120, E_GL_3DL_array_objects, "arrayed type");
+            parseContext.profileRequires((yyvsp[(1) - (3)].interm.type).loc, EEsProfile, 300, 0, "arrayed type");
+            parseContext.arraySizeRequiredCheck((yyvsp[(1) - (3)].interm.type).loc, *(yyvsp[(1) - (3)].interm.type).arraySizes);
         }
-        parseContext.arrayDimCheck((yyvsp[-1].lex).loc, (yyvsp[-2].interm.type).arraySizes, (yyvsp[0].interm).arraySizes);
+        parseContext.arrayDimCheck((yyvsp[(2) - (3)].lex).loc, (yyvsp[(1) - (3)].interm.type).arraySizes, (yyvsp[(3) - (3)].interm).arraySizes);
 
-        parseContext.arraySizeRequiredCheck((yyvsp[0].interm).loc, *(yyvsp[0].interm).arraySizes);
-        parseContext.reservedErrorCheck((yyvsp[-1].lex).loc, *(yyvsp[-1].lex).string);
+        parseContext.arraySizeRequiredCheck((yyvsp[(3) - (3)].interm).loc, *(yyvsp[(3) - (3)].interm).arraySizes);
+        parseContext.reservedErrorCheck((yyvsp[(2) - (3)].lex).loc, *(yyvsp[(2) - (3)].lex).string);
 
-        (yyvsp[-2].interm.type).arraySizes = (yyvsp[0].interm).arraySizes;
+        (yyvsp[(1) - (3)].interm.type).arraySizes = (yyvsp[(3) - (3)].interm).arraySizes;
 
-        TParameter param = { (yyvsp[-1].lex).string, new TType((yyvsp[-2].interm.type))};
-        (yyval.interm).loc = (yyvsp[-1].lex).loc;
+        TParameter param = { (yyvsp[(2) - (3)].lex).string, new TType((yyvsp[(1) - (3)].interm.type))};
+        (yyval.interm).loc = (yyvsp[(2) - (3)].lex).loc;
         (yyval.interm).param = param;
     }
-#line 4112 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 106:
-#line 869 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 872 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[0].interm);
-        if ((yyvsp[-1].interm.type).qualifier.precision != EpqNone)
-            (yyval.interm).param.type->getQualifier().precision = (yyvsp[-1].interm.type).qualifier.precision;
+        (yyval.interm) = (yyvsp[(2) - (2)].interm);
+        if ((yyvsp[(1) - (2)].interm.type).qualifier.precision != EpqNone)
+            (yyval.interm).param.type->getQualifier().precision = (yyvsp[(1) - (2)].interm.type).qualifier.precision;
         parseContext.precisionQualifierCheck((yyval.interm).loc, (yyval.interm).param.type->getBasicType(), (yyval.interm).param.type->getQualifier());
 
-        parseContext.checkNoShaderLayouts((yyvsp[-1].interm.type).loc, (yyvsp[-1].interm.type).shaderQualifiers);
-        parseContext.parameterTypeCheck((yyvsp[0].interm).loc, (yyvsp[-1].interm.type).qualifier.storage, *(yyval.interm).param.type);
-        parseContext.paramCheckFix((yyvsp[-1].interm.type).loc, (yyvsp[-1].interm.type).qualifier, *(yyval.interm).param.type);
+        parseContext.checkNoShaderLayouts((yyvsp[(1) - (2)].interm.type).loc, (yyvsp[(1) - (2)].interm.type).shaderQualifiers);
+        parseContext.parameterTypeCheck((yyvsp[(2) - (2)].interm).loc, (yyvsp[(1) - (2)].interm.type).qualifier.storage, *(yyval.interm).param.type);
+        parseContext.paramCheckFix((yyvsp[(1) - (2)].interm.type).loc, (yyvsp[(1) - (2)].interm.type).qualifier, *(yyval.interm).param.type);
 
     }
-#line 4128 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 107:
-#line 880 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 883 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[0].interm);
+        (yyval.interm) = (yyvsp[(1) - (1)].interm);
 
-        parseContext.parameterTypeCheck((yyvsp[0].interm).loc, EvqIn, *(yyvsp[0].interm).param.type);
-        parseContext.paramCheckFix((yyvsp[0].interm).loc, EvqTemporary, *(yyval.interm).param.type);
+        parseContext.parameterTypeCheck((yyvsp[(1) - (1)].interm).loc, EvqIn, *(yyvsp[(1) - (1)].interm).param.type);
+        parseContext.paramCheckFix((yyvsp[(1) - (1)].interm).loc, EvqTemporary, *(yyval.interm).param.type);
         parseContext.precisionQualifierCheck((yyval.interm).loc, (yyval.interm).param.type->getBasicType(), (yyval.interm).param.type->getQualifier());
     }
-#line 4140 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 108:
-#line 890 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 893 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[0].interm);
-        if ((yyvsp[-1].interm.type).qualifier.precision != EpqNone)
-            (yyval.interm).param.type->getQualifier().precision = (yyvsp[-1].interm.type).qualifier.precision;
-        parseContext.precisionQualifierCheck((yyvsp[-1].interm.type).loc, (yyval.interm).param.type->getBasicType(), (yyval.interm).param.type->getQualifier());
+        (yyval.interm) = (yyvsp[(2) - (2)].interm);
+        if ((yyvsp[(1) - (2)].interm.type).qualifier.precision != EpqNone)
+            (yyval.interm).param.type->getQualifier().precision = (yyvsp[(1) - (2)].interm.type).qualifier.precision;
+        parseContext.precisionQualifierCheck((yyvsp[(1) - (2)].interm.type).loc, (yyval.interm).param.type->getBasicType(), (yyval.interm).param.type->getQualifier());
 
-        parseContext.checkNoShaderLayouts((yyvsp[-1].interm.type).loc, (yyvsp[-1].interm.type).shaderQualifiers);
-        parseContext.parameterTypeCheck((yyvsp[0].interm).loc, (yyvsp[-1].interm.type).qualifier.storage, *(yyval.interm).param.type);
-        parseContext.paramCheckFix((yyvsp[-1].interm.type).loc, (yyvsp[-1].interm.type).qualifier, *(yyval.interm).param.type);
+        parseContext.checkNoShaderLayouts((yyvsp[(1) - (2)].interm.type).loc, (yyvsp[(1) - (2)].interm.type).shaderQualifiers);
+        parseContext.parameterTypeCheck((yyvsp[(2) - (2)].interm).loc, (yyvsp[(1) - (2)].interm.type).qualifier.storage, *(yyval.interm).param.type);
+        parseContext.paramCheckFix((yyvsp[(1) - (2)].interm.type).loc, (yyvsp[(1) - (2)].interm.type).qualifier, *(yyval.interm).param.type);
     }
-#line 4155 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 109:
-#line 900 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 903 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[0].interm);
+        (yyval.interm) = (yyvsp[(1) - (1)].interm);
 
-        parseContext.parameterTypeCheck((yyvsp[0].interm).loc, EvqIn, *(yyvsp[0].interm).param.type);
-        parseContext.paramCheckFix((yyvsp[0].interm).loc, EvqTemporary, *(yyval.interm).param.type);
+        parseContext.parameterTypeCheck((yyvsp[(1) - (1)].interm).loc, EvqIn, *(yyvsp[(1) - (1)].interm).param.type);
+        parseContext.paramCheckFix((yyvsp[(1) - (1)].interm).loc, EvqTemporary, *(yyval.interm).param.type);
         parseContext.precisionQualifierCheck((yyval.interm).loc, (yyval.interm).param.type->getBasicType(), (yyval.interm).param.type->getQualifier());
     }
-#line 4167 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 110:
-#line 910 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 913 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        TParameter param = { 0, new TType((yyvsp[0].interm.type)) };
+        TParameter param = { 0, new TType((yyvsp[(1) - (1)].interm.type)) };
         (yyval.interm).param = param;
-        if ((yyvsp[0].interm.type).arraySizes)
-            parseContext.arraySizeRequiredCheck((yyvsp[0].interm.type).loc, *(yyvsp[0].interm.type).arraySizes);
+        if ((yyvsp[(1) - (1)].interm.type).arraySizes)
+            parseContext.arraySizeRequiredCheck((yyvsp[(1) - (1)].interm.type).loc, *(yyvsp[(1) - (1)].interm.type).arraySizes);
     }
-#line 4178 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 111:
-#line 919 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 922 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[0].interm);
+        (yyval.interm) = (yyvsp[(1) - (1)].interm);
     }
-#line 4186 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 112:
-#line 922 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 925 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[-2].interm);
-        parseContext.declareVariable((yyvsp[0].lex).loc, *(yyvsp[0].lex).string, (yyvsp[-2].interm).type);
+        (yyval.interm) = (yyvsp[(1) - (3)].interm);
+        parseContext.declareVariable((yyvsp[(3) - (3)].lex).loc, *(yyvsp[(3) - (3)].lex).string, (yyvsp[(1) - (3)].interm).type);
     }
-#line 4195 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 113:
-#line 926 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 929 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[-3].interm);
-        parseContext.declareVariable((yyvsp[-1].lex).loc, *(yyvsp[-1].lex).string, (yyvsp[-3].interm).type, (yyvsp[0].interm).arraySizes);
+        (yyval.interm) = (yyvsp[(1) - (4)].interm);
+        parseContext.declareVariable((yyvsp[(3) - (4)].lex).loc, *(yyvsp[(3) - (4)].lex).string, (yyvsp[(1) - (4)].interm).type, (yyvsp[(4) - (4)].interm).arraySizes);
     }
-#line 4204 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 114:
-#line 930 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 933 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).type = (yyvsp[-5].interm).type;
-        TIntermNode* initNode = parseContext.declareVariable((yyvsp[-3].lex).loc, *(yyvsp[-3].lex).string, (yyvsp[-5].interm).type, (yyvsp[-2].interm).arraySizes, (yyvsp[0].interm.intermTypedNode));
-        (yyval.interm).intermNode = parseContext.intermediate.growAggregate((yyvsp[-5].interm).intermNode, initNode, (yyvsp[-1].lex).loc);
+        (yyval.interm).type = (yyvsp[(1) - (6)].interm).type;
+        TIntermNode* initNode = parseContext.declareVariable((yyvsp[(3) - (6)].lex).loc, *(yyvsp[(3) - (6)].lex).string, (yyvsp[(1) - (6)].interm).type, (yyvsp[(4) - (6)].interm).arraySizes, (yyvsp[(6) - (6)].interm.intermTypedNode));
+        (yyval.interm).intermNode = parseContext.intermediate.growAggregate((yyvsp[(1) - (6)].interm).intermNode, initNode, (yyvsp[(5) - (6)].lex).loc);
     }
-#line 4214 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 115:
-#line 935 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 938 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).type = (yyvsp[-4].interm).type;
-        TIntermNode* initNode = parseContext.declareVariable((yyvsp[-2].lex).loc, *(yyvsp[-2].lex).string, (yyvsp[-4].interm).type, 0, (yyvsp[0].interm.intermTypedNode));
-        (yyval.interm).intermNode = parseContext.intermediate.growAggregate((yyvsp[-4].interm).intermNode, initNode, (yyvsp[-1].lex).loc);
+        (yyval.interm).type = (yyvsp[(1) - (5)].interm).type;
+        TIntermNode* initNode = parseContext.declareVariable((yyvsp[(3) - (5)].lex).loc, *(yyvsp[(3) - (5)].lex).string, (yyvsp[(1) - (5)].interm).type, 0, (yyvsp[(5) - (5)].interm.intermTypedNode));
+        (yyval.interm).intermNode = parseContext.intermediate.growAggregate((yyvsp[(1) - (5)].interm).intermNode, initNode, (yyvsp[(4) - (5)].lex).loc);
     }
-#line 4224 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 116:
-#line 943 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 946 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).type = (yyvsp[0].interm.type);
+        (yyval.interm).type = (yyvsp[(1) - (1)].interm.type);
         (yyval.interm).intermNode = 0;
         parseContext.declareTypeDefaults((yyval.interm).loc, (yyval.interm).type);
     }
-#line 4234 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 117:
-#line 948 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 951 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).type = (yyvsp[-1].interm.type);
+        (yyval.interm).type = (yyvsp[(1) - (2)].interm.type);
         (yyval.interm).intermNode = 0;
-        parseContext.declareVariable((yyvsp[0].lex).loc, *(yyvsp[0].lex).string, (yyvsp[-1].interm.type));
+        parseContext.declareVariable((yyvsp[(2) - (2)].lex).loc, *(yyvsp[(2) - (2)].lex).string, (yyvsp[(1) - (2)].interm.type));
     }
-#line 4244 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 118:
-#line 953 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 956 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).type = (yyvsp[-2].interm.type);
+        (yyval.interm).type = (yyvsp[(1) - (3)].interm.type);
         (yyval.interm).intermNode = 0;
-        parseContext.declareVariable((yyvsp[-1].lex).loc, *(yyvsp[-1].lex).string, (yyvsp[-2].interm.type), (yyvsp[0].interm).arraySizes);
+        parseContext.declareVariable((yyvsp[(2) - (3)].lex).loc, *(yyvsp[(2) - (3)].lex).string, (yyvsp[(1) - (3)].interm.type), (yyvsp[(3) - (3)].interm).arraySizes);
     }
-#line 4254 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 119:
-#line 958 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 961 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).type = (yyvsp[-4].interm.type);
-        TIntermNode* initNode = parseContext.declareVariable((yyvsp[-3].lex).loc, *(yyvsp[-3].lex).string, (yyvsp[-4].interm.type), (yyvsp[-2].interm).arraySizes, (yyvsp[0].interm.intermTypedNode));
-        (yyval.interm).intermNode = parseContext.intermediate.growAggregate(0, initNode, (yyvsp[-1].lex).loc);
+        (yyval.interm).type = (yyvsp[(1) - (5)].interm.type);
+        TIntermNode* initNode = parseContext.declareVariable((yyvsp[(2) - (5)].lex).loc, *(yyvsp[(2) - (5)].lex).string, (yyvsp[(1) - (5)].interm.type), (yyvsp[(3) - (5)].interm).arraySizes, (yyvsp[(5) - (5)].interm.intermTypedNode));
+        (yyval.interm).intermNode = parseContext.intermediate.growAggregate(0, initNode, (yyvsp[(4) - (5)].lex).loc);
     }
-#line 4264 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 120:
-#line 963 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 966 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).type = (yyvsp[-3].interm.type);
-        TIntermNode* initNode = parseContext.declareVariable((yyvsp[-2].lex).loc, *(yyvsp[-2].lex).string, (yyvsp[-3].interm.type), 0, (yyvsp[0].interm.intermTypedNode));
-        (yyval.interm).intermNode = parseContext.intermediate.growAggregate(0, initNode, (yyvsp[-1].lex).loc);
+        (yyval.interm).type = (yyvsp[(1) - (4)].interm.type);
+        TIntermNode* initNode = parseContext.declareVariable((yyvsp[(2) - (4)].lex).loc, *(yyvsp[(2) - (4)].lex).string, (yyvsp[(1) - (4)].interm.type), 0, (yyvsp[(4) - (4)].interm.intermTypedNode));
+        (yyval.interm).intermNode = parseContext.intermediate.growAggregate(0, initNode, (yyvsp[(3) - (4)].lex).loc);
     }
-#line 4274 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 121:
-#line 972 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 975 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type) = (yyvsp[(1) - (1)].interm.type);
 
-        parseContext.globalQualifierTypeCheck((yyvsp[0].interm.type).loc, (yyvsp[0].interm.type).qualifier, (yyval.interm.type));
-        if ((yyvsp[0].interm.type).arraySizes) {
-            parseContext.profileRequires((yyvsp[0].interm.type).loc, ENoProfile, 120, E_GL_3DL_array_objects, "arrayed type");
-            parseContext.profileRequires((yyvsp[0].interm.type).loc, EEsProfile, 300, 0, "arrayed type");
+        parseContext.globalQualifierTypeCheck((yyvsp[(1) - (1)].interm.type).loc, (yyvsp[(1) - (1)].interm.type).qualifier, (yyval.interm.type));
+        if ((yyvsp[(1) - (1)].interm.type).arraySizes) {
+            parseContext.profileRequires((yyvsp[(1) - (1)].interm.type).loc, ENoProfile, 120, E_GL_3DL_array_objects, "arrayed type");
+            parseContext.profileRequires((yyvsp[(1) - (1)].interm.type).loc, EEsProfile, 300, 0, "arrayed type");
         }
 
         parseContext.precisionQualifierCheck((yyval.interm.type).loc, (yyval.interm.type).basicType, (yyval.interm.type).qualifier);
     }
-#line 4290 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 122:
-#line 983 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 986 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalQualifierFixCheck((yyvsp[-1].interm.type).loc, (yyvsp[-1].interm.type).qualifier);
-        parseContext.globalQualifierTypeCheck((yyvsp[-1].interm.type).loc, (yyvsp[-1].interm.type).qualifier, (yyvsp[0].interm.type));
+        parseContext.globalQualifierFixCheck((yyvsp[(1) - (2)].interm.type).loc, (yyvsp[(1) - (2)].interm.type).qualifier);
+        parseContext.globalQualifierTypeCheck((yyvsp[(1) - (2)].interm.type).loc, (yyvsp[(1) - (2)].interm.type).qualifier, (yyvsp[(2) - (2)].interm.type));
 
-        if ((yyvsp[0].interm.type).arraySizes) {
-            parseContext.profileRequires((yyvsp[0].interm.type).loc, ENoProfile, 120, E_GL_3DL_array_objects, "arrayed type");
-            parseContext.profileRequires((yyvsp[0].interm.type).loc, EEsProfile, 300, 0, "arrayed type");
+        if ((yyvsp[(2) - (2)].interm.type).arraySizes) {
+            parseContext.profileRequires((yyvsp[(2) - (2)].interm.type).loc, ENoProfile, 120, E_GL_3DL_array_objects, "arrayed type");
+            parseContext.profileRequires((yyvsp[(2) - (2)].interm.type).loc, EEsProfile, 300, 0, "arrayed type");
         }
 
-        if ((yyvsp[0].interm.type).arraySizes && parseContext.arrayQualifierError((yyvsp[0].interm.type).loc, (yyvsp[-1].interm.type).qualifier))
-            (yyvsp[0].interm.type).arraySizes = 0;
+        if ((yyvsp[(2) - (2)].interm.type).arraySizes && parseContext.arrayQualifierError((yyvsp[(2) - (2)].interm.type).loc, (yyvsp[(1) - (2)].interm.type).qualifier))
+            (yyvsp[(2) - (2)].interm.type).arraySizes = 0;
 
-        parseContext.checkNoShaderLayouts((yyvsp[0].interm.type).loc, (yyvsp[-1].interm.type).shaderQualifiers);
-        (yyvsp[0].interm.type).shaderQualifiers.merge((yyvsp[-1].interm.type).shaderQualifiers);
-        parseContext.mergeQualifiers((yyvsp[0].interm.type).loc, (yyvsp[0].interm.type).qualifier, (yyvsp[-1].interm.type).qualifier, true);
-        parseContext.precisionQualifierCheck((yyvsp[0].interm.type).loc, (yyvsp[0].interm.type).basicType, (yyvsp[0].interm.type).qualifier);
+        parseContext.checkNoShaderLayouts((yyvsp[(2) - (2)].interm.type).loc, (yyvsp[(1) - (2)].interm.type).shaderQualifiers);
+        (yyvsp[(2) - (2)].interm.type).shaderQualifiers.merge((yyvsp[(1) - (2)].interm.type).shaderQualifiers);
+        parseContext.mergeQualifiers((yyvsp[(2) - (2)].interm.type).loc, (yyvsp[(2) - (2)].interm.type).qualifier, (yyvsp[(1) - (2)].interm.type).qualifier, true);
+        parseContext.precisionQualifierCheck((yyvsp[(2) - (2)].interm.type).loc, (yyvsp[(2) - (2)].interm.type).basicType, (yyvsp[(2) - (2)].interm.type).qualifier);
 
-        (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type) = (yyvsp[(2) - (2)].interm.type);
 
         if (! (yyval.interm.type).qualifier.isInterpolation() &&
             ((parseContext.language == EShLangVertex   && (yyval.interm.type).qualifier.storage == EvqVaryingOut) ||
              (parseContext.language == EShLangFragment && (yyval.interm.type).qualifier.storage == EvqVaryingIn)))
             (yyval.interm.type).qualifier.smooth = true;
     }
-#line 4319 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 123:
-#line 1010 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1013 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalCheck((yyvsp[0].lex).loc, "invariant");
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "invariant");
         parseContext.profileRequires((yyval.interm.type).loc, ENoProfile, 120, 0, "invariant");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.invariant = true;
     }
-#line 4330 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 124:
-#line 1019 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1022 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalCheck((yyvsp[0].lex).loc, "smooth");
-        parseContext.profileRequires((yyvsp[0].lex).loc, ENoProfile, 130, 0, "smooth");
-        parseContext.profileRequires((yyvsp[0].lex).loc, EEsProfile, 300, 0, "smooth");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "smooth");
+        parseContext.profileRequires((yyvsp[(1) - (1)].lex).loc, ENoProfile, 130, 0, "smooth");
+        parseContext.profileRequires((yyvsp[(1) - (1)].lex).loc, EEsProfile, 300, 0, "smooth");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.smooth = true;
     }
-#line 4342 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 125:
-#line 1026 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1029 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalCheck((yyvsp[0].lex).loc, "flat");
-        parseContext.profileRequires((yyvsp[0].lex).loc, ENoProfile, 130, 0, "flat");
-        parseContext.profileRequires((yyvsp[0].lex).loc, EEsProfile, 300, 0, "flat");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "flat");
+        parseContext.profileRequires((yyvsp[(1) - (1)].lex).loc, ENoProfile, 130, 0, "flat");
+        parseContext.profileRequires((yyvsp[(1) - (1)].lex).loc, EEsProfile, 300, 0, "flat");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.flat = true;
     }
-#line 4354 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 126:
-#line 1033 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1036 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalCheck((yyvsp[0].lex).loc, "noperspective");
-        parseContext.requireProfile((yyvsp[0].lex).loc, ~EEsProfile, "noperspective");
-        parseContext.profileRequires((yyvsp[0].lex).loc, ENoProfile, 130, 0, "noperspective");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "noperspective");
+        parseContext.requireProfile((yyvsp[(1) - (1)].lex).loc, ~EEsProfile, "noperspective");
+        parseContext.profileRequires((yyvsp[(1) - (1)].lex).loc, ENoProfile, 130, 0, "noperspective");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.nopersp = true;
     }
-#line 4366 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 127:
-#line 1043 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1046 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type) = (yyvsp[-1].interm.type);
+        (yyval.interm.type) = (yyvsp[(3) - (4)].interm.type);
     }
-#line 4374 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 128:
-#line 1049 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1052 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type) = (yyvsp[(1) - (1)].interm.type);
     }
-#line 4382 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 129:
-#line 1052 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1055 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type) = (yyvsp[-2].interm.type);
-        (yyval.interm.type).shaderQualifiers.merge((yyvsp[0].interm.type).shaderQualifiers);
-        parseContext.mergeObjectLayoutQualifiers((yyval.interm.type).qualifier, (yyvsp[0].interm.type).qualifier, false);
+        (yyval.interm.type) = (yyvsp[(1) - (3)].interm.type);
+        (yyval.interm.type).shaderQualifiers.merge((yyvsp[(3) - (3)].interm.type).shaderQualifiers);
+        parseContext.mergeObjectLayoutQualifiers((yyval.interm.type).qualifier, (yyvsp[(3) - (3)].interm.type).qualifier, false);
     }
-#line 4392 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 130:
-#line 1059 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1062 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
-        parseContext.setLayoutQualifier((yyvsp[0].lex).loc, (yyval.interm.type), *(yyvsp[0].lex).string);
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
+        parseContext.setLayoutQualifier((yyvsp[(1) - (1)].lex).loc, (yyval.interm.type), *(yyvsp[(1) - (1)].lex).string);
     }
-#line 4401 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 131:
-#line 1063 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1066 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[-2].lex).loc);
-        parseContext.setLayoutQualifier((yyvsp[-2].lex).loc, (yyval.interm.type), *(yyvsp[-2].lex).string, (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.type).init((yyvsp[(1) - (3)].lex).loc);
+        parseContext.setLayoutQualifier((yyvsp[(1) - (3)].lex).loc, (yyval.interm.type), *(yyvsp[(1) - (3)].lex).string, (yyvsp[(3) - (3)].interm.intermTypedNode));
     }
-#line 4410 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 132:
-#line 1067 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1070 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     { // because "shared" is both an identifier and a keyword
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         TString strShared("shared");
-        parseContext.setLayoutQualifier((yyvsp[0].lex).loc, (yyval.interm.type), strShared);
+        parseContext.setLayoutQualifier((yyvsp[(1) - (1)].lex).loc, (yyval.interm.type), strShared);
     }
-#line 4420 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 133:
-#line 1075 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1078 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
     }
-#line 4428 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 134:
-#line 1081 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1084 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type) = (yyvsp[(1) - (1)].interm.type);
     }
-#line 4436 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 135:
-#line 1084 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1087 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type) = (yyvsp[-1].interm.type);
+        (yyval.interm.type) = (yyvsp[(1) - (2)].interm.type);
         if ((yyval.interm.type).basicType == EbtVoid)
-            (yyval.interm.type).basicType = (yyvsp[0].interm.type).basicType;
+            (yyval.interm.type).basicType = (yyvsp[(2) - (2)].interm.type).basicType;
 
-        (yyval.interm.type).shaderQualifiers.merge((yyvsp[0].interm.type).shaderQualifiers);
-        parseContext.mergeQualifiers((yyval.interm.type).loc, (yyval.interm.type).qualifier, (yyvsp[0].interm.type).qualifier, false);
+        (yyval.interm.type).shaderQualifiers.merge((yyvsp[(2) - (2)].interm.type).shaderQualifiers);
+        parseContext.mergeQualifiers((yyval.interm.type).loc, (yyval.interm.type).qualifier, (yyvsp[(2) - (2)].interm.type).qualifier, false);
     }
-#line 4449 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 136:
-#line 1095 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1098 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type) = (yyvsp[(1) - (1)].interm.type);
     }
-#line 4457 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 137:
-#line 1098 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1101 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type) = (yyvsp[(1) - (1)].interm.type);
     }
-#line 4465 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 138:
-#line 1101 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1104 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type) = (yyvsp[(1) - (1)].interm.type);
     }
-#line 4473 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 139:
-#line 1104 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1107 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         // allow inheritance of storage qualifier from block declaration
-        (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type) = (yyvsp[(1) - (1)].interm.type);
     }
-#line 4482 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 140:
-#line 1108 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1111 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         // allow inheritance of storage qualifier from block declaration
-        (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type) = (yyvsp[(1) - (1)].interm.type);
     }
-#line 4491 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 141:
-#line 1112 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1115 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         // allow inheritance of storage qualifier from block declaration
-        (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type) = (yyvsp[(1) - (1)].interm.type);
     }
-#line 4500 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 142:
-#line 1119 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1122 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.storage = EvqConst;  // will later turn into EvqConstReadOnly, if the initializer is not constant
     }
-#line 4509 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 143:
-#line 1123 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1126 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.requireStage((yyvsp[0].lex).loc, EShLangVertex, "attribute");
-        parseContext.checkDeprecated((yyvsp[0].lex).loc, ECoreProfile, 130, "attribute");
-        parseContext.checkDeprecated((yyvsp[0].lex).loc, ENoProfile, 130, "attribute");
-        parseContext.requireNotRemoved((yyvsp[0].lex).loc, ECoreProfile, 420, "attribute");
-        parseContext.requireNotRemoved((yyvsp[0].lex).loc, EEsProfile, 300, "attribute");
+        parseContext.requireStage((yyvsp[(1) - (1)].lex).loc, EShLangVertex, "attribute");
+        parseContext.checkDeprecated((yyvsp[(1) - (1)].lex).loc, ECoreProfile, 130, "attribute");
+        parseContext.checkDeprecated((yyvsp[(1) - (1)].lex).loc, ENoProfile, 130, "attribute");
+        parseContext.requireNotRemoved((yyvsp[(1) - (1)].lex).loc, ECoreProfile, 420, "attribute");
+        parseContext.requireNotRemoved((yyvsp[(1) - (1)].lex).loc, EEsProfile, 300, "attribute");
 
-        parseContext.globalCheck((yyvsp[0].lex).loc, "attribute");
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "attribute");
 
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.storage = EvqVaryingIn;
     }
-#line 4526 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 144:
-#line 1135 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1138 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.checkDeprecated((yyvsp[0].lex).loc, ENoProfile, 130, "varying");
-        parseContext.checkDeprecated((yyvsp[0].lex).loc, ECoreProfile, 130, "varying");
-        parseContext.requireNotRemoved((yyvsp[0].lex).loc, ECoreProfile, 420, "varying");
-        parseContext.requireNotRemoved((yyvsp[0].lex).loc, EEsProfile, 300, "varying");
+        parseContext.checkDeprecated((yyvsp[(1) - (1)].lex).loc, ENoProfile, 130, "varying");
+        parseContext.checkDeprecated((yyvsp[(1) - (1)].lex).loc, ECoreProfile, 130, "varying");
+        parseContext.requireNotRemoved((yyvsp[(1) - (1)].lex).loc, ECoreProfile, 420, "varying");
+        parseContext.requireNotRemoved((yyvsp[(1) - (1)].lex).loc, EEsProfile, 300, "varying");
 
-        parseContext.globalCheck((yyvsp[0].lex).loc, "varying");
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "varying");
 
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         if (parseContext.language == EShLangVertex)
             (yyval.interm.type).qualifier.storage = EvqVaryingOut;
         else
             (yyval.interm.type).qualifier.storage = EvqVaryingIn;
     }
-#line 4545 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 145:
-#line 1149 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1152 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalCheck((yyvsp[0].lex).loc, "inout");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "inout");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.storage = EvqInOut;
     }
-#line 4555 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 146:
-#line 1154 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1157 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalCheck((yyvsp[0].lex).loc, "in");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "in");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         // whether this is a parameter "in" or a pipeline "in" will get sorted out a bit later
         (yyval.interm.type).qualifier.storage = EvqIn;
     }
-#line 4566 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 147:
-#line 1160 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1163 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalCheck((yyvsp[0].lex).loc, "out");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "out");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         // whether this is a parameter "out" or a pipeline "out" will get sorted out a bit later
         (yyval.interm.type).qualifier.storage = EvqOut;
     }
-#line 4577 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 148:
-#line 1166 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1169 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.profileRequires((yyvsp[0].lex).loc, ENoProfile, 120, 0, "centroid");
-        parseContext.profileRequires((yyvsp[0].lex).loc, EEsProfile, 300, 0, "centroid");
-        parseContext.globalCheck((yyvsp[0].lex).loc, "centroid");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.profileRequires((yyvsp[(1) - (1)].lex).loc, ENoProfile, 120, 0, "centroid");
+        parseContext.profileRequires((yyvsp[(1) - (1)].lex).loc, EEsProfile, 300, 0, "centroid");
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "centroid");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.centroid = true;
     }
-#line 4589 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 149:
-#line 1173 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1176 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalCheck((yyvsp[0].lex).loc, "patch");
-        parseContext.requireStage((yyvsp[0].lex).loc, (EShLanguageMask)(EShLangTessControlMask | EShLangTessEvaluationMask), "patch");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "patch");
+        parseContext.requireStage((yyvsp[(1) - (1)].lex).loc, (EShLanguageMask)(EShLangTessControlMask | EShLangTessEvaluationMask), "patch");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.patch = true;
     }
-#line 4600 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 150:
-#line 1179 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1182 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalCheck((yyvsp[0].lex).loc, "sample");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "sample");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.sample = true;
     }
-#line 4610 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 151:
-#line 1184 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1187 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalCheck((yyvsp[0].lex).loc, "uniform");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "uniform");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.storage = EvqUniform;
     }
-#line 4620 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 152:
-#line 1189 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1192 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalCheck((yyvsp[0].lex).loc, "buffer");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "buffer");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.storage = EvqBuffer;
     }
-#line 4630 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 153:
-#line 1194 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1197 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.profileRequires((yyvsp[0].lex).loc, ECoreProfile | ECompatibilityProfile, 430, 0, "shared");
-        parseContext.profileRequires((yyvsp[0].lex).loc, EEsProfile, 310, 0, "shared");
-        parseContext.requireStage((yyvsp[0].lex).loc, EShLangCompute, "shared");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.profileRequires((yyvsp[(1) - (1)].lex).loc, ECoreProfile | ECompatibilityProfile, 430, 0, "shared");
+        parseContext.profileRequires((yyvsp[(1) - (1)].lex).loc, EEsProfile, 310, 0, "shared");
+        parseContext.requireStage((yyvsp[(1) - (1)].lex).loc, EShLangCompute, "shared");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.storage = EvqShared;
     }
-#line 4642 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 154:
-#line 1201 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1204 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.coherent = true;
     }
-#line 4651 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 155:
-#line 1205 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1208 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.volatil = true;
     }
-#line 4660 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 156:
-#line 1209 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1212 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.restrict = true;
     }
-#line 4669 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 157:
-#line 1213 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1216 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.readonly = true;
     }
-#line 4678 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 158:
-#line 1217 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1220 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.writeonly = true;
     }
-#line 4687 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 159:
-#line 1221 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1224 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.spvRemoved((yyvsp[0].lex).loc, "subroutine");
-        parseContext.globalCheck((yyvsp[0].lex).loc, "subroutine");
-        (yyval.interm.type).init((yyvsp[0].lex).loc);
+        parseContext.spvRemoved((yyvsp[(1) - (1)].lex).loc, "subroutine");
+        parseContext.globalCheck((yyvsp[(1) - (1)].lex).loc, "subroutine");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc);
         (yyval.interm.type).qualifier.storage = EvqUniform;
     }
-#line 4698 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 160:
-#line 1227 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1230 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.spvRemoved((yyvsp[-3].lex).loc, "subroutine");
-        parseContext.globalCheck((yyvsp[-3].lex).loc, "subroutine");
-        (yyval.interm.type).init((yyvsp[-3].lex).loc);
+        parseContext.spvRemoved((yyvsp[(1) - (4)].lex).loc, "subroutine");
+        parseContext.globalCheck((yyvsp[(1) - (4)].lex).loc, "subroutine");
+        (yyval.interm.type).init((yyvsp[(1) - (4)].lex).loc);
         (yyval.interm.type).qualifier.storage = EvqUniform;
         // TODO: 4.0 semantics: subroutines
         // 1) make sure each identifier is a type declared earlier with SUBROUTINE
         // 2) save all of the identifiers for future comparison with the declared function
     }
-#line 4712 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 161:
-#line 1239 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1242 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         // TODO: 4.0 functionality: subroutine type to list
     }
-#line 4720 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 162:
-#line 1242 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1245 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
     }
-#line 4727 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 163:
-#line 1247 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1250 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type) = (yyvsp[(1) - (1)].interm.type);
         (yyval.interm.type).qualifier.precision = parseContext.getDefaultPrecision((yyval.interm.type));
     }
-#line 4736 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 164:
-#line 1251 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1254 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.arrayDimCheck((yyvsp[0].interm).loc, (yyvsp[0].interm).arraySizes, 0);
-        (yyval.interm.type) = (yyvsp[-1].interm.type);
+        parseContext.arrayDimCheck((yyvsp[(2) - (2)].interm).loc, (yyvsp[(2) - (2)].interm).arraySizes, 0);
+        (yyval.interm.type) = (yyvsp[(1) - (2)].interm.type);
         (yyval.interm.type).qualifier.precision = parseContext.getDefaultPrecision((yyval.interm.type));
-        (yyval.interm.type).arraySizes = (yyvsp[0].interm).arraySizes;
+        (yyval.interm.type).arraySizes = (yyvsp[(2) - (2)].interm).arraySizes;
     }
-#line 4747 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 165:
-#line 1260 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1263 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).loc = (yyvsp[-1].lex).loc;
+        (yyval.interm).loc = (yyvsp[(1) - (2)].lex).loc;
         (yyval.interm).arraySizes = new TArraySizes;
         (yyval.interm).arraySizes->addInnerSize();
     }
-#line 4757 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 166:
-#line 1265 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1268 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm).loc = (yyvsp[-2].lex).loc;
+        (yyval.interm).loc = (yyvsp[(1) - (3)].lex).loc;
         (yyval.interm).arraySizes = new TArraySizes;
 
         TArraySize size;
-        parseContext.arraySizeCheck((yyvsp[-1].interm.intermTypedNode)->getLoc(), (yyvsp[-1].interm.intermTypedNode), size);
+        parseContext.arraySizeCheck((yyvsp[(2) - (3)].interm.intermTypedNode)->getLoc(), (yyvsp[(2) - (3)].interm.intermTypedNode), size);
         (yyval.interm).arraySizes->addInnerSize(size);
     }
-#line 4770 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 167:
-#line 1273 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1276 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[-2].interm);
+        (yyval.interm) = (yyvsp[(1) - (3)].interm);
         (yyval.interm).arraySizes->addInnerSize();
     }
-#line 4779 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 168:
-#line 1277 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1280 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm) = (yyvsp[-3].interm);
+        (yyval.interm) = (yyvsp[(1) - (4)].interm);
 
         TArraySize size;
-        parseContext.arraySizeCheck((yyvsp[-1].interm.intermTypedNode)->getLoc(), (yyvsp[-1].interm.intermTypedNode), size);
+        parseContext.arraySizeCheck((yyvsp[(3) - (4)].interm.intermTypedNode)->getLoc(), (yyvsp[(3) - (4)].interm.intermTypedNode), size);
         (yyval.interm).arraySizes->addInnerSize(size);
     }
-#line 4791 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 169:
-#line 1287 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1290 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtVoid;
     }
-#line 4800 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 170:
-#line 1291 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1294 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
     }
-#line 4809 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 171:
-#line 1295 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1298 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
     }
-#line 4819 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 172:
-#line 1300 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1303 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtInt;
     }
-#line 4828 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 173:
-#line 1304 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1307 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[0].lex).loc, "unsigned integer");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.fullIntegerCheck((yyvsp[(1) - (1)].lex).loc, "unsigned integer");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtUint;
     }
-#line 4838 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 174:
-#line 1309 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1312 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtBool;
     }
-#line 4847 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 175:
-#line 1313 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1316 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setVector(2);
     }
-#line 4857 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 176:
-#line 1318 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1321 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setVector(3);
     }
-#line 4867 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 177:
-#line 1323 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1326 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setVector(4);
     }
-#line 4877 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 178:
-#line 1328 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1331 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double vector");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double vector");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setVector(2);
     }
-#line 4888 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 179:
-#line 1334 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1337 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double vector");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double vector");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setVector(3);
     }
-#line 4899 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 180:
-#line 1340 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1343 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double vector");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double vector");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setVector(4);
     }
-#line 4910 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 181:
-#line 1346 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1349 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtBool;
         (yyval.interm.type).setVector(2);
     }
-#line 4920 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 182:
-#line 1351 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1354 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtBool;
         (yyval.interm.type).setVector(3);
     }
-#line 4930 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 183:
-#line 1356 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1359 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtBool;
         (yyval.interm.type).setVector(4);
     }
-#line 4940 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 184:
-#line 1361 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1364 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtInt;
         (yyval.interm.type).setVector(2);
     }
-#line 4950 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 185:
-#line 1366 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1369 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtInt;
         (yyval.interm.type).setVector(3);
     }
-#line 4960 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 186:
-#line 1371 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1374 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtInt;
         (yyval.interm.type).setVector(4);
     }
-#line 4970 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 187:
-#line 1376 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1379 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[0].lex).loc, "unsigned integer vector");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.fullIntegerCheck((yyvsp[(1) - (1)].lex).loc, "unsigned integer vector");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtUint;
         (yyval.interm.type).setVector(2);
     }
-#line 4981 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 188:
-#line 1382 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1385 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[0].lex).loc, "unsigned integer vector");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.fullIntegerCheck((yyvsp[(1) - (1)].lex).loc, "unsigned integer vector");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtUint;
         (yyval.interm.type).setVector(3);
     }
-#line 4992 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 189:
-#line 1388 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1391 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.fullIntegerCheck((yyvsp[0].lex).loc, "unsigned integer vector");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.fullIntegerCheck((yyvsp[(1) - (1)].lex).loc, "unsigned integer vector");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtUint;
         (yyval.interm.type).setVector(4);
     }
-#line 5003 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 190:
-#line 1394 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1397 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setMatrix(2, 2);
     }
-#line 5013 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 191:
-#line 1399 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1402 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setMatrix(3, 3);
     }
-#line 5023 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 192:
-#line 1404 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1407 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setMatrix(4, 4);
     }
-#line 5033 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 193:
-#line 1409 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1412 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setMatrix(2, 2);
     }
-#line 5043 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 194:
-#line 1414 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1417 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setMatrix(2, 3);
     }
-#line 5053 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 195:
-#line 1419 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1422 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setMatrix(2, 4);
     }
-#line 5063 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 196:
-#line 1424 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1427 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setMatrix(3, 2);
     }
-#line 5073 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 197:
-#line 1429 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1432 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setMatrix(3, 3);
     }
-#line 5083 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 198:
-#line 1434 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1437 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setMatrix(3, 4);
     }
-#line 5093 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 199:
-#line 1439 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1442 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setMatrix(4, 2);
     }
-#line 5103 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 200:
-#line 1444 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1447 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setMatrix(4, 3);
     }
-#line 5113 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 201:
-#line 1449 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1452 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtFloat;
         (yyval.interm.type).setMatrix(4, 4);
     }
-#line 5123 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 202:
-#line 1454 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1457 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double matrix");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double matrix");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setMatrix(2, 2);
     }
-#line 5134 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 203:
-#line 1460 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1463 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double matrix");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double matrix");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setMatrix(3, 3);
     }
-#line 5145 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 204:
-#line 1466 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1469 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double matrix");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double matrix");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setMatrix(4, 4);
     }
-#line 5156 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 205:
-#line 1472 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1475 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double matrix");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double matrix");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setMatrix(2, 2);
     }
-#line 5167 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 206:
-#line 1478 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1481 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double matrix");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double matrix");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setMatrix(2, 3);
     }
-#line 5178 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 207:
-#line 1484 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1487 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double matrix");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double matrix");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setMatrix(2, 4);
     }
-#line 5189 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 208:
-#line 1490 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1493 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double matrix");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double matrix");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setMatrix(3, 2);
     }
-#line 5200 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 209:
-#line 1496 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1499 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double matrix");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double matrix");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setMatrix(3, 3);
     }
-#line 5211 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 210:
-#line 1502 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1505 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double matrix");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double matrix");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setMatrix(3, 4);
     }
-#line 5222 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 211:
-#line 1508 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1511 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double matrix");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double matrix");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setMatrix(4, 2);
     }
-#line 5233 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 212:
-#line 1514 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1517 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double matrix");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double matrix");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setMatrix(4, 3);
     }
-#line 5244 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 213:
-#line 1520 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1523 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.doubleCheck((yyvsp[0].lex).loc, "double matrix");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.doubleCheck((yyvsp[(1) - (1)].lex).loc, "double matrix");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtDouble;
         (yyval.interm.type).setMatrix(4, 4);
     }
-#line 5255 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 214:
-#line 1526 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1529 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.vulkanRemoved((yyvsp[0].lex).loc, "atomic counter types");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.vulkanRemoved((yyvsp[(1) - (1)].lex).loc, "atomic counter types");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtAtomicUint;
     }
-#line 5265 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 215:
-#line 1531 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1534 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, Esd1D);
     }
-#line 5275 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 216:
-#line 1536 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1539 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, Esd2D);
     }
-#line 5285 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 217:
-#line 1541 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1544 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, Esd3D);
     }
-#line 5295 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 218:
-#line 1546 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1549 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, EsdCube);
     }
-#line 5305 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 219:
-#line 1551 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1554 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, Esd1D, false, true);
     }
-#line 5315 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 220:
-#line 1556 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1559 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, Esd2D, false, true);
     }
-#line 5325 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 221:
-#line 1561 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1564 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, EsdCube, false, true);
     }
-#line 5335 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 222:
-#line 1566 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1569 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, Esd1D, true);
     }
-#line 5345 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 223:
-#line 1571 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1574 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, Esd2D, true);
     }
-#line 5355 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 224:
-#line 1576 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1579 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, Esd1D, true, true);
     }
-#line 5365 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 225:
-#line 1581 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1584 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, Esd2D, true, true);
     }
-#line 5375 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 226:
-#line 1586 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1589 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, EsdCube, true);
     }
-#line 5385 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 227:
-#line 1591 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1594 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, EsdCube, true, true);
     }
-#line 5395 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 228:
-#line 1596 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1599 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtInt, Esd1D);
     }
-#line 5405 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 229:
-#line 1601 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1604 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtInt, Esd2D);
     }
-#line 5415 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 230:
-#line 1606 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1609 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtInt, Esd3D);
     }
-#line 5425 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 231:
-#line 1611 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1614 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtInt, EsdCube);
     }
-#line 5435 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 232:
-#line 1616 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1619 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtInt, Esd1D, true);
     }
-#line 5445 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 233:
-#line 1621 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1624 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtInt, Esd2D, true);
     }
-#line 5455 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 234:
-#line 1626 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1629 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtInt, EsdCube, true);
     }
-#line 5465 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 235:
-#line 1631 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1634 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtUint, Esd1D);
     }
-#line 5475 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 236:
-#line 1636 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1639 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtUint, Esd2D);
     }
-#line 5485 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 237:
-#line 1641 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1644 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtUint, Esd3D);
     }
-#line 5495 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 238:
-#line 1646 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1649 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtUint, EsdCube);
     }
-#line 5505 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 239:
-#line 1651 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1654 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtUint, Esd1D, true);
     }
-#line 5515 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 240:
-#line 1656 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1659 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtUint, Esd2D, true);
     }
-#line 5525 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 241:
-#line 1661 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1664 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtUint, EsdCube, true);
     }
-#line 5535 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 242:
-#line 1666 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1669 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, EsdRect);
     }
-#line 5545 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 243:
-#line 1671 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1674 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, EsdRect, false, true);
     }
-#line 5555 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 244:
-#line 1676 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1679 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtInt, EsdRect);
     }
-#line 5565 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 245:
-#line 1681 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1684 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtUint, EsdRect);
     }
-#line 5575 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 246:
-#line 1686 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1689 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, EsdBuffer);
     }
-#line 5585 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 247:
-#line 1691 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1694 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtInt, EsdBuffer);
     }
-#line 5595 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 248:
-#line 1696 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1699 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtUint, EsdBuffer);
     }
-#line 5605 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 249:
-#line 1701 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1704 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, Esd2D, false, false, true);
     }
-#line 5615 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 250:
-#line 1706 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1709 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtInt, Esd2D, false, false, true);
     }
-#line 5625 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 251:
-#line 1711 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1714 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtUint, Esd2D, false, false, true);
     }
-#line 5635 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 252:
-#line 1716 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1719 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, Esd2D, true, false, true);
     }
-#line 5645 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 253:
-#line 1721 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1724 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtInt, Esd2D, true, false, true);
     }
-#line 5655 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 254:
-#line 1726 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1729 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtUint, Esd2D, true, false, true);
     }
-#line 5665 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 255:
-#line 1731 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1734 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setPureSampler(false);
     }
-#line 5675 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 256:
-#line 1736 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1739 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setPureSampler(true);
     }
-#line 5685 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 257:
-#line 1741 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1744 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtFloat, Esd1D);
     }
-#line 5695 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 258:
-#line 1746 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1749 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtFloat, Esd2D);
     }
-#line 5705 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 259:
-#line 1751 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1754 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtFloat, Esd3D);
     }
-#line 5715 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 260:
-#line 1756 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1759 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtFloat, EsdCube);
     }
-#line 5725 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 261:
-#line 1761 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1764 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtFloat, Esd1D, true);
     }
-#line 5735 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 262:
-#line 1766 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1769 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtFloat, Esd2D, true);
     }
-#line 5745 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 263:
-#line 1771 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1774 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtFloat, EsdCube, true);
     }
-#line 5755 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 264:
-#line 1776 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1779 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtInt, Esd1D);
     }
-#line 5765 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 265:
-#line 1781 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1784 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtInt, Esd2D);
     }
-#line 5775 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 266:
-#line 1786 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1789 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtInt, Esd3D);
     }
-#line 5785 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 267:
-#line 1791 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1794 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtInt, EsdCube);
     }
-#line 5795 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 268:
-#line 1796 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1799 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtInt, Esd1D, true);
     }
-#line 5805 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 269:
-#line 1801 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1804 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtInt, Esd2D, true);
     }
-#line 5815 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 270:
-#line 1806 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1809 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtInt, EsdCube, true);
     }
-#line 5825 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 271:
-#line 1811 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1814 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtUint, Esd1D);
     }
-#line 5835 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 272:
-#line 1816 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1819 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtUint, Esd2D);
     }
-#line 5845 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 273:
-#line 1821 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1824 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtUint, Esd3D);
     }
-#line 5855 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 274:
-#line 1826 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1829 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtUint, EsdCube);
     }
-#line 5865 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 275:
-#line 1831 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1834 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtUint, Esd1D, true);
     }
-#line 5875 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 276:
-#line 1836 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1839 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtUint, Esd2D, true);
     }
-#line 5885 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 277:
-#line 1841 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1844 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtUint, EsdCube, true);
     }
-#line 5895 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 278:
-#line 1846 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1849 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtFloat, EsdRect);
     }
-#line 5905 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 279:
-#line 1851 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1854 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtInt, EsdRect);
     }
-#line 5915 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 280:
-#line 1856 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1859 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtUint, EsdRect);
     }
-#line 5925 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 281:
-#line 1861 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1864 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtFloat, EsdBuffer);
     }
-#line 5935 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 282:
-#line 1866 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1869 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtInt, EsdBuffer);
     }
-#line 5945 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 283:
-#line 1871 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1874 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtUint, EsdBuffer);
     }
-#line 5955 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 284:
-#line 1876 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1879 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtFloat, Esd2D, false, false, true);
     }
-#line 5965 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 285:
-#line 1881 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1884 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtInt, Esd2D, false, false, true);
     }
-#line 5975 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 286:
-#line 1886 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1889 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtUint, Esd2D, false, false, true);
     }
-#line 5985 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 287:
-#line 1891 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1894 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtFloat, Esd2D, true, false, true);
     }
-#line 5995 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 288:
-#line 1896 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1899 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtInt, Esd2D, true, false, true);
     }
-#line 6005 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 289:
-#line 1901 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1904 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setTexture(EbtUint, Esd2D, true, false, true);
     }
-#line 6015 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 290:
-#line 1906 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1909 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtFloat, Esd1D);
     }
-#line 6025 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 291:
-#line 1911 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1914 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtInt, Esd1D);
     }
-#line 6035 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 292:
-#line 1916 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1919 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtUint, Esd1D);
     }
-#line 6045 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 293:
-#line 1921 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1924 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtFloat, Esd2D);
     }
-#line 6055 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 294:
-#line 1926 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1929 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtInt, Esd2D);
     }
-#line 6065 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 295:
-#line 1931 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1934 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtUint, Esd2D);
     }
-#line 6075 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 296:
-#line 1936 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1939 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtFloat, Esd3D);
     }
-#line 6085 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 297:
-#line 1941 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1944 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtInt, Esd3D);
     }
-#line 6095 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 298:
-#line 1946 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1949 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtUint, Esd3D);
     }
-#line 6105 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 299:
-#line 1951 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1954 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtFloat, EsdRect);
     }
-#line 6115 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 300:
-#line 1956 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1959 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtInt, EsdRect);
     }
-#line 6125 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 301:
-#line 1961 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1964 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtUint, EsdRect);
     }
-#line 6135 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 302:
-#line 1966 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1969 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtFloat, EsdCube);
     }
-#line 6145 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 303:
-#line 1971 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1974 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtInt, EsdCube);
     }
-#line 6155 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 304:
-#line 1976 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1979 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtUint, EsdCube);
     }
-#line 6165 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 305:
-#line 1981 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1984 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtFloat, EsdBuffer);
     }
-#line 6175 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 306:
-#line 1986 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1989 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtInt, EsdBuffer);
     }
-#line 6185 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 307:
-#line 1991 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1994 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtUint, EsdBuffer);
     }
-#line 6195 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 308:
-#line 1996 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 1999 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtFloat, Esd1D, true);
     }
-#line 6205 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 309:
-#line 2001 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2004 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtInt, Esd1D, true);
     }
-#line 6215 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 310:
-#line 2006 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2009 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtUint, Esd1D, true);
     }
-#line 6225 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 311:
-#line 2011 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2014 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtFloat, Esd2D, true);
     }
-#line 6235 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 312:
-#line 2016 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2019 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtInt, Esd2D, true);
     }
-#line 6245 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 313:
-#line 2021 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2024 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtUint, Esd2D, true);
     }
-#line 6255 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 314:
-#line 2026 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2029 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtFloat, EsdCube, true);
     }
-#line 6265 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 315:
-#line 2031 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2034 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtInt, EsdCube, true);
     }
-#line 6275 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 316:
-#line 2036 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2039 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtUint, EsdCube, true);
     }
-#line 6285 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 317:
-#line 2041 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2044 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtFloat, Esd2D, false, false, true);
     }
-#line 6295 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 318:
-#line 2046 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2049 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtInt, Esd2D, false, false, true);
     }
-#line 6305 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 319:
-#line 2051 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2054 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtUint, Esd2D, false, false, true);
     }
-#line 6315 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 320:
-#line 2056 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2059 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtFloat, Esd2D, true, false, true);
     }
-#line 6325 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 321:
-#line 2061 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2064 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtInt, Esd2D, true, false, true);
     }
-#line 6335 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 322:
-#line 2066 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2069 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setImage(EbtUint, Esd2D, true, false, true);
     }
-#line 6345 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 323:
-#line 2071 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2074 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {  // GL_OES_EGL_image_external
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.set(EbtFloat, Esd2D);
         (yyval.interm.type).sampler.external = true;
     }
-#line 6356 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 324:
-#line 2077 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2080 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.requireStage((yyvsp[0].lex).loc, EShLangFragment, "subpass input");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.requireStage((yyvsp[(1) - (1)].lex).loc, EShLangFragment, "subpass input");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setSubpass(EbtFloat);
     }
-#line 6367 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 325:
-#line 2083 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2086 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.requireStage((yyvsp[0].lex).loc, EShLangFragment, "subpass input");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.requireStage((yyvsp[(1) - (1)].lex).loc, EShLangFragment, "subpass input");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setSubpass(EbtFloat, true);
     }
-#line 6378 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 326:
-#line 2089 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2092 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.requireStage((yyvsp[0].lex).loc, EShLangFragment, "subpass input");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.requireStage((yyvsp[(1) - (1)].lex).loc, EShLangFragment, "subpass input");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setSubpass(EbtInt);
     }
-#line 6389 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 327:
-#line 2095 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2098 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.requireStage((yyvsp[0].lex).loc, EShLangFragment, "subpass input");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.requireStage((yyvsp[(1) - (1)].lex).loc, EShLangFragment, "subpass input");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setSubpass(EbtInt, true);
     }
-#line 6400 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 328:
-#line 2101 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2104 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.requireStage((yyvsp[0].lex).loc, EShLangFragment, "subpass input");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.requireStage((yyvsp[(1) - (1)].lex).loc, EShLangFragment, "subpass input");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setSubpass(EbtUint);
     }
-#line 6411 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 329:
-#line 2107 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2110 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.requireStage((yyvsp[0].lex).loc, EShLangFragment, "subpass input");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.requireStage((yyvsp[(1) - (1)].lex).loc, EShLangFragment, "subpass input");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         (yyval.interm.type).basicType = EbtSampler;
         (yyval.interm.type).sampler.setSubpass(EbtUint, true);
     }
-#line 6422 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 330:
-#line 2113 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2116 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type) = (yyvsp[(1) - (1)].interm.type);
         (yyval.interm.type).qualifier.storage = parseContext.symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
         parseContext.structTypeCheck((yyval.interm.type).loc, (yyval.interm.type));
     }
-#line 6432 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 331:
-#line 2118 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2121 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         //
         // This is for user defined type names.  The lexical phase looked up the
         // type.
         //
-        if (const TVariable* variable = ((yyvsp[0].lex).symbol)->getAsVariable()) {
+        if (const TVariable* variable = ((yyvsp[(1) - (1)].lex).symbol)->getAsVariable()) {
             const TType& structure = variable->getType();
-            (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+            (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
             (yyval.interm.type).basicType = EbtStruct;
             (yyval.interm.type).userDef = &structure;
         } else
-            parseContext.error((yyvsp[0].lex).loc, "expected type name", (yyvsp[0].lex).string->c_str(), "");
+            parseContext.error((yyvsp[(1) - (1)].lex).loc, "expected type name", (yyvsp[(1) - (1)].lex).string->c_str(), "");
     }
-#line 6450 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 332:
-#line 2134 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2137 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.profileRequires((yyvsp[0].lex).loc, ENoProfile, 130, 0, "highp precision qualifier");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.profileRequires((yyvsp[(1) - (1)].lex).loc, ENoProfile, 130, 0, "highp precision qualifier");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         if (parseContext.profile == EEsProfile)
             (yyval.interm.type).qualifier.precision = EpqHigh;
     }
-#line 6461 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 333:
-#line 2140 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2143 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.profileRequires((yyvsp[0].lex).loc, ENoProfile, 130, 0, "mediump precision qualifier");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.profileRequires((yyvsp[(1) - (1)].lex).loc, ENoProfile, 130, 0, "mediump precision qualifier");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         if (parseContext.profile == EEsProfile)
             (yyval.interm.type).qualifier.precision = EpqMedium;
     }
-#line 6472 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 334:
-#line 2146 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2149 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.profileRequires((yyvsp[0].lex).loc, ENoProfile, 130, 0, "lowp precision qualifier");
-        (yyval.interm.type).init((yyvsp[0].lex).loc, parseContext.symbolTable.atGlobalLevel());
+        parseContext.profileRequires((yyvsp[(1) - (1)].lex).loc, ENoProfile, 130, 0, "lowp precision qualifier");
+        (yyval.interm.type).init((yyvsp[(1) - (1)].lex).loc, parseContext.symbolTable.atGlobalLevel());
         if (parseContext.profile == EEsProfile)
             (yyval.interm.type).qualifier.precision = EpqLow;
     }
-#line 6483 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 335:
-#line 2155 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { parseContext.nestedStructCheck((yyvsp[-2].lex).loc); }
-#line 6489 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2158 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { parseContext.nestedStructCheck((yyvsp[(1) - (3)].lex).loc); }
     break;
 
   case 336:
-#line 2155 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2158 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        TType* structure = new TType((yyvsp[-1].interm.typeList), *(yyvsp[-4].lex).string);
-        parseContext.structArrayCheck((yyvsp[-4].lex).loc, *structure);
-        TVariable* userTypeDef = new TVariable((yyvsp[-4].lex).string, *structure, true);
+        TType* structure = new TType((yyvsp[(5) - (6)].interm.typeList), *(yyvsp[(2) - (6)].lex).string);
+        parseContext.structArrayCheck((yyvsp[(2) - (6)].lex).loc, *structure);
+        TVariable* userTypeDef = new TVariable((yyvsp[(2) - (6)].lex).string, *structure, true);
         if (! parseContext.symbolTable.insert(*userTypeDef))
-            parseContext.error((yyvsp[-4].lex).loc, "redefinition", (yyvsp[-4].lex).string->c_str(), "struct");
-        (yyval.interm.type).init((yyvsp[-5].lex).loc);
+            parseContext.error((yyvsp[(2) - (6)].lex).loc, "redefinition", (yyvsp[(2) - (6)].lex).string->c_str(), "struct");
+        (yyval.interm.type).init((yyvsp[(1) - (6)].lex).loc);
         (yyval.interm.type).basicType = EbtStruct;
         (yyval.interm.type).userDef = structure;
         --parseContext.structNestingLevel;
     }
-#line 6505 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 337:
-#line 2166 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { parseContext.nestedStructCheck((yyvsp[-1].lex).loc); }
-#line 6511 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2169 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { parseContext.nestedStructCheck((yyvsp[(1) - (2)].lex).loc); }
     break;
 
   case 338:
-#line 2166 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2169 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        TType* structure = new TType((yyvsp[-1].interm.typeList), TString(""));
-        (yyval.interm.type).init((yyvsp[-4].lex).loc);
+        TType* structure = new TType((yyvsp[(4) - (5)].interm.typeList), TString(""));
+        (yyval.interm.type).init((yyvsp[(1) - (5)].lex).loc);
         (yyval.interm.type).basicType = EbtStruct;
         (yyval.interm.type).userDef = structure;
         --parseContext.structNestingLevel;
     }
-#line 6523 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 339:
-#line 2176 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2179 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.typeList) = (yyvsp[0].interm.typeList);
+        (yyval.interm.typeList) = (yyvsp[(1) - (1)].interm.typeList);
     }
-#line 6531 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 340:
-#line 2179 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2182 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.typeList) = (yyvsp[-1].interm.typeList);
-        for (unsigned int i = 0; i < (yyvsp[0].interm.typeList)->size(); ++i) {
+        (yyval.interm.typeList) = (yyvsp[(1) - (2)].interm.typeList);
+        for (unsigned int i = 0; i < (yyvsp[(2) - (2)].interm.typeList)->size(); ++i) {
             for (unsigned int j = 0; j < (yyval.interm.typeList)->size(); ++j) {
-                if ((*(yyval.interm.typeList))[j].type->getFieldName() == (*(yyvsp[0].interm.typeList))[i].type->getFieldName())
-                    parseContext.error((*(yyvsp[0].interm.typeList))[i].loc, "duplicate member name:", "", (*(yyvsp[0].interm.typeList))[i].type->getFieldName().c_str());
+                if ((*(yyval.interm.typeList))[j].type->getFieldName() == (*(yyvsp[(2) - (2)].interm.typeList))[i].type->getFieldName())
+                    parseContext.error((*(yyvsp[(2) - (2)].interm.typeList))[i].loc, "duplicate member name:", "", (*(yyvsp[(2) - (2)].interm.typeList))[i].type->getFieldName().c_str());
             }
-            (yyval.interm.typeList)->push_back((*(yyvsp[0].interm.typeList))[i]);
+            (yyval.interm.typeList)->push_back((*(yyvsp[(2) - (2)].interm.typeList))[i]);
         }
     }
-#line 6546 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 341:
-#line 2192 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2195 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        if ((yyvsp[-2].interm.type).arraySizes) {
-            parseContext.profileRequires((yyvsp[-2].interm.type).loc, ENoProfile, 120, E_GL_3DL_array_objects, "arrayed type");
-            parseContext.profileRequires((yyvsp[-2].interm.type).loc, EEsProfile, 300, 0, "arrayed type");
+        if ((yyvsp[(1) - (3)].interm.type).arraySizes) {
+            parseContext.profileRequires((yyvsp[(1) - (3)].interm.type).loc, ENoProfile, 120, E_GL_3DL_array_objects, "arrayed type");
+            parseContext.profileRequires((yyvsp[(1) - (3)].interm.type).loc, EEsProfile, 300, 0, "arrayed type");
             if (parseContext.profile == EEsProfile)
-                parseContext.arraySizeRequiredCheck((yyvsp[-2].interm.type).loc, *(yyvsp[-2].interm.type).arraySizes);
+                parseContext.arraySizeRequiredCheck((yyvsp[(1) - (3)].interm.type).loc, *(yyvsp[(1) - (3)].interm.type).arraySizes);
         }
 
-        (yyval.interm.typeList) = (yyvsp[-1].interm.typeList);
+        (yyval.interm.typeList) = (yyvsp[(2) - (3)].interm.typeList);
 
-        parseContext.voidErrorCheck((yyvsp[-2].interm.type).loc, (*(yyvsp[-1].interm.typeList))[0].type->getFieldName(), (yyvsp[-2].interm.type).basicType);
-        parseContext.precisionQualifierCheck((yyvsp[-2].interm.type).loc, (yyvsp[-2].interm.type).basicType, (yyvsp[-2].interm.type).qualifier);
+        parseContext.voidErrorCheck((yyvsp[(1) - (3)].interm.type).loc, (*(yyvsp[(2) - (3)].interm.typeList))[0].type->getFieldName(), (yyvsp[(1) - (3)].interm.type).basicType);
+        parseContext.precisionQualifierCheck((yyvsp[(1) - (3)].interm.type).loc, (yyvsp[(1) - (3)].interm.type).basicType, (yyvsp[(1) - (3)].interm.type).qualifier);
 
         for (unsigned int i = 0; i < (yyval.interm.typeList)->size(); ++i) {
-            parseContext.arrayDimCheck((yyvsp[-2].interm.type).loc, (*(yyval.interm.typeList))[i].type, (yyvsp[-2].interm.type).arraySizes);
-            (*(yyval.interm.typeList))[i].type->mergeType((yyvsp[-2].interm.type));
+            parseContext.arrayDimCheck((yyvsp[(1) - (3)].interm.type).loc, (*(yyval.interm.typeList))[i].type, (yyvsp[(1) - (3)].interm.type).arraySizes);
+            (*(yyval.interm.typeList))[i].type->mergeType((yyvsp[(1) - (3)].interm.type));
         }
     }
-#line 6569 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 342:
-#line 2210 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2213 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.globalQualifierFixCheck((yyvsp[-3].interm.type).loc, (yyvsp[-3].interm.type).qualifier);
-        if ((yyvsp[-2].interm.type).arraySizes) {
-            parseContext.profileRequires((yyvsp[-2].interm.type).loc, ENoProfile, 120, E_GL_3DL_array_objects, "arrayed type");
-            parseContext.profileRequires((yyvsp[-2].interm.type).loc, EEsProfile, 300, 0, "arrayed type");
+        parseContext.globalQualifierFixCheck((yyvsp[(1) - (4)].interm.type).loc, (yyvsp[(1) - (4)].interm.type).qualifier);
+        if ((yyvsp[(2) - (4)].interm.type).arraySizes) {
+            parseContext.profileRequires((yyvsp[(2) - (4)].interm.type).loc, ENoProfile, 120, E_GL_3DL_array_objects, "arrayed type");
+            parseContext.profileRequires((yyvsp[(2) - (4)].interm.type).loc, EEsProfile, 300, 0, "arrayed type");
             if (parseContext.profile == EEsProfile)
-                parseContext.arraySizeRequiredCheck((yyvsp[-2].interm.type).loc, *(yyvsp[-2].interm.type).arraySizes);
+                parseContext.arraySizeRequiredCheck((yyvsp[(2) - (4)].interm.type).loc, *(yyvsp[(2) - (4)].interm.type).arraySizes);
         }
 
-        (yyval.interm.typeList) = (yyvsp[-1].interm.typeList);
+        (yyval.interm.typeList) = (yyvsp[(3) - (4)].interm.typeList);
 
-        parseContext.checkNoShaderLayouts((yyvsp[-3].interm.type).loc, (yyvsp[-3].interm.type).shaderQualifiers);
-        parseContext.voidErrorCheck((yyvsp[-2].interm.type).loc, (*(yyvsp[-1].interm.typeList))[0].type->getFieldName(), (yyvsp[-2].interm.type).basicType);
-        parseContext.mergeQualifiers((yyvsp[-2].interm.type).loc, (yyvsp[-2].interm.type).qualifier, (yyvsp[-3].interm.type).qualifier, true);
-        parseContext.precisionQualifierCheck((yyvsp[-2].interm.type).loc, (yyvsp[-2].interm.type).basicType, (yyvsp[-2].interm.type).qualifier);
+        parseContext.checkNoShaderLayouts((yyvsp[(1) - (4)].interm.type).loc, (yyvsp[(1) - (4)].interm.type).shaderQualifiers);
+        parseContext.voidErrorCheck((yyvsp[(2) - (4)].interm.type).loc, (*(yyvsp[(3) - (4)].interm.typeList))[0].type->getFieldName(), (yyvsp[(2) - (4)].interm.type).basicType);
+        parseContext.mergeQualifiers((yyvsp[(2) - (4)].interm.type).loc, (yyvsp[(2) - (4)].interm.type).qualifier, (yyvsp[(1) - (4)].interm.type).qualifier, true);
+        parseContext.precisionQualifierCheck((yyvsp[(2) - (4)].interm.type).loc, (yyvsp[(2) - (4)].interm.type).basicType, (yyvsp[(2) - (4)].interm.type).qualifier);
 
         for (unsigned int i = 0; i < (yyval.interm.typeList)->size(); ++i) {
-            parseContext.arrayDimCheck((yyvsp[-3].interm.type).loc, (*(yyval.interm.typeList))[i].type, (yyvsp[-2].interm.type).arraySizes);
-            (*(yyval.interm.typeList))[i].type->mergeType((yyvsp[-2].interm.type));
+            parseContext.arrayDimCheck((yyvsp[(1) - (4)].interm.type).loc, (*(yyval.interm.typeList))[i].type, (yyvsp[(2) - (4)].interm.type).arraySizes);
+            (*(yyval.interm.typeList))[i].type->mergeType((yyvsp[(2) - (4)].interm.type));
         }
     }
-#line 6595 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 343:
-#line 2234 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2237 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         (yyval.interm.typeList) = new TTypeList;
-        (yyval.interm.typeList)->push_back((yyvsp[0].interm.typeLine));
+        (yyval.interm.typeList)->push_back((yyvsp[(1) - (1)].interm.typeLine));
     }
-#line 6604 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 344:
-#line 2238 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2241 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.typeList)->push_back((yyvsp[0].interm.typeLine));
+        (yyval.interm.typeList)->push_back((yyvsp[(3) - (3)].interm.typeLine));
     }
-#line 6612 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 345:
-#line 2244 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2247 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         (yyval.interm.typeLine).type = new TType(EbtVoid);
-        (yyval.interm.typeLine).loc = (yyvsp[0].lex).loc;
-        (yyval.interm.typeLine).type->setFieldName(*(yyvsp[0].lex).string);
+        (yyval.interm.typeLine).loc = (yyvsp[(1) - (1)].lex).loc;
+        (yyval.interm.typeLine).type->setFieldName(*(yyvsp[(1) - (1)].lex).string);
     }
-#line 6622 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 346:
-#line 2249 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2252 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.arrayDimCheck((yyvsp[-1].lex).loc, (yyvsp[0].interm).arraySizes, 0);
+        parseContext.arrayDimCheck((yyvsp[(1) - (2)].lex).loc, (yyvsp[(2) - (2)].interm).arraySizes, 0);
 
         (yyval.interm.typeLine).type = new TType(EbtVoid);
-        (yyval.interm.typeLine).loc = (yyvsp[-1].lex).loc;
-        (yyval.interm.typeLine).type->setFieldName(*(yyvsp[-1].lex).string);
-        (yyval.interm.typeLine).type->newArraySizes(*(yyvsp[0].interm).arraySizes);
+        (yyval.interm.typeLine).loc = (yyvsp[(1) - (2)].lex).loc;
+        (yyval.interm.typeLine).type->setFieldName(*(yyvsp[(1) - (2)].lex).string);
+        (yyval.interm.typeLine).type->newArraySizes(*(yyvsp[(2) - (2)].interm).arraySizes);
     }
-#line 6635 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 347:
-#line 2260 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2263 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
+        (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode);
     }
-#line 6643 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 348:
-#line 2263 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2266 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         const char* initFeature = "{ } style initializers";
-        parseContext.requireProfile((yyvsp[-2].lex).loc, ~EEsProfile, initFeature);
-        parseContext.profileRequires((yyvsp[-2].lex).loc, ~EEsProfile, 420, E_GL_ARB_shading_language_420pack, initFeature);
-        (yyval.interm.intermTypedNode) = (yyvsp[-1].interm.intermTypedNode);
+        parseContext.requireProfile((yyvsp[(1) - (3)].lex).loc, ~EEsProfile, initFeature);
+        parseContext.profileRequires((yyvsp[(1) - (3)].lex).loc, ~EEsProfile, 420, E_GL_ARB_shading_language_420pack, initFeature);
+        (yyval.interm.intermTypedNode) = (yyvsp[(2) - (3)].interm.intermTypedNode);
     }
-#line 6654 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 349:
-#line 2269 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2272 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         const char* initFeature = "{ } style initializers";
-        parseContext.requireProfile((yyvsp[-3].lex).loc, ~EEsProfile, initFeature);
-        parseContext.profileRequires((yyvsp[-3].lex).loc, ~EEsProfile, 420, E_GL_ARB_shading_language_420pack, initFeature);
-        (yyval.interm.intermTypedNode) = (yyvsp[-2].interm.intermTypedNode);
+        parseContext.requireProfile((yyvsp[(1) - (4)].lex).loc, ~EEsProfile, initFeature);
+        parseContext.profileRequires((yyvsp[(1) - (4)].lex).loc, ~EEsProfile, 420, E_GL_ARB_shading_language_420pack, initFeature);
+        (yyval.interm.intermTypedNode) = (yyvsp[(2) - (4)].interm.intermTypedNode);
     }
-#line 6665 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 350:
-#line 2278 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2281 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.intermediate.growAggregate(0, (yyvsp[0].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode)->getLoc());
+        (yyval.interm.intermTypedNode) = parseContext.intermediate.growAggregate(0, (yyvsp[(1) - (1)].interm.intermTypedNode), (yyvsp[(1) - (1)].interm.intermTypedNode)->getLoc());
     }
-#line 6673 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 351:
-#line 2281 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2284 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = parseContext.intermediate.growAggregate((yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = parseContext.intermediate.growAggregate((yyvsp[(1) - (3)].interm.intermTypedNode), (yyvsp[(3) - (3)].interm.intermTypedNode));
     }
-#line 6681 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 352:
-#line 2287 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode); }
-#line 6687 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2290 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode); }
     break;
 
   case 353:
-#line 2291 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode); }
-#line 6693 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2294 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode); }
     break;
 
   case 354:
-#line 2292 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode); }
-#line 6699 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2295 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode); }
     break;
 
   case 355:
-#line 2298 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode); }
-#line 6705 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2301 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode); }
     break;
 
   case 356:
-#line 2299 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode); }
-#line 6711 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2302 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode); }
     break;
 
   case 357:
-#line 2300 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode); }
-#line 6717 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2303 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode); }
     break;
 
   case 358:
-#line 2301 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode); }
-#line 6723 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2304 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode); }
     break;
 
   case 359:
-#line 2302 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode); }
-#line 6729 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2305 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode); }
     break;
 
   case 360:
-#line 2303 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode); }
-#line 6735 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2306 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode); }
     break;
 
   case 361:
-#line 2304 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode); }
-#line 6741 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2307 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode); }
     break;
 
   case 362:
-#line 2308 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2311 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     { (yyval.interm.intermNode) = 0; }
-#line 6747 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 363:
-#line 2309 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2312 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         parseContext.symbolTable.push();
         ++parseContext.statementNestingLevel;
     }
-#line 6756 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 364:
-#line 2313 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2316 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         parseContext.symbolTable.pop(&parseContext.defaultPrecision[0]);
         --parseContext.statementNestingLevel;
     }
-#line 6765 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 365:
-#line 2317 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2320 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        if ((yyvsp[-2].interm.intermNode) && (yyvsp[-2].interm.intermNode)->getAsAggregate())
-            (yyvsp[-2].interm.intermNode)->getAsAggregate()->setOperator(EOpSequence);
-        (yyval.interm.intermNode) = (yyvsp[-2].interm.intermNode);
+        if ((yyvsp[(3) - (5)].interm.intermNode) && (yyvsp[(3) - (5)].interm.intermNode)->getAsAggregate())
+            (yyvsp[(3) - (5)].interm.intermNode)->getAsAggregate()->setOperator(EOpSequence);
+        (yyval.interm.intermNode) = (yyvsp[(3) - (5)].interm.intermNode);
     }
-#line 6775 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 366:
-#line 2325 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode); }
-#line 6781 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2328 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode); }
     break;
 
   case 367:
-#line 2326 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode); }
-#line 6787 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2329 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode); }
     break;
 
   case 368:
-#line 2330 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2333 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         ++parseContext.controlFlowNestingLevel;
     }
-#line 6795 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 369:
-#line 2333 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2336 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         --parseContext.controlFlowNestingLevel;
-        (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode);
+        (yyval.interm.intermNode) = (yyvsp[(2) - (2)].interm.intermNode);
     }
-#line 6804 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 370:
-#line 2337 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2340 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         parseContext.symbolTable.push();
         ++parseContext.statementNestingLevel;
         ++parseContext.controlFlowNestingLevel;
     }
-#line 6814 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 371:
-#line 2342 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2345 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         parseContext.symbolTable.pop(&parseContext.defaultPrecision[0]);
         --parseContext.statementNestingLevel;
         --parseContext.controlFlowNestingLevel;
-        (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode);
+        (yyval.interm.intermNode) = (yyvsp[(2) - (2)].interm.intermNode);
     }
-#line 6825 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 372:
-#line 2351 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2354 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         (yyval.interm.intermNode) = 0;
     }
-#line 6833 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 373:
-#line 2354 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2357 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        if ((yyvsp[-1].interm.intermNode) && (yyvsp[-1].interm.intermNode)->getAsAggregate())
-            (yyvsp[-1].interm.intermNode)->getAsAggregate()->setOperator(EOpSequence);
-        (yyval.interm.intermNode) = (yyvsp[-1].interm.intermNode);
+        if ((yyvsp[(2) - (3)].interm.intermNode) && (yyvsp[(2) - (3)].interm.intermNode)->getAsAggregate())
+            (yyvsp[(2) - (3)].interm.intermNode)->getAsAggregate()->setOperator(EOpSequence);
+        (yyval.interm.intermNode) = (yyvsp[(2) - (3)].interm.intermNode);
     }
-#line 6843 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 374:
-#line 2362 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2365 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermNode) = parseContext.intermediate.makeAggregate((yyvsp[0].interm.intermNode));
-        if ((yyvsp[0].interm.intermNode) && (yyvsp[0].interm.intermNode)->getAsBranchNode() && ((yyvsp[0].interm.intermNode)->getAsBranchNode()->getFlowOp() == EOpCase ||
-                                            (yyvsp[0].interm.intermNode)->getAsBranchNode()->getFlowOp() == EOpDefault)) {
-            parseContext.wrapupSwitchSubsequence(0, (yyvsp[0].interm.intermNode));
+        (yyval.interm.intermNode) = parseContext.intermediate.makeAggregate((yyvsp[(1) - (1)].interm.intermNode));
+        if ((yyvsp[(1) - (1)].interm.intermNode) && (yyvsp[(1) - (1)].interm.intermNode)->getAsBranchNode() && ((yyvsp[(1) - (1)].interm.intermNode)->getAsBranchNode()->getFlowOp() == EOpCase ||
+                                            (yyvsp[(1) - (1)].interm.intermNode)->getAsBranchNode()->getFlowOp() == EOpDefault)) {
+            parseContext.wrapupSwitchSubsequence(0, (yyvsp[(1) - (1)].interm.intermNode));
             (yyval.interm.intermNode) = 0;  // start a fresh subsequence for what's after this case
         }
     }
-#line 6856 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 375:
-#line 2370 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2373 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        if ((yyvsp[0].interm.intermNode) && (yyvsp[0].interm.intermNode)->getAsBranchNode() && ((yyvsp[0].interm.intermNode)->getAsBranchNode()->getFlowOp() == EOpCase ||
-                                            (yyvsp[0].interm.intermNode)->getAsBranchNode()->getFlowOp() == EOpDefault)) {
-            parseContext.wrapupSwitchSubsequence((yyvsp[-1].interm.intermNode) ? (yyvsp[-1].interm.intermNode)->getAsAggregate() : 0, (yyvsp[0].interm.intermNode));
+        if ((yyvsp[(2) - (2)].interm.intermNode) && (yyvsp[(2) - (2)].interm.intermNode)->getAsBranchNode() && ((yyvsp[(2) - (2)].interm.intermNode)->getAsBranchNode()->getFlowOp() == EOpCase ||
+                                            (yyvsp[(2) - (2)].interm.intermNode)->getAsBranchNode()->getFlowOp() == EOpDefault)) {
+            parseContext.wrapupSwitchSubsequence((yyvsp[(1) - (2)].interm.intermNode) ? (yyvsp[(1) - (2)].interm.intermNode)->getAsAggregate() : 0, (yyvsp[(2) - (2)].interm.intermNode));
             (yyval.interm.intermNode) = 0;  // start a fresh subsequence for what's after this case
         } else
-            (yyval.interm.intermNode) = parseContext.intermediate.growAggregate((yyvsp[-1].interm.intermNode), (yyvsp[0].interm.intermNode));
+            (yyval.interm.intermNode) = parseContext.intermediate.growAggregate((yyvsp[(1) - (2)].interm.intermNode), (yyvsp[(2) - (2)].interm.intermNode));
     }
-#line 6869 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 376:
-#line 2381 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2384 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     { (yyval.interm.intermNode) = 0; }
-#line 6875 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 377:
-#line 2382 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
-    { (yyval.interm.intermNode) = static_cast<TIntermNode*>((yyvsp[-1].interm.intermTypedNode)); }
-#line 6881 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2385 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
+    { (yyval.interm.intermNode) = static_cast<TIntermNode*>((yyvsp[(1) - (2)].interm.intermTypedNode)); }
     break;
 
   case 378:
-#line 2386 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2389 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.boolCheck((yyvsp[-4].lex).loc, (yyvsp[-2].interm.intermTypedNode));
-        (yyval.interm.intermNode) = parseContext.intermediate.addSelection((yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.nodePair), (yyvsp[-4].lex).loc);
+        parseContext.boolCheck((yyvsp[(1) - (5)].lex).loc, (yyvsp[(3) - (5)].interm.intermTypedNode));
+        (yyval.interm.intermNode) = parseContext.intermediate.addSelection((yyvsp[(3) - (5)].interm.intermTypedNode), (yyvsp[(5) - (5)].interm.nodePair), (yyvsp[(1) - (5)].lex).loc);
     }
-#line 6890 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 379:
-#line 2393 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2396 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.nodePair).node1 = (yyvsp[-2].interm.intermNode);
-        (yyval.interm.nodePair).node2 = (yyvsp[0].interm.intermNode);
+        (yyval.interm.nodePair).node1 = (yyvsp[(1) - (3)].interm.intermNode);
+        (yyval.interm.nodePair).node2 = (yyvsp[(3) - (3)].interm.intermNode);
     }
-#line 6899 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 380:
-#line 2397 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2400 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.nodePair).node1 = (yyvsp[0].interm.intermNode);
+        (yyval.interm.nodePair).node1 = (yyvsp[(1) - (1)].interm.intermNode);
         (yyval.interm.nodePair).node2 = 0;
     }
-#line 6908 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 381:
-#line 2405 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2408 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
-        parseContext.boolCheck((yyvsp[0].interm.intermTypedNode)->getLoc(), (yyvsp[0].interm.intermTypedNode));
+        (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode);
+        parseContext.boolCheck((yyvsp[(1) - (1)].interm.intermTypedNode)->getLoc(), (yyvsp[(1) - (1)].interm.intermTypedNode));
     }
-#line 6917 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 382:
-#line 2409 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2412 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.boolCheck((yyvsp[-2].lex).loc, (yyvsp[-3].interm.type));
+        parseContext.boolCheck((yyvsp[(2) - (4)].lex).loc, (yyvsp[(1) - (4)].interm.type));
 
-        TType type((yyvsp[-3].interm.type));
-        TIntermNode* initNode = parseContext.declareVariable((yyvsp[-2].lex).loc, *(yyvsp[-2].lex).string, (yyvsp[-3].interm.type), 0, (yyvsp[0].interm.intermTypedNode));
+        TType type((yyvsp[(1) - (4)].interm.type));
+        TIntermNode* initNode = parseContext.declareVariable((yyvsp[(2) - (4)].lex).loc, *(yyvsp[(2) - (4)].lex).string, (yyvsp[(1) - (4)].interm.type), 0, (yyvsp[(4) - (4)].interm.intermTypedNode));
         if (initNode)
             (yyval.interm.intermTypedNode) = initNode->getAsTyped();
         else
             (yyval.interm.intermTypedNode) = 0;
     }
-#line 6932 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 383:
-#line 2422 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2425 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         // start new switch sequence on the switch stack
         ++parseContext.controlFlowNestingLevel;
@@ -6941,13 +7233,13 @@ yyreduce:
         parseContext.switchLevel.push_back(parseContext.statementNestingLevel);
         parseContext.symbolTable.push();
     }
-#line 6945 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 384:
-#line 2430 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2433 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermNode) = parseContext.addSwitch((yyvsp[-7].lex).loc, (yyvsp[-5].interm.intermTypedNode), (yyvsp[-1].interm.intermNode) ? (yyvsp[-1].interm.intermNode)->getAsAggregate() : 0);
+        (yyval.interm.intermNode) = parseContext.addSwitch((yyvsp[(1) - (8)].lex).loc, (yyvsp[(3) - (8)].interm.intermTypedNode), (yyvsp[(7) - (8)].interm.intermNode) ? (yyvsp[(7) - (8)].interm.intermNode)->getAsAggregate() : 0);
         delete parseContext.switchSequenceStack.back();
         parseContext.switchSequenceStack.pop_back();
         parseContext.switchLevel.pop_back();
@@ -6955,302 +7247,302 @@ yyreduce:
         --parseContext.statementNestingLevel;
         --parseContext.controlFlowNestingLevel;
     }
-#line 6959 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 385:
-#line 2442 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2445 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         (yyval.interm.intermNode) = 0;
     }
-#line 6967 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 386:
-#line 2445 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2448 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode);
+        (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode);
     }
-#line 6975 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 387:
-#line 2451 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2454 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         (yyval.interm.intermNode) = 0;
         if (parseContext.switchLevel.size() == 0)
-            parseContext.error((yyvsp[-2].lex).loc, "cannot appear outside switch statement", "case", "");
+            parseContext.error((yyvsp[(1) - (3)].lex).loc, "cannot appear outside switch statement", "case", "");
         else if (parseContext.switchLevel.back() != parseContext.statementNestingLevel)
-            parseContext.error((yyvsp[-2].lex).loc, "cannot be nested inside control flow", "case", "");
+            parseContext.error((yyvsp[(1) - (3)].lex).loc, "cannot be nested inside control flow", "case", "");
         else {
-            parseContext.constantValueCheck((yyvsp[-1].interm.intermTypedNode), "case");
-            parseContext.integerCheck((yyvsp[-1].interm.intermTypedNode), "case");
-            (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpCase, (yyvsp[-1].interm.intermTypedNode), (yyvsp[-2].lex).loc);
+            parseContext.constantValueCheck((yyvsp[(2) - (3)].interm.intermTypedNode), "case");
+            parseContext.integerCheck((yyvsp[(2) - (3)].interm.intermTypedNode), "case");
+            (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpCase, (yyvsp[(2) - (3)].interm.intermTypedNode), (yyvsp[(1) - (3)].lex).loc);
         }
     }
-#line 6992 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 388:
-#line 2463 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2466 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         (yyval.interm.intermNode) = 0;
         if (parseContext.switchLevel.size() == 0)
-            parseContext.error((yyvsp[-1].lex).loc, "cannot appear outside switch statement", "default", "");
+            parseContext.error((yyvsp[(1) - (2)].lex).loc, "cannot appear outside switch statement", "default", "");
         else if (parseContext.switchLevel.back() != parseContext.statementNestingLevel)
-            parseContext.error((yyvsp[-1].lex).loc, "cannot be nested inside control flow", "default", "");
+            parseContext.error((yyvsp[(1) - (2)].lex).loc, "cannot be nested inside control flow", "default", "");
         else
-            (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpDefault, (yyvsp[-1].lex).loc);
+            (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpDefault, (yyvsp[(1) - (2)].lex).loc);
     }
-#line 7006 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 389:
-#line 2475 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2478 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         if (! parseContext.limits.whileLoops)
-            parseContext.error((yyvsp[-1].lex).loc, "while loops not available", "limitation", "");
+            parseContext.error((yyvsp[(1) - (2)].lex).loc, "while loops not available", "limitation", "");
         parseContext.symbolTable.push();
         ++parseContext.loopNestingLevel;
         ++parseContext.statementNestingLevel;
         ++parseContext.controlFlowNestingLevel;
     }
-#line 7019 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 390:
-#line 2483 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2486 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         parseContext.symbolTable.pop(&parseContext.defaultPrecision[0]);
-        (yyval.interm.intermNode) = parseContext.intermediate.addLoop((yyvsp[0].interm.intermNode), (yyvsp[-2].interm.intermTypedNode), 0, true, (yyvsp[-5].lex).loc);
+        (yyval.interm.intermNode) = parseContext.intermediate.addLoop((yyvsp[(6) - (6)].interm.intermNode), (yyvsp[(4) - (6)].interm.intermTypedNode), 0, true, (yyvsp[(1) - (6)].lex).loc);
         --parseContext.loopNestingLevel;
         --parseContext.statementNestingLevel;
         --parseContext.controlFlowNestingLevel;
     }
-#line 7031 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 391:
-#line 2490 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2493 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         ++parseContext.loopNestingLevel;
         ++parseContext.statementNestingLevel;
         ++parseContext.controlFlowNestingLevel;
     }
-#line 7041 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 392:
-#line 2495 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2498 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         if (! parseContext.limits.whileLoops)
-            parseContext.error((yyvsp[-7].lex).loc, "do-while loops not available", "limitation", "");
+            parseContext.error((yyvsp[(1) - (8)].lex).loc, "do-while loops not available", "limitation", "");
 
-        parseContext.boolCheck((yyvsp[0].lex).loc, (yyvsp[-2].interm.intermTypedNode));
+        parseContext.boolCheck((yyvsp[(8) - (8)].lex).loc, (yyvsp[(6) - (8)].interm.intermTypedNode));
 
-        (yyval.interm.intermNode) = parseContext.intermediate.addLoop((yyvsp[-5].interm.intermNode), (yyvsp[-2].interm.intermTypedNode), 0, false, (yyvsp[-4].lex).loc);
+        (yyval.interm.intermNode) = parseContext.intermediate.addLoop((yyvsp[(3) - (8)].interm.intermNode), (yyvsp[(6) - (8)].interm.intermTypedNode), 0, false, (yyvsp[(4) - (8)].lex).loc);
         --parseContext.loopNestingLevel;
         --parseContext.statementNestingLevel;
         --parseContext.controlFlowNestingLevel;
     }
-#line 7057 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 393:
-#line 2506 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2509 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         parseContext.symbolTable.push();
         ++parseContext.loopNestingLevel;
         ++parseContext.statementNestingLevel;
         ++parseContext.controlFlowNestingLevel;
     }
-#line 7068 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 394:
-#line 2512 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2515 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         parseContext.symbolTable.pop(&parseContext.defaultPrecision[0]);
-        (yyval.interm.intermNode) = parseContext.intermediate.makeAggregate((yyvsp[-3].interm.intermNode), (yyvsp[-5].lex).loc);
-        TIntermLoop* forLoop = parseContext.intermediate.addLoop((yyvsp[0].interm.intermNode), reinterpret_cast<TIntermTyped*>((yyvsp[-2].interm.nodePair).node1), reinterpret_cast<TIntermTyped*>((yyvsp[-2].interm.nodePair).node2), true, (yyvsp[-6].lex).loc);
+        (yyval.interm.intermNode) = parseContext.intermediate.makeAggregate((yyvsp[(4) - (7)].interm.intermNode), (yyvsp[(2) - (7)].lex).loc);
+        TIntermLoop* forLoop = parseContext.intermediate.addLoop((yyvsp[(7) - (7)].interm.intermNode), reinterpret_cast<TIntermTyped*>((yyvsp[(5) - (7)].interm.nodePair).node1), reinterpret_cast<TIntermTyped*>((yyvsp[(5) - (7)].interm.nodePair).node2), true, (yyvsp[(1) - (7)].lex).loc);
         if (! parseContext.limits.nonInductiveForLoops)
-            parseContext.inductiveLoopCheck((yyvsp[-6].lex).loc, (yyvsp[-3].interm.intermNode), forLoop);
-        (yyval.interm.intermNode) = parseContext.intermediate.growAggregate((yyval.interm.intermNode), forLoop, (yyvsp[-6].lex).loc);
+            parseContext.inductiveLoopCheck((yyvsp[(1) - (7)].lex).loc, (yyvsp[(4) - (7)].interm.intermNode), forLoop);
+        (yyval.interm.intermNode) = parseContext.intermediate.growAggregate((yyval.interm.intermNode), forLoop, (yyvsp[(1) - (7)].lex).loc);
         (yyval.interm.intermNode)->getAsAggregate()->setOperator(EOpSequence);
         --parseContext.loopNestingLevel;
         --parseContext.statementNestingLevel;
         --parseContext.controlFlowNestingLevel;
     }
-#line 7085 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 395:
-#line 2527 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2530 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode);
+        (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode);
     }
-#line 7093 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 396:
-#line 2530 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2533 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode);
+        (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode);
     }
-#line 7101 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 397:
-#line 2536 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2539 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
+        (yyval.interm.intermTypedNode) = (yyvsp[(1) - (1)].interm.intermTypedNode);
     }
-#line 7109 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 398:
-#line 2539 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2542 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         (yyval.interm.intermTypedNode) = 0;
     }
-#line 7117 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 399:
-#line 2545 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2548 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.nodePair).node1 = (yyvsp[-1].interm.intermTypedNode);
+        (yyval.interm.nodePair).node1 = (yyvsp[(1) - (2)].interm.intermTypedNode);
         (yyval.interm.nodePair).node2 = 0;
     }
-#line 7126 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 400:
-#line 2549 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2552 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.nodePair).node1 = (yyvsp[-2].interm.intermTypedNode);
-        (yyval.interm.nodePair).node2 = (yyvsp[0].interm.intermTypedNode);
+        (yyval.interm.nodePair).node1 = (yyvsp[(1) - (3)].interm.intermTypedNode);
+        (yyval.interm.nodePair).node2 = (yyvsp[(3) - (3)].interm.intermTypedNode);
     }
-#line 7135 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 401:
-#line 2556 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2559 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         if (parseContext.loopNestingLevel <= 0)
-            parseContext.error((yyvsp[-1].lex).loc, "continue statement only allowed in loops", "", "");
-        (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpContinue, (yyvsp[-1].lex).loc);
+            parseContext.error((yyvsp[(1) - (2)].lex).loc, "continue statement only allowed in loops", "", "");
+        (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpContinue, (yyvsp[(1) - (2)].lex).loc);
     }
-#line 7145 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 402:
-#line 2561 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2564 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         if (parseContext.loopNestingLevel + parseContext.switchSequenceStack.size() <= 0)
-            parseContext.error((yyvsp[-1].lex).loc, "break statement only allowed in switch and loops", "", "");
-        (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpBreak, (yyvsp[-1].lex).loc);
+            parseContext.error((yyvsp[(1) - (2)].lex).loc, "break statement only allowed in switch and loops", "", "");
+        (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpBreak, (yyvsp[(1) - (2)].lex).loc);
     }
-#line 7155 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 403:
-#line 2566 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2569 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpReturn, (yyvsp[-1].lex).loc);
+        (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpReturn, (yyvsp[(1) - (2)].lex).loc);
         if (parseContext.currentFunctionType->getBasicType() != EbtVoid)
-            parseContext.error((yyvsp[-1].lex).loc, "non-void function must return a value", "return", "");
+            parseContext.error((yyvsp[(1) - (2)].lex).loc, "non-void function must return a value", "return", "");
         if (parseContext.inMain)
             parseContext.postMainReturn = true;
     }
-#line 7167 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 404:
-#line 2573 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2576 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         parseContext.functionReturnsValue = true;
         if (parseContext.currentFunctionType->getBasicType() == EbtVoid) {
-            parseContext.error((yyvsp[-2].lex).loc, "void function cannot return a value", "return", "");
-            (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpReturn, (yyvsp[-2].lex).loc);
-        } else if (*(parseContext.currentFunctionType) != (yyvsp[-1].interm.intermTypedNode)->getType()) {
-            TIntermTyped* converted = parseContext.intermediate.addConversion(EOpReturn, *parseContext.currentFunctionType, (yyvsp[-1].interm.intermTypedNode));
+            parseContext.error((yyvsp[(1) - (3)].lex).loc, "void function cannot return a value", "return", "");
+            (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpReturn, (yyvsp[(1) - (3)].lex).loc);
+        } else if (*(parseContext.currentFunctionType) != (yyvsp[(2) - (3)].interm.intermTypedNode)->getType()) {
+            TIntermTyped* converted = parseContext.intermediate.addConversion(EOpReturn, *parseContext.currentFunctionType, (yyvsp[(2) - (3)].interm.intermTypedNode));
             if (converted) {
                 if (parseContext.version < 420)
-                    parseContext.warn((yyvsp[-2].lex).loc, "type conversion on return values was not explicitly allowed until version 420", "return", "");
-                (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpReturn, converted, (yyvsp[-2].lex).loc);
+                    parseContext.warn((yyvsp[(1) - (3)].lex).loc, "type conversion on return values was not explicitly allowed until version 420", "return", "");
+                (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpReturn, converted, (yyvsp[(1) - (3)].lex).loc);
             } else {
-                parseContext.error((yyvsp[-2].lex).loc, "type does not match, or is not convertible to, the function's return type", "return", "");
-                (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpReturn, (yyvsp[-1].interm.intermTypedNode), (yyvsp[-2].lex).loc);
+                parseContext.error((yyvsp[(1) - (3)].lex).loc, "type does not match, or is not convertible to, the function's return type", "return", "");
+                (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpReturn, (yyvsp[(2) - (3)].interm.intermTypedNode), (yyvsp[(1) - (3)].lex).loc);
             }
         } else
-            (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpReturn, (yyvsp[-1].interm.intermTypedNode), (yyvsp[-2].lex).loc);
+            (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpReturn, (yyvsp[(2) - (3)].interm.intermTypedNode), (yyvsp[(1) - (3)].lex).loc);
     }
-#line 7190 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 405:
-#line 2591 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2594 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        parseContext.requireStage((yyvsp[-1].lex).loc, EShLangFragment, "discard");
-        (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpKill, (yyvsp[-1].lex).loc);
+        parseContext.requireStage((yyvsp[(1) - (2)].lex).loc, EShLangFragment, "discard");
+        (yyval.interm.intermNode) = parseContext.intermediate.addBranch(EOpKill, (yyvsp[(1) - (2)].lex).loc);
     }
-#line 7199 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 406:
-#line 2600 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2603 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode);
+        (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode);
         parseContext.intermediate.setTreeRoot((yyval.interm.intermNode));
     }
-#line 7208 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 407:
-#line 2604 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2607 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermNode) = parseContext.intermediate.growAggregate((yyvsp[-1].interm.intermNode), (yyvsp[0].interm.intermNode));
+        (yyval.interm.intermNode) = parseContext.intermediate.growAggregate((yyvsp[(1) - (2)].interm.intermNode), (yyvsp[(2) - (2)].interm.intermNode));
         parseContext.intermediate.setTreeRoot((yyval.interm.intermNode));
     }
-#line 7217 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 408:
-#line 2611 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2614 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode);
+        (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode);
     }
-#line 7225 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 409:
-#line 2614 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2617 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode);
+        (yyval.interm.intermNode) = (yyvsp[(1) - (1)].interm.intermNode);
     }
-#line 7233 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 410:
-#line 2620 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2623 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
-        (yyvsp[0].interm).function = parseContext.handleFunctionDeclarator((yyvsp[0].interm).loc, *(yyvsp[0].interm).function, false /* not prototype */);
-        (yyvsp[0].interm).intermNode = parseContext.handleFunctionDefinition((yyvsp[0].interm).loc, *(yyvsp[0].interm).function);
+        (yyvsp[(1) - (1)].interm).function = parseContext.handleFunctionDeclarator((yyvsp[(1) - (1)].interm).loc, *(yyvsp[(1) - (1)].interm).function, false /* not prototype */);
+        (yyvsp[(1) - (1)].interm).intermNode = parseContext.handleFunctionDefinition((yyvsp[(1) - (1)].interm).loc, *(yyvsp[(1) - (1)].interm).function);
     }
-#line 7242 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
   case 411:
-#line 2624 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 2627 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
     {
         //   May be best done as post process phase on intermediate code
         if (parseContext.currentFunctionType->getBasicType() != EbtVoid && ! parseContext.functionReturnsValue)
-            parseContext.error((yyvsp[-2].interm).loc, "function does not return a value:", "", (yyvsp[-2].interm).function->getName().c_str());
+            parseContext.error((yyvsp[(1) - (3)].interm).loc, "function does not return a value:", "", (yyvsp[(1) - (3)].interm).function->getName().c_str());
         parseContext.symbolTable.pop(&parseContext.defaultPrecision[0]);
-        (yyval.interm.intermNode) = parseContext.intermediate.growAggregate((yyvsp[-2].interm).intermNode, (yyvsp[0].interm.intermNode));
-        parseContext.intermediate.setAggregateOperator((yyval.interm.intermNode), EOpFunction, (yyvsp[-2].interm).function->getType(), (yyvsp[-2].interm).loc);
-        (yyval.interm.intermNode)->getAsAggregate()->setName((yyvsp[-2].interm).function->getMangledName().c_str());
+        (yyval.interm.intermNode) = parseContext.intermediate.growAggregate((yyvsp[(1) - (3)].interm).intermNode, (yyvsp[(3) - (3)].interm.intermNode));
+        parseContext.intermediate.setAggregateOperator((yyval.interm.intermNode), EOpFunction, (yyvsp[(1) - (3)].interm).function->getType(), (yyvsp[(1) - (3)].interm).loc);
+        (yyval.interm.intermNode)->getAsAggregate()->setName((yyvsp[(1) - (3)].interm).function->getMangledName().c_str());
 
         // store the pragma information for debug and optimize and other vendor specific
         // information. This information can be queried from the parse tree
@@ -7258,11 +7550,11 @@ yyreduce:
         (yyval.interm.intermNode)->getAsAggregate()->setDebug(parseContext.contextPragma.debug);
         (yyval.interm.intermNode)->getAsAggregate()->addToPragmaTable(parseContext.contextPragma.pragmaTable);
     }
-#line 7262 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 7266 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang_tab.cpp" /* yacc.c:1646  */
+/* Line 1792 of yacc.c  */
+#line 7558 "C:/Projects/glslang/glslang/MachineIndependent/glslang_tab.cpp"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -7284,7 +7576,7 @@ yyreduce:
 
   *++yyvsp = yyval;
 
-  /* Now 'shift' the result of the reduction.  Determine what state
+  /* Now `shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
      number reduced by.  */
 
@@ -7299,9 +7591,9 @@ yyreduce:
   goto yynewstate;
 
 
-/*--------------------------------------.
-| yyerrlab -- here on detecting error.  |
-`--------------------------------------*/
+/*------------------------------------.
+| yyerrlab -- here on detecting error |
+`------------------------------------*/
 yyerrlab:
   /* Make sure we have latest lookahead translation.  See comments at
      user semantic actions for why this is necessary.  */
@@ -7352,20 +7644,20 @@ yyerrlab:
   if (yyerrstatus == 3)
     {
       /* If just tried and failed to reuse lookahead token after an
-         error, discard it.  */
+	 error, discard it.  */
 
       if (yychar <= YYEOF)
-        {
-          /* Return failure if at end of input.  */
-          if (yychar == YYEOF)
-            YYABORT;
-        }
+	{
+	  /* Return failure if at end of input.  */
+	  if (yychar == YYEOF)
+	    YYABORT;
+	}
       else
-        {
-          yydestruct ("Error: discarding",
-                      yytoken, &yylval, pParseContext);
-          yychar = YYEMPTY;
-        }
+	{
+	  yydestruct ("Error: discarding",
+		      yytoken, &yylval, pParseContext);
+	  yychar = YYEMPTY;
+	}
     }
 
   /* Else will try to reuse lookahead token after shifting the error
@@ -7384,7 +7676,7 @@ yyerrorlab:
   if (/*CONSTCOND*/ 0)
      goto yyerrorlab;
 
-  /* Do not reclaim the symbols of the rule whose action triggered
+  /* Do not reclaim the symbols of the rule which action triggered
      this YYERROR.  */
   YYPOPSTACK (yylen);
   yylen = 0;
@@ -7397,29 +7689,29 @@ yyerrorlab:
 | yyerrlab1 -- common code for both syntax error and YYERROR.  |
 `-------------------------------------------------------------*/
 yyerrlab1:
-  yyerrstatus = 3;      /* Each real token shifted decrements this.  */
+  yyerrstatus = 3;	/* Each real token shifted decrements this.  */
 
   for (;;)
     {
       yyn = yypact[yystate];
       if (!yypact_value_is_default (yyn))
-        {
-          yyn += YYTERROR;
-          if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
-            {
-              yyn = yytable[yyn];
-              if (0 < yyn)
-                break;
-            }
-        }
+	{
+	  yyn += YYTERROR;
+	  if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
+	    {
+	      yyn = yytable[yyn];
+	      if (0 < yyn)
+		break;
+	    }
+	}
 
       /* Pop the current state because it cannot handle the error token.  */
       if (yyssp == yyss)
-        YYABORT;
+	YYABORT;
 
 
       yydestruct ("Error: popping",
-                  yystos[yystate], yyvsp, pParseContext);
+		  yystos[yystate], yyvsp, pParseContext);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -7470,14 +7762,14 @@ yyreturn:
       yydestruct ("Cleanup: discarding lookahead",
                   yytoken, &yylval, pParseContext);
     }
-  /* Do not reclaim the symbols of the rule whose action triggered
+  /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
   YY_STACK_PRINT (yyss, yyssp);
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-                  yystos[*yyssp], yyvsp, pParseContext);
+		  yystos[*yyssp], yyvsp, pParseContext);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -7488,7 +7780,11 @@ yyreturn:
   if (yymsg != yymsgbuf)
     YYSTACK_FREE (yymsg);
 #endif
-  return yyresult;
+  /* Make sure YYID is used.  */
+  return YYID (yyresult);
 }
-#line 2641 "/home/icecool/Downloads/VulkanSDK/1.0.3.1/source/glslang/glslang/MachineIndependent/glslang.y" /* yacc.c:1906  */
+
+
+/* Line 2055 of yacc.c  */
+#line 2644 "C:/Projects/glslang/glslang/MachineIndependent/glslang.y"
 

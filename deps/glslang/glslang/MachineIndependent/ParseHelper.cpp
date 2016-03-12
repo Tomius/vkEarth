@@ -1,6 +1,7 @@
 //
 //Copyright (C) 2002-2005  3Dlabs Inc. Ltd.
-//Copyright (C) 2012-2013 LunarG, Inc.
+//Copyright (C) 2012-2015 LunarG, Inc.
+//Copyright (C) 2015-2016 Google, Inc.
 //
 //All rights reserved.
 //
@@ -610,6 +611,16 @@ void TParseContext::makeEditable(TSymbol*& symbol)
     intermediate.addSymbolLinkageNode(linkage, *symbol);
 }
 
+TVariable* TParseContext::getEditableVariable(const char* name)
+{
+    bool builtIn;
+    TSymbol* symbol = symbolTable.find(name, &builtIn);
+    if (builtIn)
+        makeEditable(symbol);
+
+    return symbol->getAsVariable();
+}
+
 // Return true if this is a geometry shader input array or tessellation control output array.
 bool TParseContext::isIoResizeArray(const TType& type) const
 {
@@ -813,7 +824,7 @@ TIntermTyped* TParseContext::handleDotDereference(const TSourceLoc& loc, TInterm
             }
         }
 
-        if (base->getType().getQualifier().storage == EvqConst)
+        if (base->getType().getQualifier().isFrontEndConstant())
             result = intermediate.foldSwizzle(base, fields, loc);
         else {
             if (fields.num == 1) {
@@ -1511,6 +1522,11 @@ void TParseContext::builtInOpCheck(const TSourceLoc& loc, const TFunction& fnCan
             if (base == nullptr || base->getType().getQualifier().storage != EvqVaryingIn)
                 error(loc, "first argument must be an interpolant, or interpolant-array element", fnCandidate.getName().c_str(), "");
         }
+        break;
+
+    case EOpEmitStreamVertex:
+    case EOpEndStreamPrimitive:
+        intermediate.setMultiStream();
         break;
 
     default:
@@ -2427,7 +2443,7 @@ void TParseContext::atomicUintCheck(const TSourceLoc& loc, const TType& type, co
         error(loc, "atomic_uints can only be used in uniform variables or function parameters:", type.getBasicTypeString().c_str(), identifier.c_str());
 }
 
-void TParseContext::transparentCheck(const TSourceLoc& loc, const TType& type, const TString& identifier)
+void TParseContext::transparentCheck(const TSourceLoc& loc, const TType& type, const TString& /*identifier*/)
 {
     // double standard due to gl_NumSamples
     if (parsingBuiltins)
@@ -3484,6 +3500,12 @@ void TParseContext::opaqueCheck(const TSourceLoc& loc, const TType& type, const 
         error(loc, "can't use with samplers or structs containing samplers", op, "");
 }
 
+void TParseContext::specializationCheck(const TSourceLoc& loc, const TType& type, const char* op)
+{
+    if (type.containsSpecializationSize())
+        error(loc, "can't use with types containing arrays sized with a specialization constant", op, "");
+}
+
 void TParseContext::structTypeCheck(const TSourceLoc& /*loc*/, TPublicType& publicType)
 {
     const TTypeList& typeList = *publicType.userDef->getStruct();
@@ -3992,6 +4014,8 @@ void TParseContext::setLayoutQualifier(const TSourceLoc& loc, TPublicType& publi
         } else {
             publicType.qualifier.layoutSpecConstantId = value;
             publicType.qualifier.specConstant = true;
+            if (! intermediate.addUsedConstantId(value))
+                error(loc, "specialization-constant id already used", id.c_str(), "");
         }
         return;
     }
@@ -4031,6 +4055,8 @@ void TParseContext::setLayoutQualifier(const TSourceLoc& loc, TPublicType& publi
         if (id == "stream") {
             requireProfile(loc, ~EEsProfile, "selecting output stream");
             publicType.qualifier.layoutStream = value;
+            if (value > 0)
+                intermediate.setMultiStream();
             return;
         }
         break;
@@ -4234,7 +4260,7 @@ void TParseContext::layoutTypeCheck(const TSourceLoc& loc, const TType& type)
         case EvqBuffer:
             break;
         default:
-            error(loc, "can only appy to uniform, buffer, in, or out storage qualifiers", "location", "");
+            error(loc, "can only apply to uniform, buffer, in, or out storage qualifiers", "location", "");
             break;
         }
 
@@ -4457,6 +4483,8 @@ void TParseContext::layoutQualifierCheck(const TSourceLoc& loc, const TQualifier
     if (qualifier.layoutPushConstant) {
         if (qualifier.storage != EvqUniform)
             error(loc, "can only be used with a uniform", "push_constant", "");
+        if (qualifier.hasSet())
+            error(loc, "cannot be used with push_constant", "set", "");
     }
 }
 
@@ -4876,7 +4904,7 @@ TIntermNode* TParseContext::executeInitializer(const TSourceLoc& loc, TIntermTyp
     }
 
     if (qualifier == EvqConst || qualifier == EvqUniform) {
-        // Compile-time tagging of the variable with it's constant value...
+        // Compile-time tagging of the variable with its constant value...
 
         initializer = intermediate.addConversion(EOpAssign, variable->getType(), initializer);
         if (! initializer || ! initializer->getAsConstantUnion() || variable->getType() != initializer->getType()) {
@@ -4889,6 +4917,7 @@ TIntermNode* TParseContext::executeInitializer(const TSourceLoc& loc, TIntermTyp
         variable->setConstArray(initializer->getAsConstantUnion()->getConstArray());
     } else {
         // normal assigning of a value to a variable...
+        specializationCheck(loc, initializer->getType(), "initializer");
         TIntermSymbol* intermSymbol = intermediate.addSymbol(*variable, loc);
         TIntermNode* initNode = intermediate.addAssign(EOpAssign, intermSymbol, initializer, loc);
         if (! initNode)
@@ -4902,7 +4931,7 @@ TIntermNode* TParseContext::executeInitializer(const TSourceLoc& loc, TIntermTyp
 
 //
 // Reprocess any initializer-list { ... } parts of the initializer.
-// Need to heirarchically assign correct types and implicit
+// Need to hierarchically assign correct types and implicit
 // conversions. Will do this mimicking the same process used for
 // creating a constructor-style initializer, ensuring we get the
 // same form.
@@ -5742,11 +5771,7 @@ void TParseContext::updateStandaloneQualifierDefaults(const TSourceLoc& loc, con
                         error(loc, "too large; see gl_MaxComputeWorkGroupSize", "local_size", "");
 
                     // Fix the existing constant gl_WorkGroupSize with this new information.
-                    bool builtIn;
-                    TSymbol* symbol = symbolTable.find("gl_WorkGroupSize", &builtIn);
-                    if (builtIn)
-                        makeEditable(symbol);
-                    TVariable* workGroupSize = symbol->getAsVariable();
+                    TVariable* workGroupSize = getEditableVariable("gl_WorkGroupSize");
                     workGroupSize->getWritableConstArray()[i].setUConst(intermediate.getLocalSize(i));
                 }
             } else
@@ -5758,6 +5783,9 @@ void TParseContext::updateStandaloneQualifierDefaults(const TSourceLoc& loc, con
                     error(loc, "cannot change previously set size", "local_size", "");
             } else
                 error(loc, "can only apply to 'in'", "local_size id", "");
+            // Set the workgroup built-in variable as a specialization constant
+            TVariable* workGroupSize = getEditableVariable("gl_WorkGroupSize");
+            workGroupSize->getWritableType().getQualifier().specConstant = true;
         }
     }
     if (publicType.shaderQualifiers.earlyFragmentTests) {

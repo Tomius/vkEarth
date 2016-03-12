@@ -7,7 +7,7 @@ layout(rgba32f, binding = 3)    uniform imageCube       iCube;
 layout(rgba32f, binding = 4)    uniform imageCubeArray  iCubeArray;
 layout(rgba32f, binding = 5)    uniform image2DRect     i2DRect;
 layout(rgba32f, binding = 6)    uniform image1DArray    i1DArray;
-layout(rgba32f, binding = 7)    uniform image2DArray    i2DArray;
+layout(rg16, binding = 7)       uniform image2DArray    i2DArray;
 layout(rgba32f, binding = 8)    uniform imageBuffer     iBuffer;
 layout(rgba32f, binding = 9)    uniform image2DMS       i2DMS;
 layout(rgba32f, binding = 10)   uniform image2DMSArray  i2DMSArray;
@@ -19,6 +19,8 @@ flat in int     ic1D;
 flat in ivec2   ic2D;
 flat in ivec3   ic3D;
 flat in ivec4   ic4D;
+
+writeonly layout(binding = 1)   uniform image2D         wo2D;
 
 flat in uint value;
 
@@ -83,6 +85,8 @@ void main()
     ui      += imageAtomicExchange(ui2D, ic2D, value);
     iv.x    += imageAtomicCompSwap(ii1D, ic1D, 18, 17);
     ui      += imageAtomicCompSwap(ui2D, ic2D, 19u, value);
+
+    imageStore(wo2D, ic2D, v);
 
     fragData = ui != iv.y ? v : vec4(0.0); 
 }

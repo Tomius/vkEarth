@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
-link_libraries(glfw glslang)
+link_libraries(glfw)
+link_libraries(glslang OGLCompiler OSDependent SPIRV)
 
 set (CMAKE_CXX_FLAGS "-g -std=c++11")
 
@@ -17,7 +18,6 @@ add_executable(vkEarth WIN32 vkEarth.cpp ${ICON})
 target_include_directories(vkEarth PRIVATE "${VULKAN_INCLUDE_DIR}")
 target_link_libraries(vkEarth "${VULKAN_LIBRARY}")
 set(WINDOWS_BINARIES vkEarth)
-# list(APPEND WINDOWS_BINARIES vkEarth)
 
 if (MSVC)
     # Tell MSVC to use main instead of WinMain for Windows subsystem executables

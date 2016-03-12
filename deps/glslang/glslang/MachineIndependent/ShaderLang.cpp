@@ -1,6 +1,7 @@
 //
 //Copyright (C) 2002-2005  3Dlabs Inc. Ltd.
-//Copyright (C) 2013 LunarG, Inc.
+//Copyright (C) 2013-2015 LunarG, Inc.
+//Copyright (C) 2015-2016 Google, Inc.
 //
 //All rights reserved.
 //
@@ -565,6 +566,8 @@ bool ProcessDeferred(
     intermediate.setVersion(version);
     intermediate.setProfile(profile);
     intermediate.setSpv(spv);
+    if (vulkan)
+        intermediate.setOriginUpperLeft();
     SetupBuiltinSymbolTable(version, profile, spv, vulkan);
     
     TSymbolTable* cachedTable = SharedSymbolTables[MapVersionToIndex(version)]
