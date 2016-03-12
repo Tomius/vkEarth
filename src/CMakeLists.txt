@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-link_libraries(glfw)
+link_libraries(glfw glslang)
 
 set (CMAKE_CXX_FLAGS "-g -std=c++11")
 

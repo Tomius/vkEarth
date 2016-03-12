@@ -1,0 +1,12 @@
+spv.branch-return.vert
+Warning, version 310 is not yet complete; most version-specific features are present, but some are missing.
+ERROR: 0:3: 'gl_InstanceID' : undeclared identifier 
+ERROR: 0:3: 'switch' : condition must be a scalar integer expression 
+ERROR: 2 compilation errors.  No code generated.
+
+
+
+Linked vertex stage:
+
+
+SPIR-V is not generated for failed compile or link

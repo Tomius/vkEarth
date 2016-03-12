@@ -13,13 +13,15 @@ set(vkEarth_VERSION_MINOR "0")
 set(vkEarth_VERSION_PATCH "0")
 set(vkEarth_VERSION_EXTRA "")
 
+set (CMAKE_CXX_FLAGS "-g -std=c++11")
+
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 #--------------------------------------------------------------------
 # Add subdirectories
 #--------------------------------------------------------------------
-#add_subdirectory(src)
 add_subdirectory(deps/glfw)
+add_subdirectory(deps/glslang)
 add_subdirectory(src)
 
 set(CMAKE_MODULE_PATH "${vkEarth_SOURCE_DIR}/deps/glfw/CMake/modules")

@@ -46,6 +46,7 @@
 #include <assert.h>
 
 #include "vk_cpp.h"
+#include "../deps/glslang/SPIRV/GlslangToSpv.h"
 #include <GLFW/glfw3.h>
 
 #define DEMO_TEXTURE_COUNT 1
