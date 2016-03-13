@@ -1,0 +1,9 @@
+[submodule "deps/vkcpp"]
+	path = deps/vkcpp
+	url = https://github.com/nvpro-pipeline/vkcpp.git
+[submodule "deps/glfw"]
+	path = deps/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "deps/glslang"]
+	path = deps/glslang
+	url = https://github.com/KhronosGroup/glslang.git

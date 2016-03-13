@@ -21,7 +21,13 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Add subdirectories
 #--------------------------------------------------------------------
 add_subdirectory(deps/glfw)
+include_directories(SYSTEM deps/glfw/include)
+
 add_subdirectory(deps/glslang)
+include_directories(SYSTEM deps/glslang)
+
+include_directories(SYSTEM deps/vkcpp)
+
 add_subdirectory(src)
 
 set(CMAKE_MODULE_PATH "${vkEarth_SOURCE_DIR}/deps/glfw/CMake/modules")
