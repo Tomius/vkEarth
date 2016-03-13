@@ -14,10 +14,16 @@ if (MSVC)
 endif()
 
 
-add_executable(vkEarth WIN32 cpp/vk_earth.cpp ${ICON})
+add_executable(vkEarth WIN32 cpp/vk_earth.cpp cpp/create_pipeline.cpp ${ICON})
 target_include_directories(vkEarth PRIVATE "${VULKAN_INCLUDE_DIR}")
 target_link_libraries(vkEarth "${VULKAN_LIBRARY}")
 set(WINDOWS_BINARIES vkEarth)
+SET(EXECUTABLE_OUTPUT_PATH ${vkEarth_SOURCE_DIR})
+
+# Copy shader codes
+add_custom_command(TARGET vkEarth PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                   ${CMAKE_SOURCE_DIR}/src/glsl $<TARGET_FILE_DIR:vkEarth>/src/glsl)
 
 if (MSVC)
     # Tell MSVC to use main instead of WinMain for Windows subsystem executables
