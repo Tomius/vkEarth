@@ -6,31 +6,25 @@
 
 #include "file_utils.hpp"
 #include "glsl2spv.hpp"
-
-#if defined(NDEBUG) && defined(__GNUC__)
-  #define U_ASSERT_ONLY __attribute__((unused))
-#else
-  #define U_ASSERT_ONLY
-#endif
+#include "error_checking.hpp"
 
 static vk::ShaderModule PrepareShaderModule(vk::Device& device,
                                                    const void *code,
                                                    size_t size) {
   vk::ShaderModuleCreateInfo moduleCreateInfo;
   vk::ShaderModule module;
-  vk::Result U_ASSERT_ONLY err;
 
   moduleCreateInfo.codeSize(size);
   moduleCreateInfo.pCode(static_cast<const uint32_t*>(code));
-  err = device.createShaderModule(&moduleCreateInfo, nullptr, &module);
-  assert(err == vk::Result::eSuccess);
+  vk::chk(device.createShaderModule(&moduleCreateInfo, nullptr, &module));
 
   return module;
 }
 
 static vk::ShaderModule PrepareVs(vk::Device& device) {
   std::vector<unsigned int> vertShader =
-    GetVertexShaderCode(FileUtils::ReadFileToString("src/glsl/simple.vert"));
+    GLSLtoSPV(vk::ShaderStageFlagBits::eVertex,
+              FileUtils::ReadFileToString("src/glsl/simple.vert"));
 
   return PrepareShaderModule(device, (const void*)vertShader.data(),
                              vertShader.size() * sizeof(vertShader[0]));
@@ -38,7 +32,8 @@ static vk::ShaderModule PrepareVs(vk::Device& device) {
 
 static vk::ShaderModule PrepareFs(vk::Device& device) {
   std::vector<unsigned int> fragShader =
-    GetFragmentShaderCode(FileUtils::ReadFileToString("src/glsl/simple.frag"));
+    GLSLtoSPV(vk::ShaderStageFlagBits::eFragment,
+              FileUtils::ReadFileToString("src/glsl/simple.frag"));
 
   return PrepareShaderModule(device, (const void*)fragShader.data(),
                              fragShader.size() * sizeof(fragShader[0]));
@@ -49,8 +44,6 @@ vk::Pipeline PreparePipeline(vk::Device& device,
                              const vk::PipelineVertexInputStateCreateInfo& vertexState,
                              const vk::PipelineLayout& pipelineLayout,
                              const vk::RenderPass& renderPass) {
-  vk::Result U_ASSERT_ONLY err;
-
   vk::GraphicsPipelineCreateInfo pipelineCreateInfo;
 
   vk::PipelineInputAssemblyStateCreateInfo ia;
@@ -133,14 +126,12 @@ vk::Pipeline PreparePipeline(vk::Device& device,
 
   vk::PipelineCache pipelineCache;
   vk::PipelineCacheCreateInfo pipelineCacheCreateInfo;
-  err = device.createPipelineCache(&pipelineCacheCreateInfo, nullptr,
-                                   &pipelineCache);
-  assert(err == vk::Result::eSuccess);
+  vk::chk(device.createPipelineCache(&pipelineCacheCreateInfo, nullptr,
+                                     &pipelineCache));
 
   vk::Pipeline pipeline;
-  err = device.createGraphicsPipelines(pipelineCache, 1, &pipelineCreateInfo,
-                                       nullptr, &pipeline);
-  assert(err == vk::Result::eSuccess);
+  vk::chk(device.createGraphicsPipelines(pipelineCache, 1, &pipelineCreateInfo,
+                                         nullptr, &pipeline));
 
   device.destroyPipelineCache(pipelineCache, nullptr);
 
