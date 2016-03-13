@@ -1,4 +1,4 @@
-#include "error_checking.hpp"
+#include "common/error_checking.hpp"
 
 static const char* GetVulkanResultString(VkResult result)
 {

@@ -1,12 +1,12 @@
-#include "create_pipeline.hpp"
+#include "initialize/create_pipeline.hpp"
 
 #include <vector>
 #include <cassert>
 #include <iostream>
 
-#include "file_utils.hpp"
-#include "glsl2spv.hpp"
-#include "error_checking.hpp"
+#include "common/file_utils.hpp"
+#include "common/error_checking.hpp"
+#include "shader/glsl2spv.hpp"
 
 static vk::ShaderModule PrepareShaderModule(vk::Device& device,
                                                    const void *code,
@@ -23,8 +23,8 @@ static vk::ShaderModule PrepareShaderModule(vk::Device& device,
 
 static vk::ShaderModule PrepareVs(vk::Device& device) {
   std::vector<unsigned int> vertShader =
-    GLSLtoSPV(vk::ShaderStageFlagBits::eVertex,
-              FileUtils::ReadFileToString("src/glsl/simple.vert"));
+    Shader::GLSLtoSPV(vk::ShaderStageFlagBits::eVertex,
+                      FileUtils::ReadFileToString("src/glsl/simple.vert"));
 
   return PrepareShaderModule(device, (const void*)vertShader.data(),
                              vertShader.size() * sizeof(vertShader[0]));
@@ -32,18 +32,19 @@ static vk::ShaderModule PrepareVs(vk::Device& device) {
 
 static vk::ShaderModule PrepareFs(vk::Device& device) {
   std::vector<unsigned int> fragShader =
-    GLSLtoSPV(vk::ShaderStageFlagBits::eFragment,
-              FileUtils::ReadFileToString("src/glsl/simple.frag"));
+    Shader::GLSLtoSPV(vk::ShaderStageFlagBits::eFragment,
+                      FileUtils::ReadFileToString("src/glsl/simple.frag"));
 
   return PrepareShaderModule(device, (const void*)fragShader.data(),
                              fragShader.size() * sizeof(fragShader[0]));
 }
 
 
-vk::Pipeline PreparePipeline(vk::Device& device,
-                             const vk::PipelineVertexInputStateCreateInfo& vertexState,
-                             const vk::PipelineLayout& pipelineLayout,
-                             const vk::RenderPass& renderPass) {
+vk::Pipeline Initialize::PreparePipeline(
+          vk::Device& device,
+          const vk::PipelineVertexInputStateCreateInfo& vertexState,
+          const vk::PipelineLayout& pipelineLayout,
+          const vk::RenderPass& renderPass) {
   vk::GraphicsPipelineCreateInfo pipelineCreateInfo;
 
   vk::PipelineInputAssemblyStateCreateInfo ia;

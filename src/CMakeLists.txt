@@ -13,9 +13,9 @@ if (MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-file(GLOB vkEarth_SOURCE "cpp/*.cpp")
-
+file(GLOB vkEarth_SOURCE "cpp/*.cpp" "cpp/*/*.cpp")
 add_executable(vkEarth WIN32 ${vkEarth_SOURCE} ${ICON})
+
 target_include_directories(vkEarth PRIVATE "${VULKAN_INCLUDE_DIR}")
 target_link_libraries(vkEarth "${VULKAN_LIBRARY}")
 set(WINDOWS_BINARIES vkEarth)

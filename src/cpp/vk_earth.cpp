@@ -48,9 +48,9 @@
 
 #include <vulkan/vk_cpp.h>
 #include <GLFW/glfw3.h>
-#include <SPIRV/GlslangToSpv.h>
 
-#include "create_pipeline.hpp"
+#include "shader/glsl2spv.hpp"
+#include "initialize/create_pipeline.hpp"
 
 #define DEMO_TEXTURE_COUNT 1
 #define VERTEX_BUFFER_BIND_ID 0
@@ -1073,8 +1073,8 @@ static void demo_prepare(Demo *demo) {
     demo_prepare_vertices(demo);
     demo_prepare_descriptor_layout(demo);
     demo_prepare_render_pass(demo);
-    demo->pipeline = PreparePipeline(demo->device, demo->vertices.vi,
-                                     demo->pipeline_layout, demo->render_pass);
+    demo->pipeline = Initialize::PreparePipeline(demo->device, demo->vertices.vi,
+                                                demo->pipeline_layout, demo->render_pass);
 
     demo_prepare_descriptor_pool(demo);
     demo_prepare_descriptor_set(demo);
@@ -1177,7 +1177,7 @@ static void demo_init_vk(Demo *demo) {
     demo->enabled_extension_count = 0;
     demo->enabled_layer_count = 0;
 
-    glslang::InitializeProcess();
+    Shader::InitializeGlslang();
 
     const char *instance_validation_layers[] = {
         // "VK_LAYER_GOOGLE_threading",
@@ -1629,7 +1629,7 @@ static void demo_cleanup(Demo *demo) {
 
     delete[] demo->queue_props;
 
-    glslang::FinalizeProcess();
+    Shader::FinalizeGlslang();
 
     glfwDestroyWindow(demo->window);
     glfwTerminate();

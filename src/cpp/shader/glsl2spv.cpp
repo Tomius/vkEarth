@@ -1,7 +1,15 @@
-#include "glsl2spv.hpp"
+#include "shader/glsl2spv.hpp"
 
 #include <iostream>
 #include <SPIRV/GlslangToSpv.h>
+
+void Shader::InitializeGlslang() {
+  glslang::InitializeProcess();
+}
+
+void Shader::FinalizeGlslang() {
+  glslang::FinalizeProcess();
+}
 
 static void InitResources(TBuiltInResource& resources) {
   resources.maxLights = 32;
@@ -145,8 +153,8 @@ static void PrintErrorLog(T& obj) {
   }
 }
 
-std::vector<unsigned int> GLSLtoSPV(const vk::ShaderStageFlagBits shaderType,
-                                    const std::string& shaderText) {
+std::vector<unsigned int> Shader::GLSLtoSPV(const vk::ShaderStageFlagBits shaderType,
+                                            const std::string& shaderText) {
   EShLanguage stage = FindLanguage(static_cast<VkShaderStageFlagBits>(shaderType));
   glslang::TShader shader(stage);
   glslang::TProgram program;

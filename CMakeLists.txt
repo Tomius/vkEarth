@@ -27,7 +27,7 @@ add_subdirectory(deps/glslang)
 include_directories(SYSTEM deps/glslang)
 
 include_directories(SYSTEM deps/vkcpp)
-
+include_directories(${vkEarth_SOURCE_DIR}/src/cpp)
 add_subdirectory(src)
 
 set(CMAKE_MODULE_PATH "${vkEarth_SOURCE_DIR}/deps/glfw/CMake/modules")
