@@ -45,16 +45,21 @@
 #include <cstdbool>
 #include <cassert>
 #include <iostream>
+#include <vector>
+#include <memory>
 
 #include <vulkan/vk_cpp.h>
 #include <GLFW/glfw3.h>
 
-#include "shader/glsl2spv.hpp"
+#include "common/vulkan_application.hpp"
+#include "initialize/create_debug_callback.hpp"
+#include "initialize/create_device.hpp"
+#include "initialize/create_instance.hpp"
+#include "initialize/create_physical_device.hpp"
 #include "initialize/create_pipeline.hpp"
 
 #define DEMO_TEXTURE_COUNT 1
 #define VERTEX_BUFFER_BIND_ID 0
-#define APP_SHORT_NAME "vkEarth"
 #define APP_LONG_NAME "Vulkan planetary CDLOD"
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
@@ -64,24 +69,6 @@
 #else
   #define U_ASSERT_ONLY
 #endif
-
-#define GET_INSTANCE_PROC_ADDR(inst, entrypoint)                                                   \
-    {                                                                                              \
-        demo->fp##entrypoint =                                                                     \
-            (PFN_vk##entrypoint)inst.getProcAddr("vk" #entrypoint);                                \
-        if (demo->fp##entrypoint == nullptr) {                                                     \
-           throw std::runtime_error("vk::getInstanceProcAddr failed to find vk" #entrypoint);      \
-        }                                                                                          \
-    }
-
-#define GET_DEVICE_PROC_ADDR(dev, entrypoint)                                                      \
-    {                                                                                              \
-        demo->fp##entrypoint =                                                                     \
-            (PFN_vk##entrypoint)dev.getProcAddr("vk" #entrypoint);                                 \
-        if (demo->fp##entrypoint == nullptr) {                                                     \
-            throw std::runtime_error("vk::getDeviceProcAddr failed to find vk" #entrypoint);       \
-        }                                                                                          \
-    }
 
 struct texture_object {
     vk::Sampler sampler;
@@ -93,22 +80,6 @@ struct texture_object {
     vk::ImageView view;
     int32_t tex_width = 0, tex_height = 0;
 };
-
-VKAPI_ATTR VkBool32 VKAPI_CALL dbgFunc(
-    VkDebugReportFlagsEXT       flags,
-    VkDebugReportObjectTypeEXT  objectType,
-    uint64_t                    object,
-    size_t                      location,
-    int32_t                     messageCode,
-    const char*                 pLayerPrefix,
-    const char*                 pMessage,
-    void*                       pUserData)
-{
-  std::cerr << (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT ? "ERROR " : "WARNING ")
-            << "(layer = " << pLayerPrefix << ", code = " << messageCode << ") : " << pMessage << std::endl;
-
-  return VK_FALSE;
-}
 
 typedef struct _SwapchainBuffers {
     vk::Image image;
@@ -123,35 +94,16 @@ struct Demo {
     bool use_staging_buffer = false;
 
     vk::Instance inst;
+    std::unique_ptr<Initialize::DebugCallback> debugCallback;
     vk::PhysicalDevice gpu;
     vk::Device device;
     vk::Queue queue;
-    vk::PhysicalDeviceProperties gpu_props;
-    vk::QueueFamilyProperties *queue_props;
     uint32_t graphics_queue_node_index = 0;
-
-    uint32_t enabled_extension_count = 0;
-    uint32_t enabled_layer_count = 0;
-    std::string extension_names[64];
-    const char* device_validation_layers[64];
 
     int width = 0, height = 0;
     vk::Format format;
     vk::ColorSpaceKHR color_space;
 
-    PFN_vkGetPhysicalDeviceSurfaceSupportKHR
-        fpGetPhysicalDeviceSurfaceSupportKHR = nullptr;
-    PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR
-        fpGetPhysicalDeviceSurfaceCapabilitiesKHR = nullptr;
-    PFN_vkGetPhysicalDeviceSurfaceFormatsKHR
-        fpGetPhysicalDeviceSurfaceFormatsKHR = nullptr;
-    PFN_vkGetPhysicalDeviceSurfacePresentModesKHR
-        fpGetPhysicalDeviceSurfacePresentModesKHR = nullptr;
-    PFN_vkCreateSwapchainKHR fpCreateSwapchainKHR = nullptr;
-    PFN_vkDestroySwapchainKHR fpDestroySwapchainKHR = nullptr;
-    PFN_vkGetSwapchainImagesKHR fpGetSwapchainImagesKHR = nullptr;
-    PFN_vkAcquireNextImageKHR fpAcquireNextImageKHR = nullptr;
-    PFN_vkQueuePresentKHR fpQueuePresentKHR = nullptr;
     uint32_t swapchainImageCount = 0;
     vk::SwapchainKHR swapchain;
     SwapchainBuffers *buffers = nullptr;
@@ -191,16 +143,12 @@ struct Demo {
 
     vk::PhysicalDeviceMemoryProperties memory_properties;
 
-    bool validate = true;
-    PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallback;
-    PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;
-    VkDebugReportCallbackEXT msg_callback;
+    VulkanApplication app;
 
     float depthStencil = 0.0f;
     float depthIncrement = 0.0f;
 
     uint32_t current_buffer = 0;
-    uint32_t queue_count = 0;
 };
 
 // Forward declaration:
@@ -385,10 +333,9 @@ static void demo_draw(Demo *demo) {
     assert(err == vk::Result::eSuccess);
 
     // Get the index of the next available swapchain image:
-    vkErr = demo->fpAcquireNextImageKHR(demo->device, demo->swapchain, UINT64_MAX,
-                                        presentCompleteSemaphore,
-                                        (vk::Fence)0, // TODO: Show use of fence
-                                        &demo->current_buffer);
+    vkErr = demo->app.entryPoints.fpAcquireNextImageKHR(
+      demo->device, demo->swapchain, UINT64_MAX, presentCompleteSemaphore,
+      (vk::Fence)nullptr, &demo->current_buffer);
     if (vkErr == VK_ERROR_OUT_OF_DATE_KHR) {
         // demo->swapchain is out of date (e.g. the window was resized) and
         // must be recreated:
@@ -440,7 +387,7 @@ static void demo_draw(Demo *demo) {
         static_cast<const VkPresentInfoKHR&>(present));
 
     // TBD/TODO: SHOULD THE "present" PARAMETER BE "const" IN THE HEADER?
-    vkErr = demo->fpQueuePresentKHR(demo->queue, &vkPresent);
+    vkErr = demo->app.entryPoints.fpQueuePresentKHR(demo->queue, &vkPresent);
     if (vkErr == VK_ERROR_OUT_OF_DATE_KHR) {
         // demo->swapchain is out of date (e.g. the window was resized) and
         // must be recreated:
@@ -468,19 +415,19 @@ static void demo_prepare_buffers(Demo *demo) {
     VkSurfaceCapabilitiesKHR& vkSurfCapabilities =
       const_cast<VkSurfaceCapabilitiesKHR&>(
         static_cast<const VkSurfaceCapabilitiesKHR&>(surfCapabilities));
-    vkErr = demo->fpGetPhysicalDeviceSurfaceCapabilitiesKHR(
+    vkErr = demo->app.entryPoints.fpGetPhysicalDeviceSurfaceCapabilitiesKHR(
         demo->gpu, demo->surface, &vkSurfCapabilities);
     assert(vkErr == VK_SUCCESS);
 
     uint32_t presentModeCount;
-    vkErr = demo->fpGetPhysicalDeviceSurfacePresentModesKHR(
+    vkErr = demo->app.entryPoints.fpGetPhysicalDeviceSurfacePresentModesKHR(
         demo->gpu, demo->surface, &presentModeCount, nullptr);
     assert(vkErr == VK_SUCCESS);
 
     VkPresentModeKHR *presentModes = new VkPresentModeKHR[presentModeCount];
     assert(presentModes);
 
-    vkErr = demo->fpGetPhysicalDeviceSurfacePresentModesKHR(
+    vkErr = demo->app.entryPoints.fpGetPhysicalDeviceSurfacePresentModesKHR(
         demo->gpu, demo->surface, &presentModeCount, presentModes);
     assert(vkErr == VK_SUCCESS);
 
@@ -538,8 +485,8 @@ static void demo_prepare_buffers(Demo *demo) {
 
     const VkSwapchainCreateInfoKHR& vkSwapchainInfo = swapchain;
     VkSwapchainKHR vkSwapchain = demo->swapchain;
-    vkErr = demo->fpCreateSwapchainKHR(demo->device, &vkSwapchainInfo, nullptr,
-                                       &vkSwapchain);
+    vkErr = demo->app.entryPoints.fpCreateSwapchainKHR(
+        demo->device, &vkSwapchainInfo, nullptr, &vkSwapchain);
     demo->swapchain = vkSwapchain;
     assert(vkErr == VK_SUCCESS);
 
@@ -548,17 +495,16 @@ static void demo_prepare_buffers(Demo *demo) {
     // Note: destroying the swapchain also cleans up all its associated
     // presentable images once the platform is done with them.
     if (oldSwapchain != VK_NULL_HANDLE) {
-        demo->fpDestroySwapchainKHR(demo->device, oldSwapchain, nullptr);
+        demo->app.entryPoints.fpDestroySwapchainKHR(demo->device, oldSwapchain, nullptr);
     }
 
-    vkErr = demo->fpGetSwapchainImagesKHR(demo->device, demo->swapchain,
-                                        &demo->swapchainImageCount, nullptr);
+    vkErr = demo->app.entryPoints.fpGetSwapchainImagesKHR(
+        demo->device, demo->swapchain, &demo->swapchainImageCount, nullptr);
     assert(vkErr == VK_SUCCESS);
 
     VkImage *swapchainImages = new VkImage[demo->swapchainImageCount];
-    vkErr = demo->fpGetSwapchainImagesKHR(demo->device, demo->swapchain,
-                                        &demo->swapchainImageCount,
-                                        swapchainImages);
+    vkErr = demo->app.entryPoints.fpGetSwapchainImagesKHR(
+        demo->device, demo->swapchain, &demo->swapchainImageCount, swapchainImages);
     assert(vkErr == VK_SUCCESS);
 
     demo->buffers = new SwapchainBuffers[demo->swapchainImageCount];
@@ -1143,347 +1089,39 @@ static void demo_create_window(Demo *demo) {
     glfwSetKeyCallback(demo->window, demo_key_callback);
 }
 
-/*
- * Return 1 (true) if all layer names specified in check_names
- * can be found in given layer properties.
- */
-static vk::Bool32 demo_check_layers(uint32_t check_count,
-                                    const char **check_names,
-                                    uint32_t layer_count,
-                                    vk::LayerProperties *layers) {
-    for (uint32_t i = 0; i < check_count; i++) {
-        vk::Bool32 found = 0;
-        for (uint32_t j = 0; j < layer_count; j++) {
-            if (!strcmp(check_names[i], layers[j].layerName())) {
-                found = 1;
-                break;
-            }
-        }
-        if (!found) {
-            fprintf(stderr, "Cannot find layer: %s\n", check_names[i]);
-            return 0;
-        }
-    }
-    return 1;
-}
-
-static void demo_init_vk(Demo *demo) {
-    vk::Result err;
-    uint32_t required_extension_count;
-    const char** required_extensions;
-    uint32_t instance_extension_count = 0;
-    uint32_t instance_layer_count = 0;
-    uint32_t device_validation_layer_count = 0;
-    demo->enabled_extension_count = 0;
-    demo->enabled_layer_count = 0;
-
-    Shader::InitializeGlslang();
-
-    const char *instance_validation_layers[] = {
-        // "VK_LAYER_GOOGLE_threading",
-        "VK_LAYER_LUNARG_param_checker",
-        "VK_LAYER_LUNARG_device_limits",
-        "VK_LAYER_LUNARG_object_tracker",
-        "VK_LAYER_LUNARG_image",
-        "VK_LAYER_LUNARG_mem_tracker",
-        "VK_LAYER_LUNARG_draw_state",
-        "VK_LAYER_LUNARG_swapchain",
-        "VK_LAYER_GOOGLE_unique_objects"
-    };
-
-    device_validation_layer_count = ARRAY_SIZE(instance_validation_layers);
-    for (int i = 0; i < device_validation_layer_count; ++i) {
-      demo->device_validation_layers[i] = instance_validation_layers[i];
-    }
-    // demo->device_validation_layers[0] = "VK_LAYER_LUNARG_mem_tracker";
-    // demo->device_validation_layers[1] = "VK_LAYER_GOOGLE_unique_objects";
-    // device_validation_layer_count = 2;
-
-    /* Look for validation layers */
-    vk::Bool32 validation_found = 0;
-    err = vk::enumerateInstanceLayerProperties(&instance_layer_count, nullptr);
-    assert(err == vk::Result::eSuccess);
-
-    if (instance_layer_count > 0) {
-        vk::LayerProperties *instance_layers =
-            new vk::LayerProperties[instance_layer_count];
-        err = vk::enumerateInstanceLayerProperties(&instance_layer_count,
-                                                   instance_layers);
-        assert(err == vk::Result::eSuccess);
-
-        if (demo->validate) {
-            validation_found = demo_check_layers(
-                ARRAY_SIZE(instance_validation_layers),
-                instance_validation_layers, instance_layer_count,
-                instance_layers);
-            demo->enabled_layer_count = ARRAY_SIZE(instance_validation_layers);
-        }
-
-        delete[] instance_layers;
-    }
-
-    if (demo->validate && !validation_found) {
-        throw std::runtime_error("vk::enumerateInstanceLayerProperties failed to find"
-                 "required validation layer.\n\n"
-                 "Please look at the Getting Started guide for additional information.");
-    }
-
-    /* Look for instance extensions */
-    required_extensions = glfwGetRequiredInstanceExtensions((unsigned*) &required_extension_count);
-    if (!required_extensions) {
-        throw std::runtime_error("glfwGetRequiredInstanceExtensions failed to find the "
-                 "platform surface extensions.\n\nDo you have a compatible "
-                 "Vulkan installable client driver (ICD) installed?\nPlease "
-                 "look at the Getting Started guide for additional information.");
-    }
-
-    for (uint32_t i = 0; i < required_extension_count; i++) {
-        demo->extension_names[demo->enabled_extension_count++] = required_extensions[i];
-        assert(demo->enabled_extension_count < 64);
-    }
-
-    err = vk::enumerateInstanceExtensionProperties(
-        nullptr, &instance_extension_count, nullptr);
-    assert(err == vk::Result::eSuccess);
-
-    if (instance_extension_count > 0) {
-        vk::ExtensionProperties *instance_extensions =
-            new vk::ExtensionProperties[instance_extension_count];
-        err = vk::enumerateInstanceExtensionProperties(
-            nullptr, &instance_extension_count, instance_extensions);
-        assert(err == vk::Result::eSuccess);
-        for (uint32_t i = 0; i < instance_extension_count; i++) {
-            if (!strcmp(VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
-                        instance_extensions[i].extensionName())) {
-                if (demo->validate) {
-                    demo->extension_names[demo->enabled_extension_count++] =
-                        VK_EXT_DEBUG_REPORT_EXTENSION_NAME;
-                }
-            }
-            assert(demo->enabled_extension_count < 64);
-        }
-
-        delete[] instance_extensions;
-    }
-
-    const vk::ApplicationInfo app = vk::ApplicationInfo()
-        .pApplicationName(APP_SHORT_NAME)
-        .applicationVersion(0)
-        .pEngineName(APP_SHORT_NAME)
-        .engineVersion(0)
-        .apiVersion(VK_MAKE_VERSION(1, 0, 4));
-
-    vk::InstanceCreateInfo inst_info = vk::InstanceCreateInfo()
-        .pApplicationInfo(&app)
-        .enabledLayerCount(demo->enabled_layer_count)
-        .ppEnabledLayerNames((const char *const *)instance_validation_layers)
-        .enabledExtensionCount(demo->enabled_extension_count)
-        .ppEnabledExtensionNames((const char *const *)demo->extension_names);
-
-    uint32_t gpu_count;
-
-    err = vk::createInstance(&inst_info, nullptr, &demo->inst);
-    if (err == vk::Result::eErrorIncompatibleDriver) {
-        throw std::runtime_error("Cannot find a compatible Vulkan installable client driver "
-                 "(ICD).\n\nPlease look at the Getting Started guide for "
-                 "additional information.");
-    } else if (err == vk::Result::eErrorExtensionNotPresent) {
-        throw std::runtime_error("Cannot find a specified extension library"
-                 ".\nMake sure your layers path is set appropriately");
-    } else if (err != vk::Result::eSuccess) {
-        throw std::runtime_error("vk::createInstance failed.\n\nDo you have a compatible Vulkan "
-                 "installable client driver (ICD) installed?\nPlease look at "
-                 "the Getting Started guide for additional information.");
-    }
-
-    /* Make initial call to query gpu_count, then second call for gpu info*/
-    err = demo->inst.enumeratePhysicalDevices(&gpu_count, nullptr);
-    assert(err == vk::Result::eSuccess && gpu_count > 0);
-
-    if (gpu_count > 0) {
-        vk::PhysicalDevice *physical_devices =
-            new vk::PhysicalDevice[gpu_count];
-        err = demo->inst.enumeratePhysicalDevices(&gpu_count, physical_devices);
-        assert(err == vk::Result::eSuccess);
-        /* For tri demo we just grab the first physical device */
-        demo->gpu = physical_devices[0];
-        delete[] physical_devices;
-    } else {
-        throw std::runtime_error("vk::enumeratePhysicalDevices reported zero accessible devices."
-                 "\n\nDo you have a compatible Vulkan installable client"
-                 " driver (ICD) installed?\nPlease look at the Getting Started"
-                 " guide for additional information.");
-    }
-
-    /* Look for validation layers */
-    validation_found = 0;
-    demo->enabled_layer_count = 0;
-    uint32_t device_layer_count = 0;
-    err = demo->gpu.enumerateDeviceLayerProperties(&device_layer_count, nullptr);
-    assert(err == vk::Result::eSuccess);
-
-    if (device_layer_count > 0) {
-        vk::LayerProperties *device_layers =
-            new vk::LayerProperties[device_layer_count];
-        err = demo->gpu.enumerateDeviceLayerProperties(&device_layer_count,
-                                                       device_layers);
-        assert(err == vk::Result::eSuccess);
-
-        if (demo->validate) {
-            validation_found = demo_check_layers(device_validation_layer_count,
-                                                 demo->device_validation_layers,
-                                                 device_layer_count,
-                                                 device_layers);
-            demo->enabled_layer_count = device_validation_layer_count;
-        }
-
-        delete[] device_layers;
-    }
-
-    if (demo->validate && !validation_found) {
-        throw std::runtime_error("vk::enumerateDeviceLayerProperties failed to find "
-                 "a required validation layer.\n\n"
-                 "Please look at the Getting Started guide for additional information.");
-    }
-
-    /* Look for device extensions */
-    uint32_t device_extension_count = 0;
-    vk::Bool32 swapchainExtFound = 0;
-    demo->enabled_extension_count = 0;
-
-    err = demo->gpu.enumerateDeviceExtensionProperties(
-        nullptr, &device_extension_count, nullptr);
-    assert(err == vk::Result::eSuccess);
-
-    if (device_extension_count > 0) {
-        vk::ExtensionProperties *device_extensions =
-            new vk::ExtensionProperties[device_extension_count];
-        err = demo->gpu.enumerateDeviceExtensionProperties(
-            nullptr, &device_extension_count, device_extensions);
-        assert(err == vk::Result::eSuccess);
-
-        for (uint32_t i = 0; i < device_extension_count; i++) {
-            if (!strcmp(VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-                        device_extensions[i].extensionName())) {
-                swapchainExtFound = 1;
-                demo->extension_names[demo->enabled_extension_count++] =
-                    VK_KHR_SWAPCHAIN_EXTENSION_NAME;
-            }
-            assert(demo->enabled_extension_count < 64);
-        }
-
-        delete[] device_extensions;
-    }
-
-    if (!swapchainExtFound) {
-        throw std::runtime_error("vk::enumerateDeviceExtensionProperties failed to find "
-                 "the " VK_KHR_SWAPCHAIN_EXTENSION_NAME
-                 " extension.\n\nDo you have a compatible "
-                 "Vulkan installable client driver (ICD) installed?\nPlease "
-                 "look at the Getting Started guide for additional information.");
-    }
-
-    if (demo->validate) {
-        demo->CreateDebugReportCallback =
-            (PFN_vkCreateDebugReportCallbackEXT) demo->inst.getProcAddr(
-                "vkCreateDebugReportCallbackEXT");
-        if (!demo->CreateDebugReportCallback) {
-            throw std::runtime_error("GetProcAddr: Unable to find vkCreateDebugReportCallbackEXT");
-        }
-        vk::DebugReportCallbackCreateInfoEXT dbgCreateInfo{
-          vk::DebugReportFlagBitsEXT::eError |
-          vk::DebugReportFlagBitsEXT::eWarning,
-          dbgFunc, nullptr};
-        VkDebugReportCallbackCreateInfoEXT vkDbgCreateInfo = dbgCreateInfo;
-
-        VkResult vkErr = demo->CreateDebugReportCallback(demo->inst, &vkDbgCreateInfo,
-                                              nullptr, &demo->msg_callback);
-        switch (vkErr) {
-          case VK_SUCCESS:
-              break;
-          case VK_ERROR_OUT_OF_HOST_MEMORY:
-              throw std::runtime_error("CreateDebugReportCallback: out of host memory");
-              break;
-          default:
-              throw std::runtime_error("CreateDebugReportCallback: unknown failure");
-              break;
-        }
-    }
-
-    // Having these GIPA queries of device extension entry points both
-    // BEFORE and AFTER vk::createDevice is a good test for the loader
-    GET_INSTANCE_PROC_ADDR(demo->inst, GetPhysicalDeviceSurfaceCapabilitiesKHR);
-    GET_INSTANCE_PROC_ADDR(demo->inst, GetPhysicalDeviceSurfaceFormatsKHR);
-    GET_INSTANCE_PROC_ADDR(demo->inst, GetPhysicalDeviceSurfacePresentModesKHR);
-    GET_INSTANCE_PROC_ADDR(demo->inst, GetPhysicalDeviceSurfaceSupportKHR);
-    GET_INSTANCE_PROC_ADDR(demo->inst, CreateSwapchainKHR);
-    GET_INSTANCE_PROC_ADDR(demo->inst, DestroySwapchainKHR);
-    GET_INSTANCE_PROC_ADDR(demo->inst, GetSwapchainImagesKHR);
-    GET_INSTANCE_PROC_ADDR(demo->inst, AcquireNextImageKHR);
-    GET_INSTANCE_PROC_ADDR(demo->inst, QueuePresentKHR);
-
-    demo->gpu.getProperties(&demo->gpu_props);
-
-    // Query with nullptr data to get count
-    demo->gpu.getQueueFamilyProperties(&demo->queue_count, nullptr);
-
-    demo->queue_props = new vk::QueueFamilyProperties[demo->queue_count];
-    demo->gpu.getQueueFamilyProperties(&demo->queue_count, demo->queue_props);
-    assert(demo->queue_count >= 1);
-
-    // Graphics queue and MemMgr queue can be separate.
-    // TODO: Add support for separate queues, including synchronization,
-    //       and appropriate tracking for QueueSubmit
-}
-
-static void demo_init_device(Demo *demo) {
-    vk::Result U_ASSERT_ONLY err;
-
-    float queue_priorities[1] = {0.0};
-    const vk::DeviceQueueCreateInfo queue = vk::DeviceQueueCreateInfo()
-        .queueFamilyIndex(demo->graphics_queue_node_index)
-        .queueCount(1)
-        .pQueuePriorities(queue_priorities);
-
-    vk::DeviceCreateInfo device = vk::DeviceCreateInfo()
-        .queueCreateInfoCount(1)
-        .pQueueCreateInfos(&queue)
-        .enabledLayerCount(demo->enabled_layer_count)
-        .ppEnabledLayerNames((const char *const *)((demo->validate)
-                                      ? demo->device_validation_layers
-                                      : nullptr))
-        .enabledExtensionCount(demo->enabled_extension_count)
-        .ppEnabledExtensionNames((const char *const *)demo->extension_names);
-
-    err = demo->gpu.createDevice(&device, nullptr, &demo->device);
-    assert(err == vk::Result::eSuccess);
-
-    GET_DEVICE_PROC_ADDR(demo->device, CreateSwapchainKHR);
-    GET_DEVICE_PROC_ADDR(demo->device, DestroySwapchainKHR);
-    GET_DEVICE_PROC_ADDR(demo->device, GetSwapchainImagesKHR);
-    GET_DEVICE_PROC_ADDR(demo->device, AcquireNextImageKHR);
-    GET_DEVICE_PROC_ADDR(demo->device, QueuePresentKHR);
-}
-
 static void demo_init_vk_swapchain(Demo *demo) {
     vk::Result U_ASSERT_ONLY err;
 
     // Create a WSI surface for the window:
     glfwCreateWindowSurface(demo->inst, demo->window, nullptr, &demo->surface);
 
+    // Get queue count and properties
+    uint32_t queueCount = 0;
+    demo->gpu.getQueueFamilyProperties(&queueCount, nullptr);
+
+    std::vector<vk::QueueFamilyProperties> queue_props;
+    queue_props.resize(queueCount);
+    demo->gpu.getQueueFamilyProperties(&queueCount, queue_props.data());
+    assert(1 <= queueCount);
+    queue_props.resize(queueCount);
+
+    // Graphics queue and MemMgr queue can be separate.
+    // TODO: Add support for separate queues, including synchronization,
+    //       and appropriate tracking for QueueSubmit
+
     // Iterate over each queue to learn whether it supports presenting:
-    vk::Bool32 *supportsPresent = new vk::Bool32[demo->queue_count];
-    for (uint32_t i = 0; i < demo->queue_count; i++) {
-        demo->fpGetPhysicalDeviceSurfaceSupportKHR(demo->gpu, i, demo->surface,
-                                                   &supportsPresent[i]);
+    vk::Bool32 *supportsPresent = new vk::Bool32[queueCount];
+    for (uint32_t i = 0; i < queueCount; i++) {
+        demo->app.entryPoints.fpGetPhysicalDeviceSurfaceSupportKHR(
+            demo->gpu, i, demo->surface, &supportsPresent[i]);
     }
 
     // Search for a graphics and a present queue in the array of queue
     // families, try to find one that supports both
     uint32_t graphicsQueueNodeIndex = UINT32_MAX;
     uint32_t presentQueueNodeIndex = UINT32_MAX;
-    for (uint32_t i = 0; i < demo->queue_count; i++) {
-        if ((demo->queue_props[i].queueFlags() & vk::QueueFlagBits::eGraphics) != 0) {
+    for (uint32_t i = 0; i < queueCount; i++) {
+        if ((queue_props[i].queueFlags() & vk::QueueFlagBits::eGraphics) != 0) {
             if (graphicsQueueNodeIndex == UINT32_MAX) {
                 graphicsQueueNodeIndex = i;
             }
@@ -1498,7 +1136,7 @@ static void demo_init_vk_swapchain(Demo *demo) {
     if (presentQueueNodeIndex == UINT32_MAX) {
         // If didn't find a queue that supports both graphics and present, then
         // find a separate present queue.
-        for (uint32_t i = 0; i < demo->queue_count; ++i) {
+        for (uint32_t i = 0; i < queueCount; ++i) {
             if (supportsPresent[i] == VK_TRUE) {
                 presentQueueNodeIndex = i;
                 break;
@@ -1524,19 +1162,20 @@ static void demo_init_vk_swapchain(Demo *demo) {
 
     demo->graphics_queue_node_index = graphicsQueueNodeIndex;
 
-    demo_init_device(demo);
+    demo->device = Initialize::CreateDevice(demo->gpu, graphicsQueueNodeIndex,
+                                            demo->app);
 
     demo->device.getQueue(demo->graphics_queue_node_index, 0, &demo->queue);
 
     // Get the list of vk::Format's that are supported:
     uint32_t formatCount;
     VkResult vkerr =
-      demo->fpGetPhysicalDeviceSurfaceFormatsKHR(demo->gpu, demo->surface,
-                                                 &formatCount, nullptr);
+      demo->app.entryPoints.fpGetPhysicalDeviceSurfaceFormatsKHR(
+          demo->gpu, demo->surface, &formatCount, nullptr);
     assert(vkerr == VK_SUCCESS);
     VkSurfaceFormatKHR *surfFormats = new VkSurfaceFormatKHR[formatCount];
-    vkerr = demo->fpGetPhysicalDeviceSurfaceFormatsKHR(demo->gpu, demo->surface,
-                                                       &formatCount, surfFormats);
+    vkerr = demo->app.entryPoints.fpGetPhysicalDeviceSurfaceFormatsKHR(
+        demo->gpu, demo->surface, &formatCount, surfFormats);
     assert(vkerr == VK_SUCCESS);
     // If the format list includes just one entry of VK_FORMAT_UNDEFINED,
     // the surface has no preferred format.  Otherwise, at least one
@@ -1577,7 +1216,11 @@ static void demo_init(Demo *demo, const int argc, const char *argv[]) {
     }
 
     demo_init_connection(demo);
-    demo_init_vk(demo);
+
+    demo->inst = Initialize::CreateInstance(demo->app);
+    demo->debugCallback = std::unique_ptr<Initialize::DebugCallback>{
+      new Initialize::DebugCallback(demo->inst)};
+    demo->gpu  = Initialize::CreatePhysicalDevice(demo->inst, demo->app);
 
     demo->width = 300;
     demo->height = 300;
@@ -1621,15 +1264,12 @@ static void demo_cleanup(Demo *demo) {
     demo->device.destroyImage(demo->depth.image, nullptr);
     demo->device.freeMemory(demo->depth.mem, nullptr);
 
-    demo->fpDestroySwapchainKHR(demo->device, demo->swapchain, nullptr);
+    demo->app.entryPoints.fpDestroySwapchainKHR(demo->device, demo->swapchain, nullptr);
     delete[] demo->buffers;
 
     demo->device.destroy(nullptr);
     demo->inst.destroySurfaceKHR(demo->surface, nullptr);
-
-    delete[] demo->queue_props;
-
-    Shader::FinalizeGlslang();
+    demo->debugCallback = nullptr;
 
     glfwDestroyWindow(demo->window);
     glfwTerminate();

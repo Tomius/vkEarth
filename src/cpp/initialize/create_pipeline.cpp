@@ -1,16 +1,12 @@
 #include "initialize/create_pipeline.hpp"
 
-#include <vector>
-#include <cassert>
-#include <iostream>
-
 #include "common/file_utils.hpp"
 #include "common/error_checking.hpp"
 #include "shader/glsl2spv.hpp"
 
 static vk::ShaderModule PrepareShaderModule(vk::Device& device,
-                                                   const void *code,
-                                                   size_t size) {
+                                            const void *code,
+                                            size_t size) {
   vk::ShaderModuleCreateInfo moduleCreateInfo;
   vk::ShaderModule module;
 
@@ -106,6 +102,7 @@ vk::Pipeline Initialize::PreparePipeline(
   pipelineCreateInfo.stageCount(2);
   vk::PipelineShaderStageCreateInfo shaderStages[2];
 
+  Shader::InitializeGlslang();
   shaderStages[0].stage(vk::ShaderStageFlagBits::eVertex);
   shaderStages[0].module(PrepareVs(device));
   shaderStages[0].pName("main");
@@ -113,6 +110,7 @@ vk::Pipeline Initialize::PreparePipeline(
   shaderStages[1].stage(vk::ShaderStageFlagBits::eFragment);
   shaderStages[1].module(PrepareFs(device));
   shaderStages[1].pName("main");
+  Shader::FinalizeGlslang();
 
   pipelineCreateInfo.pVertexInputState(&vertexState);
   pipelineCreateInfo.pInputAssemblyState(&ia);
