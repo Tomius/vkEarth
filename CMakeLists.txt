@@ -26,6 +26,9 @@ include_directories(SYSTEM deps/glfw/include)
 add_subdirectory(deps/glslang)
 include_directories(SYSTEM deps/glslang)
 
+add_subdirectory(deps/glm)
+include_directories(SYSTEM deps/glm)
+
 include_directories(SYSTEM deps/vkcpp)
 include_directories(${vkEarth_SOURCE_DIR}/src/cpp)
 add_subdirectory(src)

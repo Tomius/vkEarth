@@ -5,8 +5,10 @@
 
 namespace Initialize {
 
-vk::PhysicalDevice CreatePhysicalDevice(vk::Instance& instance,
-                                        const VulkanApplication& app);
+vk::Instance        CreateInstance(VulkanApplication& app);
+
+vk::PhysicalDevice  CreatePhysicalDevice(vk::Instance& instance,
+                                         const VulkanApplication& app);
 
 }
 

@@ -10,7 +10,7 @@ namespace Initialize {
 bool CheckForMissingLayers(uint32_t check_count,
                            const char* const* check_names,
                            uint32_t layer_count,
-                           vk::LayerProperties *layers);
+                           vk::LayerProperties* layers);
 #endif // VK_VALIDATE
 
 }

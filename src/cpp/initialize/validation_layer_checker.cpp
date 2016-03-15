@@ -6,7 +6,7 @@
 bool Initialize::CheckForMissingLayers(uint32_t check_count,
                                        const char* const* check_names,
                                        uint32_t layer_count,
-                                       vk::LayerProperties *layers) {
+                                       vk::LayerProperties* layers) {
   bool found_all = true;
   for (uint32_t i = 0; i < check_count; i++) {
     vk::Bool32 found = 0;

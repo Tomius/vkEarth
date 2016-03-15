@@ -52,17 +52,16 @@
 #include <GLFW/glfw3.h>
 
 #include "common/vulkan_application.hpp"
-#include "initialize/create_debug_callback.hpp"
-#include "initialize/create_device.hpp"
-#include "initialize/create_instance.hpp"
+#include "initialize/debug_callback.hpp"
 #include "initialize/create_physical_device.hpp"
 #include "initialize/create_pipeline.hpp"
+#include "initialize/prepare_swapchain.hpp"
+
+#include "engine/game_engine.hpp"
 
 #define DEMO_TEXTURE_COUNT 1
 #define VERTEX_BUFFER_BIND_ID 0
 #define APP_LONG_NAME "Vulkan planetary CDLOD"
-
-#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 
 #if defined(NDEBUG) && defined(__GNUC__)
   #define U_ASSERT_ONLY __attribute__((unused))
@@ -98,11 +97,11 @@ struct Demo {
     vk::PhysicalDevice gpu;
     vk::Device device;
     vk::Queue queue;
-    uint32_t graphics_queue_node_index = 0;
+    uint32_t graphicsQueueNodeIndex = 0;
 
     int width = 0, height = 0;
     vk::Format format;
-    vk::ColorSpaceKHR color_space;
+    vk::ColorSpaceKHR colorSpace;
 
     uint32_t swapchainImageCount = 0;
     vk::SwapchainKHR swapchain;
@@ -141,7 +140,7 @@ struct Demo {
 
     vk::Framebuffer *framebuffers = nullptr;
 
-    vk::PhysicalDeviceMemoryProperties memory_properties;
+    vk::PhysicalDeviceMemoryProperties memoryProperties;
 
     VulkanApplication app;
 
@@ -149,7 +148,7 @@ struct Demo {
     float depthIncrement = 0.0f;
 
     uint32_t current_buffer = 0;
-};
+} gDemo;
 
 // Forward declaration:
 static void demo_resize(Demo *demo);
@@ -161,7 +160,7 @@ static bool memory_type_from_properties(Demo *demo, uint32_t typeBits,
     for (uint32_t i = 0; i < 32; i++) {
         if ((typeBits & 1) == 1) {
             // Type is available, does it match user properties?
-            if ((demo->memory_properties.memoryTypes()[i].propertyFlags() &
+            if ((demo->memoryProperties.memoryTypes()[i].propertyFlags() &
                  requirements_mask) == requirements_mask) {
                 mem_alloc.memoryTypeIndex(i);
                 return true;
@@ -470,7 +469,7 @@ static void demo_prepare_buffers(Demo *demo) {
         .surface(demo->surface)
         .minImageCount(desiredNumberOfSwapchainImages)
         .imageFormat(demo->format)
-        .imageColorSpace(demo->color_space)
+        .imageColorSpace(demo->colorSpace)
         .imageExtent(vk::Extent2D{swapchainExtent.width(), swapchainExtent.height()})
         .imageUsage(vk::ImageUsageFlagBits::eColorAttachment)
         .preTransform(preTransform)
@@ -790,7 +789,7 @@ static void demo_prepare_textures(Demo *demo) {
 
 static void demo_prepare_vertices(Demo *demo) {
     // clang-format off
-    const float vb[3][5] = {
+    const float vb[][5] = {
         /*      position             texcoord */
         { -1.0f, -1.0f,  0.25f,     0.0f, 0.0f },
         {  1.0f, -1.0f,  0.25f,     1.0f, 0.0f },
@@ -998,7 +997,7 @@ static void demo_prepare(Demo *demo) {
 
     const vk::CommandPoolCreateInfo cmd_pool_info =
       vk::CommandPoolCreateInfo()
-        .queueFamilyIndex(demo->graphics_queue_node_index)
+        .queueFamilyIndex(demo->graphicsQueueNodeIndex)
         .flags(vk::CommandPoolCreateFlagBits::eResetCommandBuffer);
 
     err = demo->device.createCommandPool(&cmd_pool_info, nullptr,
@@ -1033,21 +1032,14 @@ static void demo_error_callback(int error, const char* description) {
     fflush(stdout);
 }
 
-static void demo_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-}
-
 static void demo_refresh_callback(GLFWwindow* window) {
-    Demo* demo = reinterpret_cast<Demo*>(glfwGetWindowUserPointer(window));
-    demo_draw(demo);
+    demo_draw(&gDemo);
 }
 
 static void demo_resize_callback(GLFWwindow* window, int width, int height) {
-    Demo* demo = reinterpret_cast<Demo*>(glfwGetWindowUserPointer(window));
-    demo->width = width;
-    demo->height = height;
-    demo_resize(demo);
+    gDemo.width = width;
+    gDemo.height = height;
+    demo_resize(&gDemo);
 }
 
 static void demo_run(Demo *demo) {
@@ -1083,113 +1075,8 @@ static void demo_create_window(Demo *demo) {
         exit(1);
     }
 
-    glfwSetWindowUserPointer(demo->window, demo);
     glfwSetWindowRefreshCallback(demo->window, demo_refresh_callback);
     glfwSetFramebufferSizeCallback(demo->window, demo_resize_callback);
-    glfwSetKeyCallback(demo->window, demo_key_callback);
-}
-
-static void demo_init_vk_swapchain(Demo *demo) {
-    vk::Result U_ASSERT_ONLY err;
-
-    // Create a WSI surface for the window:
-    glfwCreateWindowSurface(demo->inst, demo->window, nullptr, &demo->surface);
-
-    // Get queue count and properties
-    uint32_t queueCount = 0;
-    demo->gpu.getQueueFamilyProperties(&queueCount, nullptr);
-
-    std::vector<vk::QueueFamilyProperties> queue_props;
-    queue_props.resize(queueCount);
-    demo->gpu.getQueueFamilyProperties(&queueCount, queue_props.data());
-    assert(1 <= queueCount);
-    queue_props.resize(queueCount);
-
-    // Graphics queue and MemMgr queue can be separate.
-    // TODO: Add support for separate queues, including synchronization,
-    //       and appropriate tracking for QueueSubmit
-
-    // Iterate over each queue to learn whether it supports presenting:
-    vk::Bool32 *supportsPresent = new vk::Bool32[queueCount];
-    for (uint32_t i = 0; i < queueCount; i++) {
-        demo->app.entryPoints.fpGetPhysicalDeviceSurfaceSupportKHR(
-            demo->gpu, i, demo->surface, &supportsPresent[i]);
-    }
-
-    // Search for a graphics and a present queue in the array of queue
-    // families, try to find one that supports both
-    uint32_t graphicsQueueNodeIndex = UINT32_MAX;
-    uint32_t presentQueueNodeIndex = UINT32_MAX;
-    for (uint32_t i = 0; i < queueCount; i++) {
-        if ((queue_props[i].queueFlags() & vk::QueueFlagBits::eGraphics) != 0) {
-            if (graphicsQueueNodeIndex == UINT32_MAX) {
-                graphicsQueueNodeIndex = i;
-            }
-
-            if (supportsPresent[i] == VK_TRUE) {
-                graphicsQueueNodeIndex = i;
-                presentQueueNodeIndex = i;
-                break;
-            }
-        }
-    }
-    if (presentQueueNodeIndex == UINT32_MAX) {
-        // If didn't find a queue that supports both graphics and present, then
-        // find a separate present queue.
-        for (uint32_t i = 0; i < queueCount; ++i) {
-            if (supportsPresent[i] == VK_TRUE) {
-                presentQueueNodeIndex = i;
-                break;
-            }
-        }
-    }
-    delete[] supportsPresent;
-
-    // Generate error if could not find both a graphics and a present queue
-    if (graphicsQueueNodeIndex == UINT32_MAX ||
-        presentQueueNodeIndex == UINT32_MAX) {
-        throw std::runtime_error("Could not find a graphics and a present queue");
-    }
-
-    // TODO: Add support for separate queues, including presentation,
-    //       synchronization, and appropriate tracking for QueueSubmit.
-    // NOTE: While it is possible for an application to use a separate graphics
-    //       and a present queues, this demo program assumes it is only using
-    //       one:
-    if (graphicsQueueNodeIndex != presentQueueNodeIndex) {
-        throw std::runtime_error("Could not find a common graphics and a present queue");
-    }
-
-    demo->graphics_queue_node_index = graphicsQueueNodeIndex;
-
-    demo->device = Initialize::CreateDevice(demo->gpu, graphicsQueueNodeIndex,
-                                            demo->app);
-
-    demo->device.getQueue(demo->graphics_queue_node_index, 0, &demo->queue);
-
-    // Get the list of vk::Format's that are supported:
-    uint32_t formatCount;
-    VkResult vkerr =
-      demo->app.entryPoints.fpGetPhysicalDeviceSurfaceFormatsKHR(
-          demo->gpu, demo->surface, &formatCount, nullptr);
-    assert(vkerr == VK_SUCCESS);
-    VkSurfaceFormatKHR *surfFormats = new VkSurfaceFormatKHR[formatCount];
-    vkerr = demo->app.entryPoints.fpGetPhysicalDeviceSurfaceFormatsKHR(
-        demo->gpu, demo->surface, &formatCount, surfFormats);
-    assert(vkerr == VK_SUCCESS);
-    // If the format list includes just one entry of VK_FORMAT_UNDEFINED,
-    // the surface has no preferred format.  Otherwise, at least one
-    // supported format will be returned.
-    if (formatCount == 1 && surfFormats[0].format == VK_FORMAT_UNDEFINED) {
-        demo->format = vk::Format::eB8G8R8A8Unorm;
-    } else {
-        assert(formatCount >= 1);
-        demo->format = static_cast<vk::Format>(surfFormats[0].format);
-    }
-    demo->color_space = static_cast<vk::ColorSpaceKHR>(surfFormats[0].colorSpace);
-
-    // Get Memory information and properties
-    demo->gpu.getMemoryProperties(&demo->memory_properties);
 }
 
 static void demo_init_connection(Demo *demo) {
@@ -1319,16 +1206,26 @@ static void demo_resize(Demo *demo) {
 }
 
 int main(const int argc, const char *argv[]) {
-    Demo demo;
+    //Demo demo;
 
-    demo_init(&demo, argc, argv);
-    demo_create_window(&demo);
-    demo_init_vk_swapchain(&demo);
+    demo_init(&gDemo, argc, argv);
+    demo_create_window(&gDemo);
 
-    demo_prepare(&demo);
-    demo_run(&demo);
+    engine::GameEngine engine(gDemo.window);
 
-    demo_cleanup(&demo);
+    gDemo.surface = Initialize::CreateSurface(gDemo.inst, gDemo.window);
+    gDemo.graphicsQueueNodeIndex = Initialize::SelectQraphicsQueueNodeIndex(
+        gDemo.gpu, gDemo.surface, gDemo.app);
+    gDemo.device = Initialize::CreateDevice(gDemo.gpu, gDemo.graphicsQueueNodeIndex,
+                                            gDemo.app);
+    gDemo.queue = Initialize::GetQueue(gDemo.device, gDemo.graphicsQueueNodeIndex);
+    Initialize::GetSurfaceProperties(gDemo.gpu, gDemo.surface, gDemo.app,
+                                     gDemo.format, gDemo.colorSpace, gDemo.memoryProperties);
+
+    demo_prepare(&gDemo);
+    demo_run(&gDemo);
+
+    demo_cleanup(&gDemo);
 
     return 0;
 }
