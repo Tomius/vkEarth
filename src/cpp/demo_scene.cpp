@@ -1,43 +1,4 @@
-/*
- * Copyright (c) 2015-2016 The KHRonos Group Inc.
- * Copyright (c) 2015-2016 Valve Corporation
- * Copyright (c) 2015-2016 LunarG, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and/or associated documentation files (the "Materials"), to
- * deal in the Materials without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
- * sell copies of the Materials, and to permit persons to whom the Materials are
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice(s) and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
- *
- * THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- *
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE MATERIALS OR THE
- * USE OR OTHER DEALINGS IN THE MATERIALS.
- *
- * Author: Chia-I Wu <olvaffe@gmail.com>
- * Author: Cody Northrop <cody@lunarg.com>
- * Author: Courtney Goeltzenleuchter <courtney@LunarG.com>
- * Author: Ian Elliott <ian@LunarG.com>
- * Author: Jon Ashburn <jon@lunarg.com>
- * Author: Piers Daniell <pdaniell@nvidia.com>
- */
-/*
- * Draw a textured triangle with depth testing.  This is written against Intel
- * ICD.  It does not do state transition nor object memory binding like it
- * should.  It also does no error checking.
- */
-
-#ifndef _MSC_VER
-#define _ISOC11_SOURCE /* for aligned_alloc() */
-#endif
+#include "demo_scene.hpp"
 
 #include <cstdio>
 #include <cstdlib>
@@ -51,104 +12,18 @@
 #include <vulkan/vk_cpp.h>
 #include <GLFW/glfw3.h>
 
-#include "common/vulkan_application.hpp"
 #include "initialize/debug_callback.hpp"
 #include "initialize/create_physical_device.hpp"
 #include "initialize/create_pipeline.hpp"
 #include "initialize/prepare_swapchain.hpp"
 
-#include "engine/game_engine.hpp"
-
-#define DEMO_TEXTURE_COUNT 1
 #define VERTEX_BUFFER_BIND_ID 0
-#define APP_LONG_NAME "Vulkan planetary CDLOD"
 
 #if defined(NDEBUG) && defined(__GNUC__)
   #define U_ASSERT_ONLY __attribute__((unused))
 #else
   #define U_ASSERT_ONLY
 #endif
-
-struct texture_object {
-    vk::Sampler sampler;
-
-    vk::Image image;
-    vk::ImageLayout imageLayout;
-
-    vk::DeviceMemory mem;
-    vk::ImageView view;
-    int32_t tex_width = 0, tex_height = 0;
-};
-
-typedef struct _SwapchainBuffers {
-    vk::Image image;
-    vk::CommandBuffer cmd;
-    vk::ImageView view;
-} SwapchainBuffers;
-
-
-struct Demo {
-    GLFWwindow* window;
-    VkSurfaceKHR surface;
-    bool use_staging_buffer = false;
-
-    vk::Instance inst;
-    std::unique_ptr<Initialize::DebugCallback> debugCallback;
-    vk::PhysicalDevice gpu;
-    vk::Device device;
-    vk::Queue queue;
-    uint32_t graphicsQueueNodeIndex = 0;
-
-    int width = 0, height = 0;
-    vk::Format format;
-    vk::ColorSpaceKHR colorSpace;
-
-    uint32_t swapchainImageCount = 0;
-    vk::SwapchainKHR swapchain;
-    SwapchainBuffers *buffers = nullptr;
-
-    vk::CommandPool cmd_pool;
-
-    struct {
-        vk::Format format;
-
-        vk::Image image;
-        vk::DeviceMemory mem;
-        vk::ImageView view;
-    } depth;
-
-    struct texture_object textures[DEMO_TEXTURE_COUNT];
-
-    struct {
-        vk::Buffer buf;
-        vk::DeviceMemory mem;
-
-        vk::PipelineVertexInputStateCreateInfo vi;
-        vk::VertexInputBindingDescription vi_bindings[1];
-        vk::VertexInputAttributeDescription vi_attrs[2];
-    } vertices;
-
-    vk::CommandBuffer setup_cmd; // Command Buffer for initialization commands
-    vk::CommandBuffer draw_cmd;  // Command Buffer for drawing commands
-    vk::PipelineLayout pipeline_layout;
-    vk::DescriptorSetLayout desc_layout;
-    vk::RenderPass render_pass;
-    vk::Pipeline pipeline;
-
-    vk::DescriptorPool desc_pool;
-    vk::DescriptorSet desc_set;
-
-    vk::Framebuffer *framebuffers = nullptr;
-
-    vk::PhysicalDeviceMemoryProperties memoryProperties;
-
-    VulkanApplication app;
-
-    float depthStencil = 1.0f;
-    float depthIncrement = -0.01f;
-
-    uint32_t current_buffer = 0;
-} gDemo;
 
 // Forward declaration:
 static void demo_resize(Demo *demo);
@@ -608,7 +483,7 @@ static void demo_prepare_depth(Demo *demo) {
 
 static void
 demo_prepare_texture_image(Demo *demo, const uint32_t *tex_colors,
-                           struct texture_object *tex_obj, vk::ImageTiling tiling,
+                           TextureObject *tex_obj, vk::ImageTiling tiling,
                            vk::ImageUsageFlags usage,
                            vk::MemoryPropertyFlags required_props) {
     const vk::Format tex_format = vk::Format::eB8G8R8A8Unorm;
@@ -681,7 +556,7 @@ demo_prepare_texture_image(Demo *demo, const uint32_t *tex_colors,
 }
 
 static void demo_destroy_texture_image(Demo *demo,
-                                       struct texture_object *tex_obj) {
+                                       TextureObject *tex_obj) {
     /* clean up staging resources */
     demo->device.destroyImage(tex_obj->image, nullptr);
     demo->device.freeMemory(tex_obj->mem, nullptr);
@@ -709,7 +584,7 @@ static void demo_prepare_textures(Demo *demo) {
         } else if (props.optimalTilingFeatures() &
                    vk::FormatFeatureFlagBits::eSampledImage) {
             /* Must use staging buffer to copy linear texture to optimized */
-            struct texture_object staging_texture;
+            TextureObject staging_texture;
 
             demo_prepare_texture_image(demo, tex_colors[i], &staging_texture,
                                        vk::ImageTiling::eLinear,
@@ -1027,46 +902,6 @@ static void demo_prepare(Demo *demo) {
     demo_prepare_framebuffers(demo);
 }
 
-static void demo_refresh_callback(GLFWwindow* window) {
-    demo_draw(&gDemo);
-}
-
-static void demo_resize_callback(GLFWwindow* window, int width, int height) {
-    gDemo.width = width;
-    gDemo.height = height;
-    demo_resize(&gDemo);
-}
-
-static void demo_run(Demo *demo) {
-    while (!glfwWindowShouldClose(demo->window)) {
-        glfwPollEvents();
-
-        demo_draw(demo);
-
-        if (demo->depthStencil > 0.99f)
-            demo->depthIncrement = -0.001f;
-        if (demo->depthStencil < 0.8f)
-            demo->depthIncrement = 0.001f;
-
-        demo->depthStencil += demo->depthIncrement;
-
-        // Wait for work to finish before updating MVP.
-        demo->device.waitIdle();
-    }
-}
-
-static void demo_init(Demo *demo, const int argc, const char *argv[]) {
-    for (int i = 0; i < argc; i++) {
-        if (strncmp(argv[i], "--use_staging", strlen("--use_staging")) == 0)
-            demo->use_staging_buffer = true;
-    }
-
-    demo->inst = Initialize::CreateInstance(demo->app);
-    demo->debugCallback = std::unique_ptr<Initialize::DebugCallback>{
-      new Initialize::DebugCallback(demo->inst)};
-    demo->gpu  = Initialize::CreatePhysicalDevice(demo->inst, demo->app);
-}
-
 static void demo_cleanup(Demo *demo) {
     for (uint32_t i = 0; i < demo->swapchainImageCount; i++) {
         demo->device.destroyFramebuffer(demo->framebuffers[i], nullptr);
@@ -1109,9 +944,6 @@ static void demo_cleanup(Demo *demo) {
     demo->device.destroy(nullptr);
     demo->inst.destroySurfaceKHR(demo->surface, nullptr);
     demo->debugCallback = nullptr;
-
-    // glfwDestroyWindow(demo->window);
-    // glfwTerminate();
 }
 
 static void demo_resize(Demo *demo) {
@@ -1157,31 +989,52 @@ static void demo_resize(Demo *demo) {
     demo_prepare(demo);
 }
 
-int main(const int argc, const char *argv[]) {
-    //Demo demo;
+DemoScene::DemoScene(GLFWwindow *window) : Scene(window) {
+  glfwGetWindowSize(window_, &demo_.width, &demo_.height);
+  demo_.window = window;
 
-    engine::GameEngine engine;
-    gDemo.window = engine.window();
+  demo_.inst = Initialize::CreateInstance(demo_.app);
+  demo_.debugCallback = std::unique_ptr<Initialize::DebugCallback>{
+      new Initialize::DebugCallback(demo_.inst)};
+  demo_.gpu  = Initialize::CreatePhysicalDevice(demo_.inst, demo_.app);
 
-    glfwSetWindowRefreshCallback(gDemo.window, demo_refresh_callback);
-    glfwSetFramebufferSizeCallback(gDemo.window, demo_resize_callback);
+  demo_.surface = Initialize::CreateSurface(demo_.inst, demo_.window);
+  demo_.graphicsQueueNodeIndex = Initialize::SelectQraphicsQueueNodeIndex(
+      demo_.gpu, demo_.surface, demo_.app);
+  demo_.device = Initialize::CreateDevice(demo_.gpu, demo_.graphicsQueueNodeIndex,
+                                          demo_.app);
+  demo_.queue = Initialize::GetQueue(demo_.device, demo_.graphicsQueueNodeIndex);
+  Initialize::GetSurfaceProperties(demo_.gpu, demo_.surface, demo_.app,
+                                   demo_.format, demo_.colorSpace, demo_.memoryProperties);
 
-    demo_init(&gDemo, argc, argv);
+  demo_prepare(&demo_);
 
-    gDemo.surface = Initialize::CreateSurface(gDemo.inst, gDemo.window);
-    gDemo.graphicsQueueNodeIndex = Initialize::SelectQraphicsQueueNodeIndex(
-        gDemo.gpu, gDemo.surface, gDemo.app);
-    gDemo.device = Initialize::CreateDevice(gDemo.gpu, gDemo.graphicsQueueNodeIndex,
-                                            gDemo.app);
-    gDemo.queue = Initialize::GetQueue(gDemo.device, gDemo.graphicsQueueNodeIndex);
-    Initialize::GetSurfaceProperties(gDemo.gpu, gDemo.surface, gDemo.app,
-                                     gDemo.format, gDemo.colorSpace, gDemo.memoryProperties);
+  set_camera(addComponent<engine::FreeFlyCamera>(60, 1, 100, glm::dvec3(1, 1, 0)));
+}
 
-    demo_prepare(&gDemo);
-    demo_run(&gDemo);
+DemoScene::~DemoScene() {
+  demo_cleanup(&demo_);
+}
 
-    demo_cleanup(&gDemo);
+void DemoScene::render() {
+  demo_draw(&demo_);
+}
 
-    return 0;
+void DemoScene::update() {
+  if (demo_.depthStencil > 0.99f)
+      demo_.depthIncrement = -0.001f;
+  if (demo_.depthStencil < 0.8f)
+      demo_.depthIncrement = 0.001f;
+
+  demo_.depthStencil += demo_.depthIncrement;
+
+  // Wait for work to finish before updating MVP.
+  demo_.device.waitIdle();
+}
+
+void DemoScene::screenResized(size_t width, size_t height) {
+  demo_.width = width;
+  demo_.height = width;
+  demo_resize(&demo_);
 }
 
