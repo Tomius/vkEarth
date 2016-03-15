@@ -12,7 +12,7 @@ namespace engine {
 
 class GameEngine {
  public:
-  GameEngine(GLFWwindow *window);
+  GameEngine();
   ~GameEngine();
 
   void LoadScene(std::unique_ptr<Scene>&& new_scene);
@@ -28,7 +28,7 @@ class GameEngine {
 
   // Callbacks
   static void ErrorCallback(int error, const char* message) {
-    std::cerr << message;
+    std::cerr << "GLFW error: " << message << std::endl;
   }
 
   static void KeyCallback(GLFWwindow* window, int key, int scancode,

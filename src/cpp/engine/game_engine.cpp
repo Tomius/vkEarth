@@ -7,7 +7,29 @@
 
 namespace engine {
 
-GameEngine::GameEngine(GLFWwindow *window) : window_ (window) {
+GameEngine::GameEngine() {
+  glfwSetErrorCallback(ErrorCallback);
+
+  if (!glfwInit()) {
+    std::cerr << "Cannot initialize GLFW.\nExiting ..." << std::endl;
+    std::terminate();
+  }
+
+  if (!glfwVulkanSupported()) {
+    std::cerr << "Cannot find a compatible Vulkan installable client driver "
+                 "(ICD).\nExiting ..." << std::endl;
+    std::terminate();
+  }
+
+  glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
+  window_ = glfwCreateWindow(600, 600, "Vulkan planetary CDLOD",
+                             nullptr, nullptr);
+  if (!window_) {
+    std::cerr << "Cannot create a window in which to draw!" << std::endl;
+    std::terminate();
+  }
+
   glfwSetWindowUserPointer(window_, this);
   glfwSetKeyCallback(window_, KeyCallback);
   glfwSetCharCallback(window_, CharCallback);
@@ -49,10 +71,10 @@ void GameEngine::Run() {
     }
 
     if (scene_) {
+      glfwPollEvents();
       scene_->turn();
+      // todo device.waitIdle();
     }
-
-    glfwPollEvents();
   }
 }
 

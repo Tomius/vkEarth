@@ -144,8 +144,8 @@ struct Demo {
 
     VulkanApplication app;
 
-    float depthStencil = 0.0f;
-    float depthIncrement = 0.0f;
+    float depthStencil = 1.0f;
+    float depthIncrement = -0.01f;
 
     uint32_t current_buffer = 0;
 } gDemo;
@@ -1027,11 +1027,6 @@ static void demo_prepare(Demo *demo) {
     demo_prepare_framebuffers(demo);
 }
 
-static void demo_error_callback(int error, const char* description) {
-    printf("GLFW error: %s\n", description);
-    fflush(stdout);
-}
-
 static void demo_refresh_callback(GLFWwindow* window) {
     demo_draw(&gDemo);
 }
@@ -1060,59 +1055,16 @@ static void demo_run(Demo *demo) {
     }
 }
 
-static void demo_create_window(Demo *demo) {
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
-    demo->window = glfwCreateWindow(demo->width,
-                                    demo->height,
-                                    APP_LONG_NAME,
-                                    nullptr,
-                                    nullptr);
-    if (!demo->window) {
-        // It didn't work, so try to give a useful error:
-        printf("Cannot create a window in which to draw!\n");
-        fflush(stdout);
-        exit(1);
-    }
-
-    glfwSetWindowRefreshCallback(demo->window, demo_refresh_callback);
-    glfwSetFramebufferSizeCallback(demo->window, demo_resize_callback);
-}
-
-static void demo_init_connection(Demo *demo) {
-    glfwSetErrorCallback(demo_error_callback);
-
-    if (!glfwInit()) {
-        printf("Cannot initialize GLFW.\nExiting ...\n");
-        fflush(stdout);
-        exit(1);
-    }
-
-    if (!glfwVulkanSupported()) {
-        printf("Cannot find a compatible Vulkan installable client driver "
-               "(ICD).\nExiting ...\n");
-        fflush(stdout);
-        exit(1);
-    }
-}
-
 static void demo_init(Demo *demo, const int argc, const char *argv[]) {
     for (int i = 0; i < argc; i++) {
         if (strncmp(argv[i], "--use_staging", strlen("--use_staging")) == 0)
             demo->use_staging_buffer = true;
     }
 
-    demo_init_connection(demo);
-
     demo->inst = Initialize::CreateInstance(demo->app);
     demo->debugCallback = std::unique_ptr<Initialize::DebugCallback>{
       new Initialize::DebugCallback(demo->inst)};
     demo->gpu  = Initialize::CreatePhysicalDevice(demo->inst, demo->app);
-
-    demo->width = 300;
-    demo->height = 300;
-    demo->depthStencil = 1.0;
-    demo->depthIncrement = -0.01f;
 }
 
 static void demo_cleanup(Demo *demo) {
@@ -1158,8 +1110,8 @@ static void demo_cleanup(Demo *demo) {
     demo->inst.destroySurfaceKHR(demo->surface, nullptr);
     demo->debugCallback = nullptr;
 
-    glfwDestroyWindow(demo->window);
-    glfwTerminate();
+    // glfwDestroyWindow(demo->window);
+    // glfwTerminate();
 }
 
 static void demo_resize(Demo *demo) {
@@ -1208,10 +1160,13 @@ static void demo_resize(Demo *demo) {
 int main(const int argc, const char *argv[]) {
     //Demo demo;
 
-    demo_init(&gDemo, argc, argv);
-    demo_create_window(&gDemo);
+    engine::GameEngine engine;
+    gDemo.window = engine.window();
 
-    engine::GameEngine engine(gDemo.window);
+    glfwSetWindowRefreshCallback(gDemo.window, demo_refresh_callback);
+    glfwSetFramebufferSizeCallback(gDemo.window, demo_resize_callback);
+
+    demo_init(&gDemo, argc, argv);
 
     gDemo.surface = Initialize::CreateSurface(gDemo.inst, gDemo.window);
     gDemo.graphicsQueueNodeIndex = Initialize::SelectQraphicsQueueNodeIndex(
