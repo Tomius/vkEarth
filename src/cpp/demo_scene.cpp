@@ -12,6 +12,7 @@
 #include <vulkan/vk_cpp.h>
 #include <GLFW/glfw3.h>
 
+#include "common/error_checking.hpp"
 #include "initialize/debug_callback.hpp"
 #include "initialize/create_physical_device.hpp"
 #include "initialize/create_pipeline.hpp"
@@ -173,7 +174,7 @@ static void demo_draw_build_cmd(Demo *demo) {
     demo->draw_cmd.bindVertexBuffers(VERTEX_BUFFER_BIND_ID, 1,
                                      &demo->vertices.buf, offsets);
 
-    demo->draw_cmd.draw(3, 1, 0, 0);
+    demo->draw_cmd.draw(6, 1, 0, 0);
     demo->draw_cmd.endRenderPass();
 
     vk::ImageMemoryBarrier prePresentBarrier = vk::ImageMemoryBarrier()
@@ -666,9 +667,13 @@ static void demo_prepare_vertices(Demo *demo) {
     // clang-format off
     const float vb[][5] = {
         /*      position             texcoord */
-        { -1.0f, -1.0f,  0.25f,     0.0f, 0.0f },
-        {  1.0f, -1.0f,  0.25f,     1.0f, 0.0f },
-        {  0.0f,  1.0f,  1.0f,      0.5f, 1.0f },
+        { -1.0f, 0.0f, -1.0f,      0.0f, 0.0f },
+        {  1.0f, 0.0f, -1.0f,      1.0f, 0.0f },
+        { -1.0f, 0.0f,  1.0f,      0.5f, 1.0f },
+
+        { -1.0f, 0.0f,  1.0f,      0.0f, 0.0f },
+        {  1.0f, 0.0f, -1.0f,      1.0f, 0.0f },
+        {  1.0f, 0.0f,  1.0f,      0.5f, 1.0f },
     };
     // clang-format on
     const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
@@ -728,17 +733,23 @@ static void demo_prepare_vertices(Demo *demo) {
 }
 
 static void demo_prepare_descriptor_layout(Demo *demo) {
-    const vk::DescriptorSetLayoutBinding layout_binding =
+    const vk::DescriptorSetLayoutBinding layout_binding[2] = {
       vk::DescriptorSetLayoutBinding()
         .binding(0)
         .descriptorType(vk::DescriptorType::eCombinedImageSampler)
         .descriptorCount(DEMO_TEXTURE_COUNT)
-        .stageFlags(vk::ShaderStageFlagBits::eFragment);
+        .stageFlags(vk::ShaderStageFlagBits::eFragment),
+      vk::DescriptorSetLayoutBinding()
+        .binding(1)
+        .descriptorType(vk::DescriptorType::eUniformBuffer)
+        .descriptorCount(1)
+        .stageFlags(vk::ShaderStageFlagBits::eVertex)
+    };
 
     const vk::DescriptorSetLayoutCreateInfo descriptor_layout =
       vk::DescriptorSetLayoutCreateInfo()
-        .bindingCount(1)
-        .pBindings(&layout_binding);
+        .bindingCount(2)
+        .pBindings(layout_binding);
 
     vk::Result U_ASSERT_ONLY err;
 
@@ -800,15 +811,20 @@ static void demo_prepare_render_pass(Demo *demo) {
 }
 
 static void demo_prepare_descriptor_pool(Demo *demo) {
-    const vk::DescriptorPoolSize type_count = vk::DescriptorPoolSize()
+    const vk::DescriptorPoolSize type_count[] = {
+      vk::DescriptorPoolSize()
         .type(vk::DescriptorType::eCombinedImageSampler)
-        .descriptorCount(DEMO_TEXTURE_COUNT);
+        .descriptorCount(DEMO_TEXTURE_COUNT),
+      vk::DescriptorPoolSize()
+        .type(vk::DescriptorType::eUniformBuffer)
+        .descriptorCount(1)
+    };
 
     const vk::DescriptorPoolCreateInfo descriptor_pool =
       vk::DescriptorPoolCreateInfo()
         .maxSets(1)
-        .poolSizeCount(1)
-        .pPoolSizes(&type_count);
+        .poolSizeCount(2)
+        .pPoolSizes(type_count);
 
     vk::Result U_ASSERT_ONLY err;
     err = demo->device.createDescriptorPool(&descriptor_pool, nullptr,
@@ -816,9 +832,40 @@ static void demo_prepare_descriptor_pool(Demo *demo) {
     assert(err == vk::Result::eSuccess);
 }
 
+static void init_uniform_buffer(Demo *demo) {
+    bool U_ASSERT_ONLY pass;
+
+    /* VULKAN_KEY_START */
+    vk::BufferCreateInfo buf_info = vk::BufferCreateInfo{}
+        .usage(vk::BufferUsageFlagBits::eUniformBuffer)
+        .size(16*sizeof(float))
+        .sharingMode(vk::SharingMode::eExclusive);
+    vk::chk(demo->device.createBuffer(&buf_info, NULL, &demo->uniformData.buf));
+
+    vk::MemoryRequirements mem_reqs;
+    demo->device.getBufferMemoryRequirements(demo->uniformData.buf, &mem_reqs);
+
+    vk::MemoryAllocateInfo alloc_info;
+    alloc_info.allocationSize(mem_reqs.size());
+    pass = memory_type_from_properties(demo, mem_reqs.memoryTypeBits(),
+                                       vk::MemoryPropertyFlagBits::eHostVisible,
+                                       alloc_info);
+    assert(pass);
+
+    vk::chk(demo->device.allocateMemory(&alloc_info, NULL,
+                                        &demo->uniformData.mem));
+
+    vk::chk(demo->device.bindBufferMemory(demo->uniformData.buf,
+                                          demo->uniformData.mem, 0));
+
+    demo->uniformData.bufferInfo.buffer(demo->uniformData.buf);
+    demo->uniformData.bufferInfo.offset(0);
+    demo->uniformData.bufferInfo.range(16*sizeof(float));
+}
+
 static void demo_prepare_descriptor_set(Demo *demo) {
     vk::DescriptorImageInfo tex_descs[DEMO_TEXTURE_COUNT];
-    vk::WriteDescriptorSet write;
+    vk::WriteDescriptorSet writes[2];
     vk::Result U_ASSERT_ONLY err;
 
     vk::DescriptorSetAllocateInfo alloc_info =
@@ -835,12 +882,19 @@ static void demo_prepare_descriptor_set(Demo *demo) {
         tex_descs[i].imageLayout(vk::ImageLayout::eGeneral);
     }
 
-    write.dstSet(demo->desc_set);
-    write.descriptorCount(DEMO_TEXTURE_COUNT);
-    write.descriptorType(vk::DescriptorType::eCombinedImageSampler);
-    write.pImageInfo(tex_descs);
+    writes[0].dstBinding(0);
+    writes[0].dstSet(demo->desc_set);
+    writes[0].descriptorCount(DEMO_TEXTURE_COUNT);
+    writes[0].descriptorType(vk::DescriptorType::eCombinedImageSampler);
+    writes[0].pImageInfo(tex_descs);
 
-    demo->device.updateDescriptorSets(1, &write, 0, nullptr);
+    writes[1].dstBinding(1);
+    writes[1].dstSet(demo->desc_set);
+    writes[1].descriptorCount(1);
+    writes[1].descriptorType(vk::DescriptorType::eUniformBuffer);
+    writes[1].pBufferInfo(&demo->uniformData.bufferInfo);
+
+    demo->device.updateDescriptorSets(2, writes, 0, nullptr);
 }
 
 static void demo_prepare_framebuffers(Demo *demo) {
@@ -895,6 +949,7 @@ static void demo_prepare(Demo *demo) {
     demo_prepare_render_pass(demo);
     demo->pipeline = Initialize::PreparePipeline(demo->device, demo->vertices.vi,
                                                 demo->pipeline_layout, demo->render_pass);
+    init_uniform_buffer(demo);
 
     demo_prepare_descriptor_pool(demo);
     demo_prepare_descriptor_set(demo);
@@ -919,6 +974,9 @@ static void demo_cleanup(Demo *demo) {
     demo->device.destroyRenderPass(demo->render_pass, nullptr);
     demo->device.destroyPipelineLayout(demo->pipeline_layout, nullptr);
     demo->device.destroyDescriptorSetLayout(demo->desc_layout, nullptr);
+
+    demo->device.destroyBuffer(demo->uniformData.buf, nullptr);
+    demo->device.freeMemory(demo->uniformData.mem, nullptr);
 
     demo->device.destroyBuffer(demo->vertices.buf, nullptr);
     demo->device.freeMemory(demo->vertices.mem, nullptr);
@@ -963,6 +1021,9 @@ static void demo_resize(Demo *demo) {
     demo->device.destroyRenderPass(demo->render_pass, nullptr);
     demo->device.destroyPipelineLayout(demo->pipeline_layout, nullptr);
     demo->device.destroyDescriptorSetLayout(demo->desc_layout, nullptr);
+
+    demo->device.destroyBuffer(demo->uniformData.buf, nullptr);
+    demo->device.freeMemory(demo->uniformData.mem, nullptr);
 
     demo->device.destroyBuffer(demo->vertices.buf, nullptr);
     demo->device.freeMemory(demo->vertices.mem, nullptr);
@@ -1009,7 +1070,7 @@ DemoScene::DemoScene(GLFWwindow *window) : Scene(window) {
 
   demo_prepare(&demo_);
 
-  set_camera(addComponent<engine::FreeFlyCamera>(60, 1, 100, glm::dvec3(1, 1, 0)));
+  set_camera(addComponent<engine::FreeFlyCamera>(glm::radians(60.0), 0.1, 100, glm::dvec3(1, 1, -1)));
 }
 
 DemoScene::~DemoScene() {
@@ -1021,12 +1082,16 @@ void DemoScene::render() {
 }
 
 void DemoScene::update() {
-  if (demo_.depthStencil > 0.99f)
-      demo_.depthIncrement = -0.001f;
-  if (demo_.depthStencil < 0.8f)
-      demo_.depthIncrement = 0.001f;
+  glm::mat4 mvp = scene()->camera()->projectionMatrix() *
+                  scene()->camera()->cameraMatrix();
 
-  demo_.depthStencil += demo_.depthIncrement;
+  uint8_t *pData;
+  vk::chk(demo_.device.mapMemory(demo_.uniformData.mem, 0, sizeof(mvp),
+                                 vk::MemoryMapFlags(), (void **)&pData));
+
+  std::memcpy(pData, &mvp, sizeof(mvp));
+
+  demo_.device.unmapMemory(demo_.uniformData.mem);
 
   // Wait for work to finish before updating MVP.
   demo_.device.waitIdle();

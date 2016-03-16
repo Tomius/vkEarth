@@ -33,7 +33,7 @@ GameEngine::GameEngine() {
   glfwSetWindowUserPointer(window_, this);
   glfwSetKeyCallback(window_, KeyCallback);
   glfwSetCharCallback(window_, CharCallback);
-  //glfwSetFramebufferSizeCallback(window_, ScreenResizeCallback);
+  glfwSetFramebufferSizeCallback(window_, ScreenResizeCallback);
   glfwSetScrollCallback(window_, MouseScrolledCallback);
   glfwSetMouseButtonCallback(window_, MouseButtonPressed);
   glfwSetCursorPosCallback(window_, MouseMoved);

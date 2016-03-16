@@ -60,6 +60,12 @@ struct Demo {
     struct TextureObject textures[DEMO_TEXTURE_COUNT];
 
     struct {
+      vk::Buffer buf;
+      vk::DeviceMemory mem;
+      vk::DescriptorBufferInfo bufferInfo;
+    } uniformData;
+
+    struct {
         vk::Buffer buf;
         vk::DeviceMemory mem;
 

@@ -6,6 +6,7 @@
 #include <cmath>
 
 #define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "engine/timer.hpp"
@@ -42,7 +43,9 @@ class Camera : public Behaviour {
  public:
   Camera(GameObject* parent, double fovy, double z_near, double z_far)
       : Behaviour(parent, CameraTransform{}), fovy_(fovy), z_near_(z_near)
-      , z_far_(z_far), width_(0), height_(0) { }
+      , z_far_(z_far), width_(0), height_(0) {
+    assert(fovy_ < M_PI);
+  }
   virtual ~Camera() {}
 
   virtual void screenResized(size_t width, size_t height) override {
@@ -146,7 +149,7 @@ class FreeFlyCamera : public Camera {
                 double z_far, const glm::dvec3& pos,
                 const glm::dvec3& target = glm::dvec3(),
                 double speed_per_sec = 5.0f,
-                double mouse_sensitivity = 1.0f)
+                double mouse_sensitivity = 5.0f)
       : Camera(parent, fov, z_near, z_far)
       , first_call_(true)
       , speed_per_sec_(speed_per_sec)
