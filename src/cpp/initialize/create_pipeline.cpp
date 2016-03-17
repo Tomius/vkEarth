@@ -56,9 +56,9 @@ vk::Pipeline Initialize::PreparePipeline(
   pipelineCreateInfo.layout(pipelineLayout);
   ia.topology(vk::PrimitiveTopology::eTriangleList);
 
-  rs.polygonMode(vk::PolygonMode::eFill);
-  rs.cullMode(vk::CullModeFlagBits::eBack);
-  rs.frontFace(vk::FrontFace::eClockwise);
+  rs.polygonMode(vk::PolygonMode::eLine);
+  rs.cullMode(vk::CullModeFlagBits::eNone);
+  rs.frontFace(vk::FrontFace::eCounterClockwise);
   rs.depthClampEnable(VK_FALSE);
   rs.rasterizerDiscardEnable(VK_FALSE);
   rs.depthBiasEnable(VK_FALSE);
@@ -81,6 +81,12 @@ vk::Pipeline Initialize::PreparePipeline(
   dynamicStateEnables[dynamicState.dynamicStateCount()] =
       vk::DynamicState::eScissor;
   dynamicState.dynamicStateCount(dynamicState.dynamicStateCount() + 1);
+
+  dynamicStateEnables[dynamicState.dynamicStateCount()] =
+      vk::DynamicState::eLineWidth;
+  dynamicState.dynamicStateCount(dynamicState.dynamicStateCount() + 1);
+
+  //VK_DYNAMIC_STATE_LINE_WIDTH
 
   ds.depthTestEnable(VK_TRUE);
   ds.depthWriteEnable(VK_TRUE);

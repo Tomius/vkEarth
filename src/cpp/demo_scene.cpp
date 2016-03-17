@@ -17,6 +17,7 @@
 #include "initialize/create_physical_device.hpp"
 #include "initialize/create_pipeline.hpp"
 #include "initialize/prepare_swapchain.hpp"
+#include "cdlod/grid_mesh.hpp"
 
 #define VERTEX_BUFFER_BIND_ID 0
 
@@ -25,6 +26,8 @@
 #else
   #define U_ASSERT_ONLY
 #endif
+
+GridMesh gridMesh{64};
 
 // Forward declaration:
 static void demo_resize(Demo *demo);
@@ -176,8 +179,10 @@ static void demo_draw_build_cmd(Demo *demo) {
                                    vk::DeviceSize{},
                                    vk::IndexType::eUint16);
 
+    demo->draw_cmd.setLineWidth(2.0f);
+
     // demo->draw_cmd.draw(6, 1, 0, 0);
-    demo->draw_cmd.drawIndexed(6, 1, 0, 0, 0);
+    demo->draw_cmd.drawIndexed(gridMesh.index_count_, 1, 0, 0, 0);
     demo->draw_cmd.endRenderPass();
 
     vk::ImageMemoryBarrier prePresentBarrier = vk::ImageMemoryBarrier()
@@ -666,12 +671,13 @@ static void demo_prepare_textures(Demo *demo) {
     }
 }
 
-static void demo_prepare_indices(Demo *demo) {
-  const GLushort indices[] = {
-    0, 1, 2, 2, 1, 3
-  };
+static void demo_prepare_indices(Demo *demo,
+                                 const std::vector<uint16_t>& indices) {
+  // const GLushort indices[] = {
+  //   0, 1, 2, 2, 1, 3
+  // };
   const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
-      .size(sizeof(indices))
+      .size(sizeof(uint16_t) * indices.size())
       .usage(vk::BufferUsageFlagBits::eIndexBuffer);
 
   vk::MemoryAllocateInfo mem_alloc;
@@ -699,7 +705,7 @@ static void demo_prepare_indices(Demo *demo) {
                                vk::MemoryMapFlags{}, &data);
   assert(err == vk::Result::eSuccess);
 
-  std::memcpy(data, indices, sizeof(indices));
+  std::memcpy(data, indices.data(), sizeof(uint16_t) * indices.size());
 
   demo->device.unmapMemory(demo->indices.mem);
 
@@ -708,15 +714,16 @@ static void demo_prepare_indices(Demo *demo) {
 }
 
 static void demo_prepare_vertices(Demo *demo) {
-    const float vb[][5] = {
-        /*      position             texcoord */
-        { -1.0f, 0.0f, -1.0f,      0.0f, 0.0f },
-        {  1.0f, 0.0f, -1.0f,      1.0f, 0.0f },
-        { -1.0f, 0.0f,  1.0f,      0.5f, 1.0f },
-        {  1.0f, 0.0f,  1.0f,      0.5f, 1.0f },
-    };
+    // const float vb[][5] = {
+    //     /*      position             texcoord */
+    //     { -1.0f, 0.0f, -1.0f,      0.0f, 0.0f },
+    //     {  1.0f, 0.0f, -1.0f,      1.0f, 0.0f },
+    //     { -1.0f, 0.0f,  1.0f,      0.5f, 1.0f },
+    //     {  1.0f, 0.0f,  1.0f,      0.5f, 1.0f },
+    // };
+
     const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
-        .size(sizeof(vb))
+        .size(sizeof(svec2) * gridMesh.positions_.size())
         .usage(vk::BufferUsageFlagBits::eVertexBuffer);
 
     vk::MemoryAllocateInfo mem_alloc;
@@ -744,33 +751,34 @@ static void demo_prepare_vertices(Demo *demo) {
                                  vk::MemoryMapFlags{}, &data);
     assert(err == vk::Result::eSuccess);
 
-    std::memcpy(data, vb, sizeof(vb));
+    std::memcpy(data, gridMesh.positions_.data(),
+                sizeof(svec2) * gridMesh.positions_.size());
 
     demo->device.unmapMemory(demo->vertices.mem);
 
     err = demo->device.bindBufferMemory(demo->vertices.buf, demo->vertices.mem, 0);
     assert(err == vk::Result::eSuccess);
 
-    demo_prepare_indices(demo);
+    demo_prepare_indices(demo, gridMesh.indices_);
 
     demo->vertices.vi.vertexBindingDescriptionCount(1);
     demo->vertices.vi.pVertexBindingDescriptions(demo->vertices.vi_bindings);
-    demo->vertices.vi.vertexAttributeDescriptionCount(2);
+    demo->vertices.vi.vertexAttributeDescriptionCount(1);
     demo->vertices.vi.pVertexAttributeDescriptions(demo->vertices.vi_attrs);
 
     demo->vertices.vi_bindings[0].binding(VERTEX_BUFFER_BIND_ID);
-    demo->vertices.vi_bindings[0].stride(sizeof(vb[0]));
+    demo->vertices.vi_bindings[0].stride(sizeof(svec2));
     demo->vertices.vi_bindings[0].inputRate(vk::VertexInputRate::eVertex);
 
     demo->vertices.vi_attrs[0].binding(VERTEX_BUFFER_BIND_ID);
     demo->vertices.vi_attrs[0].location(0);
-    demo->vertices.vi_attrs[0].format(vk::Format::eR32G32B32Sfloat);
+    demo->vertices.vi_attrs[0].format(vk::Format::eR16G16Sint);
     demo->vertices.vi_attrs[0].offset(0);
 
-    demo->vertices.vi_attrs[1].binding(VERTEX_BUFFER_BIND_ID);
-    demo->vertices.vi_attrs[1].location(1);
-    demo->vertices.vi_attrs[1].format(vk::Format::eR32G32Sfloat);
-    demo->vertices.vi_attrs[1].offset(sizeof(float) * 3);
+    // demo->vertices.vi_attrs[1].binding(VERTEX_BUFFER_BIND_ID);
+    // demo->vertices.vi_attrs[1].location(1);
+    // demo->vertices.vi_attrs[1].format(vk::Format::eR32G32Sfloat);
+    // demo->vertices.vi_attrs[1].offset(sizeof(float) * 3);
 }
 
 static void demo_prepare_descriptor_layout(Demo *demo) {
@@ -1044,7 +1052,9 @@ static void demo_cleanup(Demo *demo) {
 
     demo->device.destroy(nullptr);
     demo->inst.destroySurfaceKHR(demo->surface, nullptr);
+#if VK_VALIDATE
     demo->debugCallback = nullptr;
+#endif
 }
 
 static void demo_resize(Demo *demo) {
@@ -1100,8 +1110,10 @@ DemoScene::DemoScene(GLFWwindow *window) : Scene(window) {
   demo_.window = window;
 
   demo_.inst = Initialize::CreateInstance(demo_.app);
+#if VK_VALIDATE
   demo_.debugCallback = std::unique_ptr<Initialize::DebugCallback>{
       new Initialize::DebugCallback(demo_.inst)};
+#endif
   demo_.gpu  = Initialize::CreatePhysicalDevice(demo_.inst, demo_.app);
 
   demo_.surface = Initialize::CreateSurface(demo_.inst, demo_.window);

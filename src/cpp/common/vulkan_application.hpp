@@ -31,7 +31,7 @@ struct VulkanApplication {
 
   std::vector<const char*> instanceExtensionNames{
 #if VK_VALIDATE
-    VK_EXT_DEBUG_REPORT_EXTENSION_NAME
+    VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
 #endif
   };
 

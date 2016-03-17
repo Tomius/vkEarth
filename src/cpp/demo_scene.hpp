@@ -33,7 +33,9 @@ struct Demo {
     bool use_staging_buffer = false;
 
     vk::Instance inst;
+#if VK_VALIDATE
     std::unique_ptr<Initialize::DebugCallback> debugCallback;
+#endif
     vk::PhysicalDevice gpu;
     vk::Device device;
     vk::Queue queue;

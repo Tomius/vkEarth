@@ -103,13 +103,17 @@ vk::Device Initialize::CreateDevice(const vk::PhysicalDevice& gpu,
       .queueCount(1)
       .pQueuePriorities(queue_priorities);
 
+  vk::PhysicalDeviceFeatures features = vk::PhysicalDeviceFeatures()
+      .fillModeNonSolid(true);
+
   vk::DeviceCreateInfo deviceCreateInfo = vk::DeviceCreateInfo()
       .queueCreateInfoCount(1)
       .pQueueCreateInfos(&queue)
       .enabledLayerCount(app.deviceValidationLayers.size())
       .ppEnabledLayerNames(app.deviceValidationLayers.data())
       .enabledExtensionCount(app.deviceExtensionNames.size())
-      .ppEnabledExtensionNames(app.deviceExtensionNames.data());
+      .ppEnabledExtensionNames(app.deviceExtensionNames.data())
+      .pEnabledFeatures(&features);
 
   vk::Device device;
   vk::chk(gpu.createDevice(&deviceCreateInfo, nullptr, &device));
