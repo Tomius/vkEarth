@@ -74,6 +74,11 @@ struct Demo {
         vk::VertexInputAttributeDescription vi_attrs[2];
     } vertices;
 
+    struct {
+        vk::Buffer buf;
+        vk::DeviceMemory mem;
+    } indices;
+
     vk::CommandBuffer setup_cmd; // Command Buffer for initialization commands
     vk::CommandBuffer draw_cmd;  // Command Buffer for drawing commands
     vk::PipelineLayout pipeline_layout;
@@ -89,9 +94,6 @@ struct Demo {
     vk::PhysicalDeviceMemoryProperties memoryProperties;
 
     VulkanApplication app;
-
-    float depthStencil = 1.0f;
-    float depthIncrement = -0.01f;
 
     uint32_t current_buffer = 0;
 };

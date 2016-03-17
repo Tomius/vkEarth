@@ -141,8 +141,7 @@ static void demo_draw_build_cmd(Demo *demo) {
     const vk::ClearValue clear_values[2] = {
         vk::ClearValue().color(
             vk::ClearColorValue{std::array<float,4>{0.2f, 0.2f, 0.2f, 0.2f}}),
-        vk::ClearValue().depthStencil(
-            vk::ClearDepthStencilValue{demo->depthStencil, 0})
+        vk::ClearValue().depthStencil(vk::ClearDepthStencilValue{1.0, 0})
     };
     const vk::RenderPassBeginInfo rp_begin = vk::RenderPassBeginInfo()
         .renderPass(demo->render_pass)
@@ -173,8 +172,12 @@ static void demo_draw_build_cmd(Demo *demo) {
     vk::DeviceSize offsets[1] = {0};
     demo->draw_cmd.bindVertexBuffers(VERTEX_BUFFER_BIND_ID, 1,
                                      &demo->vertices.buf, offsets);
+    demo->draw_cmd.bindIndexBuffer(demo->indices.buf,
+                                   vk::DeviceSize{},
+                                   vk::IndexType::eUint16);
 
-    demo->draw_cmd.draw(6, 1, 0, 0);
+    // demo->draw_cmd.draw(6, 1, 0, 0);
+    demo->draw_cmd.drawIndexed(6, 1, 0, 0, 0);
     demo->draw_cmd.endRenderPass();
 
     vk::ImageMemoryBarrier prePresentBarrier = vk::ImageMemoryBarrier()
@@ -663,19 +666,55 @@ static void demo_prepare_textures(Demo *demo) {
     }
 }
 
+static void demo_prepare_indices(Demo *demo) {
+  const GLushort indices[] = {
+    0, 1, 2, 2, 1, 3
+  };
+  const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
+      .size(sizeof(indices))
+      .usage(vk::BufferUsageFlagBits::eIndexBuffer);
+
+  vk::MemoryAllocateInfo mem_alloc;
+  vk::MemoryRequirements mem_reqs;
+  vk::Result U_ASSERT_ONLY err;
+  bool U_ASSERT_ONLY pass;
+  void *data;
+
+  err = demo->device.createBuffer(&buf_info, nullptr, &demo->indices.buf);
+  assert(err == vk::Result::eSuccess);
+
+  demo->device.getBufferMemoryRequirements(demo->indices.buf, &mem_reqs);
+  assert(err == vk::Result::eSuccess);
+
+  mem_alloc.allocationSize(mem_reqs.size());
+  pass = memory_type_from_properties(demo, mem_reqs.memoryTypeBits(),
+                                     vk::MemoryPropertyFlagBits::eHostVisible,
+                                     mem_alloc);
+  assert(pass);
+
+  err = demo->device.allocateMemory(&mem_alloc, nullptr, &demo->indices.mem);
+  assert(err == vk::Result::eSuccess);
+
+  err = demo->device.mapMemory(demo->indices.mem, 0, mem_alloc.allocationSize(),
+                               vk::MemoryMapFlags{}, &data);
+  assert(err == vk::Result::eSuccess);
+
+  std::memcpy(data, indices, sizeof(indices));
+
+  demo->device.unmapMemory(demo->indices.mem);
+
+  err = demo->device.bindBufferMemory(demo->indices.buf, demo->indices.mem, 0);
+  assert(err == vk::Result::eSuccess);
+}
+
 static void demo_prepare_vertices(Demo *demo) {
-    // clang-format off
     const float vb[][5] = {
         /*      position             texcoord */
         { -1.0f, 0.0f, -1.0f,      0.0f, 0.0f },
         {  1.0f, 0.0f, -1.0f,      1.0f, 0.0f },
         { -1.0f, 0.0f,  1.0f,      0.5f, 1.0f },
-
-        { -1.0f, 0.0f,  1.0f,      0.0f, 0.0f },
-        {  1.0f, 0.0f, -1.0f,      1.0f, 0.0f },
         {  1.0f, 0.0f,  1.0f,      0.5f, 1.0f },
     };
-    // clang-format on
     const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
         .size(sizeof(vb))
         .usage(vk::BufferUsageFlagBits::eVertexBuffer);
@@ -705,12 +744,14 @@ static void demo_prepare_vertices(Demo *demo) {
                                  vk::MemoryMapFlags{}, &data);
     assert(err == vk::Result::eSuccess);
 
-    memcpy(data, vb, sizeof(vb));
+    std::memcpy(data, vb, sizeof(vb));
 
     demo->device.unmapMemory(demo->vertices.mem);
 
     err = demo->device.bindBufferMemory(demo->vertices.buf, demo->vertices.mem, 0);
     assert(err == vk::Result::eSuccess);
+
+    demo_prepare_indices(demo);
 
     demo->vertices.vi.vertexBindingDescriptionCount(1);
     demo->vertices.vi.pVertexBindingDescriptions(demo->vertices.vi_bindings);
@@ -980,6 +1021,8 @@ static void demo_cleanup(Demo *demo) {
 
     demo->device.destroyBuffer(demo->vertices.buf, nullptr);
     demo->device.freeMemory(demo->vertices.mem, nullptr);
+    demo->device.destroyBuffer(demo->indices.buf, nullptr);
+    demo->device.freeMemory(demo->indices.mem, nullptr);
 
     for (uint32_t i = 0; i < DEMO_TEXTURE_COUNT; i++) {
         demo->device.destroyImageView(demo->textures[i].view, nullptr);
@@ -1027,6 +1070,8 @@ static void demo_resize(Demo *demo) {
 
     demo->device.destroyBuffer(demo->vertices.buf, nullptr);
     demo->device.freeMemory(demo->vertices.mem, nullptr);
+    demo->device.destroyBuffer(demo->indices.buf, nullptr);
+    demo->device.freeMemory(demo->indices.mem, nullptr);
 
     for (uint32_t i = 0; i < DEMO_TEXTURE_COUNT; i++) {
         demo->device.destroyImageView(demo->textures[i].view, nullptr);
