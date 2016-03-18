@@ -4,7 +4,7 @@
 #include "common/error_checking.hpp"
 #include "shader/glsl2spv.hpp"
 
-static vk::ShaderModule PrepareShaderModule(vk::Device& device,
+static vk::ShaderModule PrepareShaderModule(const vk::Device& device,
                                             const void *code,
                                             size_t size) {
   vk::ShaderModuleCreateInfo moduleCreateInfo;
@@ -17,7 +17,7 @@ static vk::ShaderModule PrepareShaderModule(vk::Device& device,
   return module;
 }
 
-static vk::ShaderModule PrepareVs(vk::Device& device) {
+static vk::ShaderModule PrepareVs(const vk::Device& device) {
   std::vector<unsigned int> vertShader =
     Shader::GLSLtoSPV(vk::ShaderStageFlagBits::eVertex,
                       FileUtils::ReadFileToString("src/glsl/simple.vert"));
@@ -26,7 +26,7 @@ static vk::ShaderModule PrepareVs(vk::Device& device) {
                              vertShader.size() * sizeof(vertShader[0]));
 }
 
-static vk::ShaderModule PrepareFs(vk::Device& device) {
+static vk::ShaderModule PrepareFs(const vk::Device& device) {
   std::vector<unsigned int> fragShader =
     Shader::GLSLtoSPV(vk::ShaderStageFlagBits::eFragment,
                       FileUtils::ReadFileToString("src/glsl/simple.frag"));
@@ -37,7 +37,7 @@ static vk::ShaderModule PrepareFs(vk::Device& device) {
 
 
 vk::Pipeline Initialize::PreparePipeline(
-          vk::Device& device,
+          const vk::Device& device,
           const vk::PipelineVertexInputStateCreateInfo& vertexState,
           const vk::PipelineLayout& pipelineLayout,
           const vk::RenderPass& renderPass) {

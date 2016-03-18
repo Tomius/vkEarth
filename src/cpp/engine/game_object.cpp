@@ -8,10 +8,22 @@
   try { \
     YourCode; \
   } catch (const std::exception& ex) { \
-    std::cout << ex.what() << std::endl; \
+    std::cerr << "Exception: " << ex.what() << std::endl; \
   } catch (...) {}
 
 namespace engine {
+
+GameObject::~GameObject() {
+  // The childrens destructor have to run before this one's,
+  // as those functions might try to access this object via the parent_ ptr
+  for (auto& comp_ptr : components_) {
+    comp_ptr.reset();
+  }
+  // this shouldn't be neccessary, but just in case...
+  if (parent_) {
+    parent_->removeComponent(this);
+  }
+}
 
 GameObject* GameObject::addComponent(std::unique_ptr<GameObject>&& component) {
   try {

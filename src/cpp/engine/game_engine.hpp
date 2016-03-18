@@ -6,8 +6,6 @@
 #include <typeinfo>
 #include "engine/scene.hpp"
 
-// #define ENGINE_NO_FULLSCREEN 1
-
 namespace engine {
 
 class GameEngine {

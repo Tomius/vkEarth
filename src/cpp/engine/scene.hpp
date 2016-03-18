@@ -5,11 +5,15 @@
 
 #include <vector>
 #include <memory>
+#include <vulkan/vk_cpp.h>
 
 #include "engine/timer.hpp"
 #include "engine/camera.hpp"
 #include "engine/behaviour.hpp"
 #include "engine/game_object.hpp"
+
+#include "common/debug_callback.hpp"
+#include "common/vulkan_application.hpp"
 
 namespace engine {
 
@@ -18,6 +22,7 @@ class GameObject;
 class Scene : public Behaviour {
  public:
   Scene(GLFWwindow *window);
+  ~Scene();
 
   virtual float gravity() const { return 9.81f; }
 
@@ -37,47 +42,45 @@ class Scene : public Behaviour {
   GLFWwindow* window() const { return window_; }
   void set_window(GLFWwindow* window) { window_ = window; }
 
-  virtual void keyAction(int key, int scancode, int action, int mods) override {
-    if (action == GLFW_PRESS) {
-      switch (key) {
-        case GLFW_KEY_F1:
-          game_time_.toggle();
-          break;
-        case GLFW_KEY_F2:
-          environment_time_.toggle();
-          break;
-        default:
-          break;
-      }
-    }
-  }
+  virtual void keyAction(int key, int scancode, int action, int mods) override;
 
-  virtual void turn() {
-    updateAll();
-    renderAll();
-    render2DAll();
-  }
+  virtual void turn();
 
- protected:
+  const vk::Queue& vkQueue() const { return vkQueue_; }
+  const vk::Device& vkDevice() const { return vkDevice_; }
+  const VkSurfaceKHR& vkSurface() const { return vkSurface_; }
+  const VulkanApplication& vkApp() const { return vkApp_; }
+  const vk::PhysicalDevice& vkGpu() const { return vkGpu_; }
+  const vk::Format& vkSurfaceFormat() const { return vkSurfaceFormat_; }
+  uint32_t vkGraphicsQueueNodeIndex() const { return vkGraphicsQueueNodeIndex_; }
+  const vk::ColorSpaceKHR& vkSurfaceColorSpace() const { return vkSurfaceColorSpace_; }
+  const vk::PhysicalDeviceMemoryProperties& vkGpuMemoryProperties() const { return vkGpuMemoryProperties_; }
+
+ private:
   Camera* camera_;
   Timer game_time_, environment_time_, camera_time_;
   GLFWwindow* window_;
 
-  virtual void updateAll() override {
-    game_time_.tick();
-    environment_time_.tick();
-    camera_time_.tick();
+  // private vulkan stuff (no getters)
+  vk::Instance vkInstance_;
+#if VK_VALIDATE
+  std::unique_ptr<DebugCallback> vkDebugCallback_;
+#endif
 
-    Behaviour::updateAll();
-  }
+  // "public" vulkan stuff (through getters)
+  vk::Queue vkQueue_;
+  vk::Device vkDevice_;
+  VkSurfaceKHR vkSurface_;
+  VulkanApplication vkApp_;
+  vk::PhysicalDevice vkGpu_;
+  vk::Format vkSurfaceFormat_;
+  uint32_t vkGraphicsQueueNodeIndex_ = 0;
+  vk::ColorSpaceKHR vkSurfaceColorSpace_;
+  vk::PhysicalDeviceMemoryProperties vkGpuMemoryProperties_;
 
-  virtual void renderAll() override {
-    if (camera_) { Behaviour::renderAll(); }
-  }
-
-  virtual void render2DAll() override {
-    Behaviour::render2DAll();
-  }
+  virtual void updateAll() override;
+  virtual void renderAll() override;
+  virtual void render2DAll() override;
 };
 
 }  // namespace engine

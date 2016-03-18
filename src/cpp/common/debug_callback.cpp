@@ -1,10 +1,8 @@
-#include "initialize/debug_callback.hpp"
+#include "common/debug_callback.hpp"
 
 #if VK_VALIDATE
 #include <iostream>
 #include "common/error_checking.hpp"
-
-namespace Initialize {
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallbackFunction(
   VkDebugReportFlagsEXT       flags,
@@ -51,8 +49,6 @@ DebugCallback::~DebugCallback() {
   }
 
   destroyDebugReportCallback(instance_, msgCallback_, nullptr);
-}
-
 }
 
 #endif

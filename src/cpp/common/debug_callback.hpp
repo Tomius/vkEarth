@@ -4,8 +4,6 @@
 #include <vulkan/vk_cpp.h>
 #include "common/defines.hpp"
 
-namespace Initialize {
-
 #if VK_VALIDATE
 class DebugCallback {
 public:
@@ -17,7 +15,5 @@ private:
   VkDebugReportCallbackEXT msgCallback_ = nullptr;
 };
 #endif
-
-}
 
 #endif

@@ -5,7 +5,6 @@
 #include <GLFW/glfw3.h>
 
 #include "engine/scene.hpp"
-#include "initialize/debug_callback.hpp"
 #include "common/vulkan_application.hpp"
 
 #define DEMO_TEXTURE_COUNT 1
@@ -29,21 +28,9 @@ struct SwapchainBuffers {
 
 struct Demo {
     GLFWwindow* window;
-    VkSurfaceKHR surface;
     bool use_staging_buffer = false;
 
-    vk::Instance inst;
-#if VK_VALIDATE
-    std::unique_ptr<Initialize::DebugCallback> debugCallback;
-#endif
-    vk::PhysicalDevice gpu;
-    vk::Device device;
-    vk::Queue queue;
-    uint32_t graphicsQueueNodeIndex = 0;
-
     int width = 600, height = 600;
-    vk::Format format;
-    vk::ColorSpaceKHR colorSpace;
 
     uint32_t swapchainImageCount = 0;
     vk::SwapchainKHR swapchain;
@@ -92,10 +79,6 @@ struct Demo {
     vk::DescriptorSet desc_set;
 
     vk::Framebuffer *framebuffers = nullptr;
-
-    vk::PhysicalDeviceMemoryProperties memoryProperties;
-
-    VulkanApplication app;
 
     uint32_t current_buffer = 0;
 };

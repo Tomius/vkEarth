@@ -5,7 +5,7 @@
 
 namespace Initialize {
 
-vk::Pipeline PreparePipeline(vk::Device& device,
+vk::Pipeline PreparePipeline(const vk::Device& device,
                              const vk::PipelineVertexInputStateCreateInfo& vertexState,
                              const vk::PipelineLayout& pipelineLayout,
                              const vk::RenderPass& renderPass);
