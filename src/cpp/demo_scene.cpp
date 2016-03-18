@@ -328,7 +328,11 @@ static void demo_prepare_buffers(Demo *demo) {
         demo->height = surfCapabilities.currentExtent().height();
     }
 
+#if VK_VSYNC
     vk::PresentModeKHR swapchainPresentMode = vk::PresentModeKHR::eFifoKHR;
+#else
+    vk::PresentModeKHR swapchainPresentMode = vk::PresentModeKHR::eImmediateKHR;
+#endif
 
     // Determine the number of vk::Image's to use in the swap chain (we desire to
     // own only 1 image at a time, besides the images being displayed and
@@ -1151,7 +1155,7 @@ void DemoScene::update() {
   demo_.device.unmapMemory(demo_.uniformData.mem);
 
   // Wait for work to finish before updating MVP.
-  demo_.device.waitIdle();
+  //demo_.device.waitIdle();
 }
 
 void DemoScene::screenResized(size_t width, size_t height) {

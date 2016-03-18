@@ -43,8 +43,8 @@ class GameEngine {
 
   static void ScreenResizeCallback(GLFWwindow* window, int width, int height) {
     GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
-    // todo
     if (gameEngine && gameEngine->scene_) {
+      std::cout << "Screen resized to " << width << "x" << height << "." << std::endl;
       gameEngine->scene_->screenResizedAll(width, height);
     }
   }

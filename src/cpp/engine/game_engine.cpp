@@ -64,6 +64,9 @@ glm::vec2 GameEngine::window_size() {
 }
 
 void GameEngine::Run() {
+  int width = 0, height = 0;
+  int lastWidth = 0, lastHeight = 0;
+  glfwGetWindowSize(window_, &lastWidth, &lastHeight);
   while (!glfwWindowShouldClose(window_)) {
     if (new_scene_) {
       std::swap(scene_, new_scene_);
@@ -73,7 +76,14 @@ void GameEngine::Run() {
     if (scene_) {
       glfwPollEvents();
       scene_->turn();
-      // todo device.waitIdle();
+    }
+
+    // GLFW bug workaround (the screen resize callback is often not called)
+    glfwGetWindowSize(window_, &width, &height);
+    if (width != lastWidth || height != lastHeight) {
+      ScreenResizeCallback(window_, width, height);
+      lastWidth = width;
+      lastHeight = height;
     }
   }
 }
