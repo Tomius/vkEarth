@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "engine/scene.hpp"
+#include "cdlod/grid_mesh.hpp"
 #include "common/vulkan_application.hpp"
 
 #define DEMO_TEXTURE_COUNT 1
@@ -81,6 +82,8 @@ struct Demo {
     vk::Framebuffer *framebuffers = nullptr;
 
     uint32_t current_buffer = 0;
+
+    GridMesh gridMesh{64};
 };
 
 class DemoScene : public engine::Scene {

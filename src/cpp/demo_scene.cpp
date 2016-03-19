@@ -15,7 +15,6 @@
 #include "engine/scene.hpp"
 #include "common/error_checking.hpp"
 #include "initialize/create_pipeline.hpp"
-#include "cdlod/grid_mesh.hpp"
 
 #define VERTEX_BUFFER_BIND_ID 0
 
@@ -25,12 +24,10 @@
   #define U_ASSERT_ONLY
 #endif
 
-GridMesh gridMesh{64};
-
 // Forward declaration:
 static void demo_resize(Demo *demo, const engine::Scene& scene);
 
-static bool memory_type_from_properties(Demo *demo, const engine::Scene& scene,
+static void memory_type_from_properties(Demo *demo, const engine::Scene& scene,
                                         uint32_t typeBits,
                                         vk::MemoryPropertyFlags requirements_mask,
                                         vk::MemoryAllocateInfo& mem_alloc) {
@@ -40,14 +37,14 @@ static bool memory_type_from_properties(Demo *demo, const engine::Scene& scene,
             // Type is available, does it match user properties?
             if ((scene.vkGpuMemoryProperties().memoryTypes()[i].propertyFlags() &
                  requirements_mask) == requirements_mask) {
-                mem_alloc.memoryTypeIndex(i);
-                return true;
+              mem_alloc.memoryTypeIndex(i);
+              return;
             }
         }
         typeBits >>= 1;
     }
-    // No memory types matched, return failure
-    return false;
+
+    throw std::runtime_error("Couldn't find request memory type.");
 }
 
 static void demo_flush_init_cmd(Demo *demo, const engine::Scene& scene) {
@@ -182,7 +179,7 @@ static void demo_draw_build_cmd(Demo *demo, const engine::Scene& scene) {
     demo->draw_cmd.setLineWidth(2.0f);
 
     // demo->draw_cmd.draw(6, 1, 0, 0);
-    demo->draw_cmd.drawIndexed(gridMesh.index_count_, 1, 0, 0, 0);
+    demo->draw_cmd.drawIndexed(demo->gridMesh.index_count_, 1, 0, 0, 0);
     demo->draw_cmd.endRenderPass();
 
     vk::ImageMemoryBarrier prePresentBarrier = vk::ImageMemoryBarrier()
@@ -458,7 +455,6 @@ static void demo_prepare_depth(Demo *demo, const engine::Scene& scene) {
 
     vk::MemoryRequirements mem_reqs;
     vk::Result U_ASSERT_ONLY err;
-    bool U_ASSERT_ONLY pass;
 
     demo->depth.format = depth_format;
 
@@ -471,10 +467,9 @@ static void demo_prepare_depth(Demo *demo, const engine::Scene& scene) {
 
     /* select memory size and type */
     mem_alloc.allocationSize(mem_reqs.size());
-    pass = memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
-                                       vk::MemoryPropertyFlags(), /* No requirements */
-                                       mem_alloc);
-    assert(pass);
+    memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
+                                vk::MemoryPropertyFlags(), /* No requirements */
+                                mem_alloc);
 
     /* allocate memory */
     err = scene.vkDevice().allocateMemory(&mem_alloc, nullptr, &demo->depth.mem);
@@ -504,7 +499,6 @@ demo_prepare_texture_image(Demo *demo, const engine::Scene& scene,
     const int32_t tex_width = 2;
     const int32_t tex_height = 2;
     vk::Result U_ASSERT_ONLY err;
-    bool U_ASSERT_ONLY pass;
 
     tex_obj->tex_width = tex_width;
     tex_obj->tex_height = tex_height;
@@ -529,9 +523,8 @@ demo_prepare_texture_image(Demo *demo, const engine::Scene& scene,
     scene.vkDevice().getImageMemoryRequirements(tex_obj->image, &mem_reqs);
 
     mem_alloc.allocationSize(mem_reqs.size());
-    pass = memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
-                                       required_props, mem_alloc);
-    assert(pass);
+    memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
+                                required_props, mem_alloc);
 
     /* allocate memory */
     err = scene.vkDevice().allocateMemory(&mem_alloc, nullptr, &tex_obj->mem);
@@ -688,7 +681,6 @@ static void demo_prepare_indices(Demo *demo, const engine::Scene& scene,
   vk::MemoryAllocateInfo mem_alloc;
   vk::MemoryRequirements mem_reqs;
   vk::Result U_ASSERT_ONLY err;
-  bool U_ASSERT_ONLY pass;
   void *data;
 
   err = scene.vkDevice().createBuffer(&buf_info, nullptr, &demo->indices.buf);
@@ -698,10 +690,9 @@ static void demo_prepare_indices(Demo *demo, const engine::Scene& scene,
   assert(err == vk::Result::eSuccess);
 
   mem_alloc.allocationSize(mem_reqs.size());
-  pass = memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
-                                     vk::MemoryPropertyFlagBits::eHostVisible,
-                                     mem_alloc);
-  assert(pass);
+  memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
+                              vk::MemoryPropertyFlagBits::eHostVisible,
+                              mem_alloc);
 
   err = scene.vkDevice().allocateMemory(&mem_alloc, nullptr, &demo->indices.mem);
   assert(err == vk::Result::eSuccess);
@@ -719,71 +710,56 @@ static void demo_prepare_indices(Demo *demo, const engine::Scene& scene,
 }
 
 static void demo_prepare_vertices(Demo *demo, const engine::Scene& scene) {
-    // const float vb[][5] = {
-    //     /*      position             texcoord */
-    //     { -1.0f, 0.0f, -1.0f,      0.0f, 0.0f },
-    //     {  1.0f, 0.0f, -1.0f,      1.0f, 0.0f },
-    //     { -1.0f, 0.0f,  1.0f,      0.5f, 1.0f },
-    //     {  1.0f, 0.0f,  1.0f,      0.5f, 1.0f },
-    // };
+  const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
+      .size(sizeof(svec2) * demo->gridMesh.positions_.size())
+      .usage(vk::BufferUsageFlagBits::eVertexBuffer);
 
-    const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
-        .size(sizeof(svec2) * gridMesh.positions_.size())
-        .usage(vk::BufferUsageFlagBits::eVertexBuffer);
+  vk::MemoryAllocateInfo mem_alloc;
+  vk::MemoryRequirements mem_reqs;
+  vk::Result U_ASSERT_ONLY err;
+  void *data;
 
-    vk::MemoryAllocateInfo mem_alloc;
-    vk::MemoryRequirements mem_reqs;
-    vk::Result U_ASSERT_ONLY err;
-    bool U_ASSERT_ONLY pass;
-    void *data;
+  err = scene.vkDevice().createBuffer(&buf_info, nullptr, &demo->vertices.buf);
+  assert(err == vk::Result::eSuccess);
 
-    err = scene.vkDevice().createBuffer(&buf_info, nullptr, &demo->vertices.buf);
-    assert(err == vk::Result::eSuccess);
+  scene.vkDevice().getBufferMemoryRequirements(demo->vertices.buf, &mem_reqs);
+  assert(err == vk::Result::eSuccess);
 
-    scene.vkDevice().getBufferMemoryRequirements(demo->vertices.buf, &mem_reqs);
-    assert(err == vk::Result::eSuccess);
+  mem_alloc.allocationSize(mem_reqs.size());
+  memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
+                              vk::MemoryPropertyFlagBits::eHostVisible,
+                              mem_alloc);
 
-    mem_alloc.allocationSize(mem_reqs.size());
-    pass = memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
-                                       vk::MemoryPropertyFlagBits::eHostVisible,
-                                       mem_alloc);
-    assert(pass);
+  err = scene.vkDevice().allocateMemory(&mem_alloc, nullptr, &demo->vertices.mem);
+  assert(err == vk::Result::eSuccess);
 
-    err = scene.vkDevice().allocateMemory(&mem_alloc, nullptr, &demo->vertices.mem);
-    assert(err == vk::Result::eSuccess);
+  err = scene.vkDevice().mapMemory(demo->vertices.mem, 0, mem_alloc.allocationSize(),
+                               vk::MemoryMapFlags{}, &data);
+  assert(err == vk::Result::eSuccess);
 
-    err = scene.vkDevice().mapMemory(demo->vertices.mem, 0, mem_alloc.allocationSize(),
-                                 vk::MemoryMapFlags{}, &data);
-    assert(err == vk::Result::eSuccess);
+  std::memcpy(data, demo->gridMesh.positions_.data(),
+              sizeof(svec2) * demo->gridMesh.positions_.size());
 
-    std::memcpy(data, gridMesh.positions_.data(),
-                sizeof(svec2) * gridMesh.positions_.size());
+  scene.vkDevice().unmapMemory(demo->vertices.mem);
 
-    scene.vkDevice().unmapMemory(demo->vertices.mem);
+  err = scene.vkDevice().bindBufferMemory(demo->vertices.buf, demo->vertices.mem, 0);
+  assert(err == vk::Result::eSuccess);
 
-    err = scene.vkDevice().bindBufferMemory(demo->vertices.buf, demo->vertices.mem, 0);
-    assert(err == vk::Result::eSuccess);
+  demo_prepare_indices(demo, scene, demo->gridMesh.indices_);
 
-    demo_prepare_indices(demo, scene, gridMesh.indices_);
+  demo->vertices.vi.vertexBindingDescriptionCount(1);
+  demo->vertices.vi.pVertexBindingDescriptions(demo->vertices.vi_bindings);
+  demo->vertices.vi.vertexAttributeDescriptionCount(1);
+  demo->vertices.vi.pVertexAttributeDescriptions(demo->vertices.vi_attrs);
 
-    demo->vertices.vi.vertexBindingDescriptionCount(1);
-    demo->vertices.vi.pVertexBindingDescriptions(demo->vertices.vi_bindings);
-    demo->vertices.vi.vertexAttributeDescriptionCount(1);
-    demo->vertices.vi.pVertexAttributeDescriptions(demo->vertices.vi_attrs);
+  demo->vertices.vi_bindings[0].binding(VERTEX_BUFFER_BIND_ID);
+  demo->vertices.vi_bindings[0].stride(sizeof(svec2));
+  demo->vertices.vi_bindings[0].inputRate(vk::VertexInputRate::eVertex);
 
-    demo->vertices.vi_bindings[0].binding(VERTEX_BUFFER_BIND_ID);
-    demo->vertices.vi_bindings[0].stride(sizeof(svec2));
-    demo->vertices.vi_bindings[0].inputRate(vk::VertexInputRate::eVertex);
-
-    demo->vertices.vi_attrs[0].binding(VERTEX_BUFFER_BIND_ID);
-    demo->vertices.vi_attrs[0].location(0);
-    demo->vertices.vi_attrs[0].format(vk::Format::eR16G16Sint);
-    demo->vertices.vi_attrs[0].offset(0);
-
-    // demo->vertices.vi_attrs[1].binding(VERTEX_BUFFER_BIND_ID);
-    // demo->vertices.vi_attrs[1].location(1);
-    // demo->vertices.vi_attrs[1].format(vk::Format::eR32G32Sfloat);
-    // demo->vertices.vi_attrs[1].offset(sizeof(float) * 3);
+  demo->vertices.vi_attrs[0].binding(VERTEX_BUFFER_BIND_ID);
+  demo->vertices.vi_attrs[0].location(0);
+  demo->vertices.vi_attrs[0].format(vk::Format::eR16G16Sint);
+  demo->vertices.vi_attrs[0].offset(0);
 }
 
 static void demo_prepare_descriptor_layout(Demo *demo, const engine::Scene& scene) {
@@ -887,9 +863,6 @@ static void demo_prepare_descriptor_pool(Demo *demo, const engine::Scene& scene)
 }
 
 static void init_uniform_buffer(Demo *demo, const engine::Scene& scene) {
-    bool U_ASSERT_ONLY pass;
-
-    /* VULKAN_KEY_START */
     vk::BufferCreateInfo buf_info = vk::BufferCreateInfo{}
         .usage(vk::BufferUsageFlagBits::eUniformBuffer)
         .size(16*sizeof(float))
@@ -901,16 +874,15 @@ static void init_uniform_buffer(Demo *demo, const engine::Scene& scene) {
 
     vk::MemoryAllocateInfo alloc_info;
     alloc_info.allocationSize(mem_reqs.size());
-    pass = memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
-                                       vk::MemoryPropertyFlagBits::eHostVisible,
-                                       alloc_info);
-    assert(pass);
+    memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
+                                vk::MemoryPropertyFlagBits::eHostVisible,
+                                alloc_info);
 
     vk::chk(scene.vkDevice().allocateMemory(&alloc_info, NULL,
-                                        &demo->uniformData.mem));
+                                            &demo->uniformData.mem));
 
     vk::chk(scene.vkDevice().bindBufferMemory(demo->uniformData.buf,
-                                          demo->uniformData.mem, 0));
+                                              demo->uniformData.mem, 0));
 
     demo->uniformData.bufferInfo.buffer(demo->uniformData.buf);
     demo->uniformData.bufferInfo.offset(0);
@@ -984,7 +956,7 @@ static void demo_prepare(Demo *demo, const engine::Scene& scene) {
         .flags(vk::CommandPoolCreateFlagBits::eResetCommandBuffer);
 
     err = scene.vkDevice().createCommandPool(&cmd_pool_info, nullptr,
-                                         &demo->cmd_pool);
+                                             &demo->cmd_pool);
     assert(err == vk::Result::eSuccess);
 
     const vk::CommandBufferAllocateInfo cmd = vk::CommandBufferAllocateInfo()
@@ -1002,7 +974,7 @@ static void demo_prepare(Demo *demo, const engine::Scene& scene) {
     demo_prepare_descriptor_layout(demo, scene);
     demo_prepare_render_pass(demo, scene);
     demo->pipeline = Initialize::PreparePipeline(scene.vkDevice(), demo->vertices.vi,
-                                                demo->pipeline_layout, demo->render_pass);
+                                                 demo->pipeline_layout, demo->render_pass);
     init_uniform_buffer(demo, scene);
 
     demo_prepare_descriptor_pool(demo, scene);

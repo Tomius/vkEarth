@@ -2,30 +2,27 @@
 
 #include <stdexcept>
 #include "engine/game_engine.hpp"
-#include "initialize/create_physical_device.hpp"
-#include "initialize/prepare_swapchain.hpp"
 
 namespace engine {
 
 Scene::Scene(GLFWwindow *window)
     : Behaviour(nullptr)
     , camera_(nullptr)
-    , window_(window) {
+    , window_(window)
+    , vkInstance_(CreateInstance(vkApp_))
+#if VK_VALIDATE
+    , vkDebugCallback_(new DebugCallback(vkInstance_))
+#endif
+    , vkGpu_(CreatePhysicalDevice(vkInstance_, vkApp_))
+    , vkSurface_(CreateSurface(vkInstance_, window))
+    , vkGraphicsQueueNodeIndex_(
+        SelectQraphicsQueueNodeIndex(vkGpu_, vkSurface_, vkApp_))
+    , vkDevice_(CreateDevice(vkGpu_, vkGraphicsQueueNodeIndex_, vkApp_))
+    , vkQueue_(GetQueue(vkDevice_, vkGraphicsQueueNodeIndex_)) {
   set_scene(this);
 
-  vkInstance_ = Initialize::CreateInstance(vkApp_);
-#if VK_VALIDATE
-  vkDebugCallback_ = std::unique_ptr<DebugCallback>{new DebugCallback(vkInstance_)};
-#endif
-  vkGpu_  = Initialize::CreatePhysicalDevice(vkInstance_, vkApp_);
-
-  vkSurface_ = Initialize::CreateSurface(vkInstance_, window);
-  Initialize::GetSurfaceProperties(vkGpu_, vkSurface_, vkApp_, vkSurfaceFormat_,
-                                   vkSurfaceColorSpace_, vkGpuMemoryProperties_);
-  vkGraphicsQueueNodeIndex_ = Initialize::SelectQraphicsQueueNodeIndex(
-      vkGpu_, vkSurface_, vkApp_);
-  vkDevice_ = Initialize::CreateDevice(vkGpu_, vkGraphicsQueueNodeIndex_, vkApp_);
-  vkQueue_ = Initialize::GetQueue(vkDevice_, vkGraphicsQueueNodeIndex_);
+  GetSurfaceProperties(vkGpu_, vkSurface_, vkApp_, vkSurfaceFormat_,
+                       vkSurfaceColorSpace_, vkGpuMemoryProperties_);
 }
 
 Scene::~Scene() {
@@ -37,10 +34,7 @@ void Scene::keyAction(int key, int scancode, int action, int mods) {
   if (action == GLFW_PRESS) {
     switch (key) {
       case GLFW_KEY_F1:
-        game_time_.toggle();
-        break;
-      case GLFW_KEY_F2:
-        environment_time_.toggle();
+        // camera_time_.toggle();
         break;
       default:
         break;
@@ -55,8 +49,6 @@ void Scene::turn() {
 }
 
 void Scene::updateAll() {
-  game_time_.tick();
-  environment_time_.tick();
   camera_time_.tick();
 
   Behaviour::updateAll();

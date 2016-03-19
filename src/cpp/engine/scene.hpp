@@ -24,14 +24,6 @@ class Scene : public Behaviour {
   Scene(GLFWwindow *window);
   ~Scene();
 
-  virtual float gravity() const { return 9.81f; }
-
-  const Timer& game_time() const { return game_time_; }
-  Timer& game_time() { return game_time_; }
-
-  const Timer& environment_time() const { return environment_time_; }
-  Timer& environment_time() { return environment_time_; }
-
   const Timer& camera_time() const { return camera_time_; }
   Timer& camera_time() { return camera_time_; }
 
@@ -43,7 +35,6 @@ class Scene : public Behaviour {
   void set_window(GLFWwindow* window) { window_ = window; }
 
   virtual void keyAction(int key, int scancode, int action, int mods) override;
-
   virtual void turn();
 
   const vk::Queue& vkQueue() const { return vkQueue_; }
@@ -58,29 +49,65 @@ class Scene : public Behaviour {
 
  private:
   Camera* camera_;
-  Timer game_time_, environment_time_, camera_time_;
+  Timer camera_time_;
   GLFWwindow* window_;
 
   // private vulkan stuff (no getters)
+  VulkanApplication vkApp_;
   vk::Instance vkInstance_;
 #if VK_VALIDATE
   std::unique_ptr<DebugCallback> vkDebugCallback_;
 #endif
 
   // "public" vulkan stuff (through getters)
-  vk::Queue vkQueue_;
-  vk::Device vkDevice_;
-  VkSurfaceKHR vkSurface_;
-  VulkanApplication vkApp_;
   vk::PhysicalDevice vkGpu_;
-  vk::Format vkSurfaceFormat_;
+  VkSurfaceKHR vkSurface_;
   uint32_t vkGraphicsQueueNodeIndex_ = 0;
+  vk::Device vkDevice_;
+  vk::Queue vkQueue_;
+
+  vk::Format vkSurfaceFormat_;
   vk::ColorSpaceKHR vkSurfaceColorSpace_;
   vk::PhysicalDeviceMemoryProperties vkGpuMemoryProperties_;
 
   virtual void updateAll() override;
   virtual void renderAll() override;
   virtual void render2DAll() override;
+
+private:
+  static vk::Instance CreateInstance(VulkanApplication& app);
+
+  static vk::PhysicalDevice CreatePhysicalDevice(vk::Instance& instance,
+                                                 const VulkanApplication& app);
+
+  static VkSurfaceKHR CreateSurface(const vk::Instance& instance,
+                                    GLFWwindow* window);
+
+  static uint32_t SelectQraphicsQueueNodeIndex(const vk::PhysicalDevice& gpu,
+                                               const VkSurfaceKHR& surface,
+                                               const VulkanApplication& app);
+
+  static vk::Device CreateDevice(const vk::PhysicalDevice& gpu,
+                                 uint32_t graphicsQueueNodeIndex,
+                                 VulkanApplication& app);
+
+  static vk::Queue GetQueue(const vk::Device& device,
+                            uint32_t graphicsQueueNodeIndex);
+
+  static void GetSurfaceProperties(const vk::PhysicalDevice& gpu,
+                                   const VkSurfaceKHR& surface,
+                                   const VulkanApplication& app,
+                                   vk::Format& format,
+                                   vk::ColorSpaceKHR& colorSpace,
+                                   vk::PhysicalDeviceMemoryProperties& memoryProperties);
+
+#if VK_VALIDATE
+  static void CheckForMissingLayers(uint32_t check_count,
+                                    const char* const* check_names,
+                                    uint32_t layer_count,
+                                    vk::LayerProperties* layers);
+#endif // VK_VALIDATE
+
 };
 
 }  // namespace engine
