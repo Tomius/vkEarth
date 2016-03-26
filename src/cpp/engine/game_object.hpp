@@ -23,26 +23,14 @@ class GameObject {
   virtual ~GameObject();
 
   template<typename T, typename... Args>
-  T* addComponent(Args&&... contructor_args);
-  GameObject* addComponent(std::unique_ptr<GameObject>&& component);
-
-  // Returns the first component found by depth first search in the
-  // GameObject hierarchy whose type is T
-  template<typename T>
-  T* findComponent() const { return FindComponent<T>(this); }
-
-  // Returns all the components in the GameObject heirarchy whose type is T
-  template<typename T>
-  std::vector<T*> findComponents() const;
+  T* AddComponent(Args&&... contructor_args);
+  GameObject* AddComponent(std::unique_ptr<GameObject>&& component);
 
   // Detaches a componenent from its parent, and adopts it.
   // Returns true on success.
-  bool stealComponent(GameObject* component_to_steal);
+  bool StealComponent(GameObject* component_to_steal);
 
-  void removeComponent(GameObject* component_to_remove);
-
-  template <typename T>
-  void removeComponents(T begin, T end);
+  void RemoveComponent(GameObject* component_to_remove);
 
   Transform* transform() { return transform_.get(); }
   const Transform* transform() const { return transform_.get(); }
@@ -61,23 +49,27 @@ class GameObject {
   int group() const { return group_; }
   void set_group(int value);
 
-  virtual void shadowRender() {}
-  virtual void render() {}
-  virtual void render2D() {}
-  virtual void screenResized(size_t width, size_t height) {}
+  virtual void Render() {}
+  virtual void Render2D() {}
+  virtual void Update() {}
+  virtual void ScreenResizedClean() {}
+  virtual void ScreenResized(size_t width, size_t height) {}
+  virtual void KeyAction(int key, int scancode, int action, int mods) {}
+  virtual void CharTyped(unsigned codepoint) {}
+  virtual void MouseScrolled(double xoffset, double yoffset) {}
+  virtual void MouseButtonPressed(int button, int action, int mods) {}
+  virtual void MouseMoved(double xpos, double ypos) {}
 
-  virtual void shadowRenderAll();
-  virtual void renderAll();
-  virtual void render2DAll();
-  virtual void screenResizedAll(size_t width, size_t height);
-
-  virtual void updateAll();
-  virtual void keyActionAll(int key, int scancode, int action, int mods);
-  virtual void charTypedAll(unsigned codepoint);
-  virtual void mouseScrolledAll(double xoffset, double yoffset);
-  virtual void mouseButtonPressedAll(int button, int action, int mods);
-  virtual void mouseMovedAll(double xpos, double ypos);
-  virtual void collisionAll(const GameObject* other);
+  virtual void RenderAll();
+  virtual void Render2DAll();
+  virtual void UpdateAll();
+  virtual void ScreenResizedCleanAll();
+  virtual void ScreenResizedAll(size_t width, size_t height);
+  virtual void KeyActionAll(int key, int scancode, int action, int mods);
+  virtual void CharTypedAll(unsigned codepoint);
+  virtual void MouseScrolledAll(double xoffset, double yoffset);
+  virtual void MouseButtonPressedAll(int button, int action, int mods);
+  virtual void MouseMovedAll(double xpos, double ypos);
 
  protected:
   Scene* scene_;
@@ -94,15 +86,9 @@ class GameObject {
   int uid_, group_;
   bool enabled_;
 
-  void internalUpdate();
+  void InternalUpdate();
 
  private:
-  template<typename T>
-  static T* FindComponent(const GameObject* obj);
-
-  template<typename T>
-  static void FindComponents(const GameObject* obj, std::vector<T*> *found);
-
   static int NextUid();
 
   struct ComponentRemoveHelper {
@@ -112,8 +98,8 @@ class GameObject {
     }
   } remove_predicate_;
 
-  void updateSortedComponents();
-  void removeComponents();
+  void UpdateSortedComponents();
+  void RemoveComponents();
 };
 
 }  // namespace engine

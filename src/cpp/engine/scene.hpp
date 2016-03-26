@@ -1,5 +1,3 @@
-// Copyright (c) 2015, Tamas Csala
-
 #ifndef ENGINE_SCENE_H_
 #define ENGINE_SCENE_H_
 
@@ -9,7 +7,6 @@
 
 #include "engine/timer.hpp"
 #include "engine/camera.hpp"
-#include "engine/behaviour.hpp"
 #include "engine/game_object.hpp"
 
 #include "common/debug_callback.hpp"
@@ -19,7 +16,7 @@ namespace engine {
 
 class GameObject;
 
-class Scene : public Behaviour {
+class Scene : public GameObject {
  public:
   Scene(GLFWwindow *window);
   ~Scene();
@@ -34,7 +31,7 @@ class Scene : public Behaviour {
   GLFWwindow* window() const { return window_; }
   void set_window(GLFWwindow* window) { window_ = window; }
 
-  virtual void keyAction(int key, int scancode, int action, int mods) override;
+  virtual void KeyAction(int key, int scancode, int action, int mods) override;
   virtual void turn();
 
   const vk::Queue& vkQueue() const { return vkQueue_; }
@@ -43,23 +40,51 @@ class Scene : public Behaviour {
   const VulkanApplication& vkApp() const { return vkApp_; }
   const vk::PhysicalDevice& vkGpu() const { return vkGpu_; }
   const vk::Format& vkSurfaceFormat() const { return vkSurfaceFormat_; }
-  uint32_t vkGraphicsQueueNodeIndex() const { return vkGraphicsQueueNodeIndex_; }
-  const vk::ColorSpaceKHR& vkSurfaceColorSpace() const { return vkSurfaceColorSpace_; }
   const vk::PhysicalDeviceMemoryProperties& vkGpuMemoryProperties() const { return vkGpuMemoryProperties_; }
+  const vk::CommandBuffer& vkSetupCmd() const { return vkSetupCmd_; }
+  const vk::CommandBuffer& vkDrawCmd() const { return vkDrawCmd_; }
+
+  struct SwapchainBuffers {
+    vk::Image image;
+    vk::CommandBuffer cmd;
+    vk::ImageView view;
+  };
+
+  glm::ivec2 framebufferSize() const { return framebufferSize_; }
+
+  const vk::SwapchainKHR& vkSwapchain() const { return vkSwapchain_; }
+  uint32_t vkSwapchainImageCount() const { return vkSwapchainImageCount_; }
+  const SwapchainBuffers* vkBuffers() const { return vkBuffers_; }
+  uint32_t& vkCurrentBuffer() { return vkCurrentBuffer_; }
+
+  struct DepthBuffer {
+    vk::Format format;
+
+    vk::Image image;
+    vk::DeviceMemory mem;
+    vk::ImageView view;
+  };
+
+  const DepthBuffer& vkDepthBuffer() const { return vkDepthBuffer_; }
+
+  void SetImageLayout(const vk::Image& image,
+                      const vk::ImageAspectFlags& aspectMask,
+                      const vk::ImageLayout& oldImageLayout,
+                      const vk::ImageLayout& newImageLayout);
+
+  void FlushInitCommand();
 
  private:
   Camera* camera_;
   Timer camera_time_;
   GLFWwindow* window_;
 
-  // private vulkan stuff (no getters)
   VulkanApplication vkApp_;
   vk::Instance vkInstance_;
 #if VK_VALIDATE
   std::unique_ptr<DebugCallback> vkDebugCallback_;
 #endif
 
-  // "public" vulkan stuff (through getters)
   vk::PhysicalDevice vkGpu_;
   VkSurfaceKHR vkSurface_;
   uint32_t vkGraphicsQueueNodeIndex_ = 0;
@@ -70,9 +95,24 @@ class Scene : public Behaviour {
   vk::ColorSpaceKHR vkSurfaceColorSpace_;
   vk::PhysicalDeviceMemoryProperties vkGpuMemoryProperties_;
 
-  virtual void updateAll() override;
-  virtual void renderAll() override;
-  virtual void render2DAll() override;
+  glm::ivec2 framebufferSize_;
+
+  vk::SwapchainKHR vkSwapchain_;
+  uint32_t vkSwapchainImageCount_ = 0;
+  SwapchainBuffers* vkBuffers_ = nullptr;
+  uint32_t vkCurrentBuffer_ = 0;
+
+  vk::CommandPool vkCmdPool_;
+  vk::CommandBuffer vkSetupCmd_;
+  vk::CommandBuffer vkDrawCmd_;
+  DepthBuffer vkDepthBuffer_;
+
+protected:
+  virtual void UpdateAll() override;
+  virtual void RenderAll() override;
+  virtual void Render2DAll() override;
+  virtual void ScreenResizedClean() override;
+  virtual void ScreenResized(size_t width, size_t height) override;
 
 private:
   static vk::Instance CreateInstance(VulkanApplication& app);
@@ -100,6 +140,12 @@ private:
                                    vk::Format& format,
                                    vk::ColorSpaceKHR& colorSpace,
                                    vk::PhysicalDeviceMemoryProperties& memoryProperties);
+
+  void PrepareBuffers();
+
+  static DepthBuffer CreateDepthBuffer(GLFWwindow* window,
+                                       const vk::Device& vkDevice,
+                                       Scene& scene);
 
 #if VK_VALIDATE
   static void CheckForMissingLayers(uint32_t check_count,

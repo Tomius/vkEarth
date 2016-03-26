@@ -10,7 +10,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "engine/timer.hpp"
-#include "engine/behaviour.hpp"
+#include "engine/game_object.hpp"
 #include "collision/frustum.hpp"
 
 namespace engine {
@@ -39,16 +39,16 @@ class CameraTransform : public Transform {
 };
 
 /// The base class for all cameras
-class Camera : public Behaviour {
+class Camera : public GameObject {
  public:
   Camera(GameObject* parent, double fovy, double z_near, double z_far)
-      : Behaviour(parent, CameraTransform{}), fovy_(fovy), z_near_(z_near)
+      : GameObject(parent, CameraTransform{}), fovy_(fovy), z_near_(z_near)
       , z_far_(z_far), width_(0), height_(0) {
     assert(fovy_ < M_PI);
   }
   virtual ~Camera() {}
 
-  virtual void screenResized(size_t width, size_t height) override {
+  virtual void ScreenResized(size_t width, size_t height) override {
     width_ = width;
     height_ = height;
   }
@@ -172,7 +172,7 @@ class FreeFlyCamera : public Camera {
   double speed_per_sec_, mouse_sensitivity_, cos_max_pitch_angle_;
 
  private:
-  virtual void update() override;
+  virtual void Update() override;
 };
 
 class ThirdPersonalCamera : public Camera {
@@ -222,9 +222,9 @@ class ThirdPersonalCamera : public Camera {
   // For mouseScrolled interpolation
   double curr_dist_mod_, dest_dist_mod_;
 
-  virtual void update() override;
+  virtual void Update() override;
 
-  virtual void mouseScrolled(double, double yoffset) override {
+  virtual void MouseScrolled(double, double yoffset) override {
     dest_dist_mod_ *= 1 + (-yoffset) * 0.1 * mouse_scroll_sensitivity_;
     if (dest_dist_mod_ < min_dist_mod_) {
       dest_dist_mod_ = min_dist_mod_;

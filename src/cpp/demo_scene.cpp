@@ -15,6 +15,7 @@
 #include "engine/scene.hpp"
 #include "common/error_checking.hpp"
 #include "initialize/create_pipeline.hpp"
+#include "common/vulkan_memory.hpp"
 
 #define VERTEX_BUFFER_BIND_ID 0
 
@@ -24,117 +25,7 @@
   #define U_ASSERT_ONLY
 #endif
 
-// Forward declaration:
-static void demo_resize(Demo *demo, const engine::Scene& scene);
-
-static void memory_type_from_properties(Demo *demo, const engine::Scene& scene,
-                                        uint32_t typeBits,
-                                        vk::MemoryPropertyFlags requirements_mask,
-                                        vk::MemoryAllocateInfo& mem_alloc) {
-    // Search memtypes to find first index with those properties
-    for (uint32_t i = 0; i < 32; i++) {
-        if ((typeBits & 1) == 1) {
-            // Type is available, does it match user properties?
-            if ((scene.vkGpuMemoryProperties().memoryTypes()[i].propertyFlags() &
-                 requirements_mask) == requirements_mask) {
-              mem_alloc.memoryTypeIndex(i);
-              return;
-            }
-        }
-        typeBits >>= 1;
-    }
-
-    throw std::runtime_error("Couldn't find request memory type.");
-}
-
-static void demo_flush_init_cmd(Demo *demo, const engine::Scene& scene) {
-    vk::Result U_ASSERT_ONLY err;
-
-    if (demo->setup_cmd == VK_NULL_HANDLE)
-        return;
-
-    err = demo->setup_cmd.end();
-    assert(err == vk::Result::eSuccess);
-
-    const vk::CommandBuffer cmd_bufs[] = {demo->setup_cmd};
-    vk::Fence nullFence = {VK_NULL_HANDLE};
-    vk::SubmitInfo submit_info = vk::SubmitInfo()
-                                 .commandBufferCount(1)
-                                 .pCommandBuffers(cmd_bufs);
-
-    err = scene.vkQueue().submit(1, &submit_info, nullFence);
-    assert(err == vk::Result::eSuccess);
-
-    err = scene.vkQueue().waitIdle();
-    assert(err == vk::Result::eSuccess);
-
-    scene.vkDevice().freeCommandBuffers(demo->cmd_pool, 1, cmd_bufs);
-    demo->setup_cmd = VK_NULL_HANDLE;
-}
-
-static void demo_set_image_layout(Demo *demo, const engine::Scene& scene,
-                                  vk::Image image,
-                                  vk::ImageAspectFlags aspectMask,
-                                  vk::ImageLayout old_image_layout,
-                                  vk::ImageLayout new_image_layout) {
-    vk::Result U_ASSERT_ONLY err;
-
-    if (demo->setup_cmd == VK_NULL_HANDLE) {
-        const vk::CommandBufferAllocateInfo cmd = vk::CommandBufferAllocateInfo()
-            .commandPool(demo->cmd_pool)
-            .level(vk::CommandBufferLevel::ePrimary)
-            .commandBufferCount(1);
-
-        err = scene.vkDevice().allocateCommandBuffers(&cmd, &demo->setup_cmd);
-        assert(err == vk::Result::eSuccess);
-
-        vk::CommandBufferInheritanceInfo cmd_buf_hinfo =
-            vk::CommandBufferInheritanceInfo();
-
-        vk::CommandBufferBeginInfo cmd_buf_info =
-          vk::CommandBufferBeginInfo().pInheritanceInfo(&cmd_buf_hinfo);
-
-        err = demo->setup_cmd.begin(&cmd_buf_info);
-        assert(err == vk::Result::eSuccess);
-    }
-
-    vk::ImageMemoryBarrier image_memory_barrier = vk::ImageMemoryBarrier()
-        .oldLayout(old_image_layout)
-        .newLayout(new_image_layout)
-        .image(image)
-        .subresourceRange({aspectMask, 0, 1, 0, 1});
-
-    if (new_image_layout == vk::ImageLayout::eTransferDstOptimal) {
-        /* Make sure anything that was copying from this image has completed */
-        image_memory_barrier.dstAccessMask(vk::AccessFlagBits::eTransferRead);
-    }
-
-    if (new_image_layout == vk::ImageLayout::eColorAttachmentOptimal) {
-        image_memory_barrier.dstAccessMask(
-            vk::AccessFlagBits::eColorAttachmentWrite);
-    }
-
-    if (new_image_layout == vk::ImageLayout::eDepthStencilAttachmentOptimal) {
-        image_memory_barrier.dstAccessMask(
-            vk::AccessFlagBits::eDepthStencilAttachmentWrite);
-    }
-
-    if (new_image_layout == vk::ImageLayout::eShaderReadOnlyOptimal) {
-        /* Make sure any Copy or CPU writes to image are flushed */
-        image_memory_barrier.dstAccessMask(vk::AccessFlagBits::eShaderRead |
-            vk::AccessFlagBits::eInputAttachmentRead);
-    }
-
-    vk::ImageMemoryBarrier *pmemory_barrier = &image_memory_barrier;
-
-    vk::PipelineStageFlags src_stages = vk::PipelineStageFlagBits::eTopOfPipe;
-    vk::PipelineStageFlags dest_stages = vk::PipelineStageFlagBits::eTopOfPipe;
-
-    demo->setup_cmd.pipelineBarrier(src_stages, dest_stages,
-      vk::DependencyFlags(), 0, nullptr, 0, nullptr, 1, pmemory_barrier);
-}
-
-static void demo_draw_build_cmd(Demo *demo, const engine::Scene& scene) {
+static void demo_draw_build_cmd(Demo *demo, engine::Scene& scene) {
     const vk::CommandBufferInheritanceInfo cmd_buf_hinfo;
     const vk::CommandBufferBeginInfo cmd_buf_info =
         vk::CommandBufferBeginInfo().pInheritanceInfo(&cmd_buf_hinfo);
@@ -145,42 +36,43 @@ static void demo_draw_build_cmd(Demo *demo, const engine::Scene& scene) {
     };
     const vk::RenderPassBeginInfo rp_begin = vk::RenderPassBeginInfo()
         .renderPass(demo->render_pass)
-        .framebuffer(demo->framebuffers[demo->current_buffer])
-        .renderArea({vk::Offset2D(0, 0), vk::Extent2D(demo->width, demo->height)})
+        .framebuffer(demo->framebuffers[scene.vkCurrentBuffer()])
+        .renderArea({vk::Offset2D(0, 0),
+            vk::Extent2D(scene.framebufferSize().x, scene.framebufferSize().y)})
         .clearValueCount(2)
         .pClearValues(clear_values);
     vk::Result U_ASSERT_ONLY err;
 
-    err = demo->draw_cmd.begin(&cmd_buf_info);
+    err = scene.vkDrawCmd().begin(&cmd_buf_info);
     assert(err == vk::Result::eSuccess);
 
-    demo->draw_cmd.beginRenderPass(&rp_begin, vk::SubpassContents::eInline);
-    demo->draw_cmd.bindPipeline(vk::PipelineBindPoint::eGraphics, demo->pipeline);
-    demo->draw_cmd.bindDescriptorSets(vk::PipelineBindPoint::eGraphics,
+    scene.vkDrawCmd().beginRenderPass(&rp_begin, vk::SubpassContents::eInline);
+    scene.vkDrawCmd().bindPipeline(vk::PipelineBindPoint::eGraphics, demo->pipeline);
+    scene.vkDrawCmd().bindDescriptorSets(vk::PipelineBindPoint::eGraphics,
         demo->pipeline_layout, 0, 1, &demo->desc_set, 0, nullptr);
 
     vk::Viewport viewport = vk::Viewport()
-      .height(demo->height)
-      .width(demo->width)
+      .width(scene.framebufferSize().x)
+      .height(scene.framebufferSize().y)
       .minDepth(0.0f)
       .maxDepth(1.0f);
-    demo->draw_cmd.setViewport(0, 1, &viewport);
+    scene.vkDrawCmd().setViewport(0, 1, &viewport);
 
-    vk::Rect2D scissor{vk::Offset2D(0, 0), vk::Extent2D(demo->width, demo->height)};
-    demo->draw_cmd.setScissor(0, 1, &scissor);
+    vk::Rect2D scissor{vk::Offset2D(0, 0), vk::Extent2D(scene.framebufferSize().x, scene.framebufferSize().y)};
+    scene.vkDrawCmd().setScissor(0, 1, &scissor);
 
     vk::DeviceSize offsets[1] = {0};
-    demo->draw_cmd.bindVertexBuffers(VERTEX_BUFFER_BIND_ID, 1,
+    scene.vkDrawCmd().bindVertexBuffers(VERTEX_BUFFER_BIND_ID, 1,
                                      &demo->vertices.buf, offsets);
-    demo->draw_cmd.bindIndexBuffer(demo->indices.buf,
+    scene.vkDrawCmd().bindIndexBuffer(demo->indices.buf,
                                    vk::DeviceSize{},
                                    vk::IndexType::eUint16);
 
-    demo->draw_cmd.setLineWidth(2.0f);
+    scene.vkDrawCmd().setLineWidth(2.0f);
 
-    // demo->draw_cmd.draw(6, 1, 0, 0);
-    demo->draw_cmd.drawIndexed(demo->gridMesh.index_count_, 1, 0, 0, 0);
-    demo->draw_cmd.endRenderPass();
+    // scene.vkDrawCmd().draw(6, 1, 0, 0);
+    scene.vkDrawCmd().drawIndexed(demo->gridMesh.index_count_, 1, 0, 0, 0);
+    scene.vkDrawCmd().endRenderPass();
 
     vk::ImageMemoryBarrier prePresentBarrier = vk::ImageMemoryBarrier()
         .srcAccessMask(vk::AccessFlagBits::eColorAttachmentWrite)
@@ -191,18 +83,18 @@ static void demo_draw_build_cmd(Demo *demo, const engine::Scene& scene) {
         .dstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
         .subresourceRange({vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
 
-    prePresentBarrier.image(demo->buffers[demo->current_buffer].image);
+    prePresentBarrier.image(scene.vkBuffers()[scene.vkCurrentBuffer()].image);
     vk::ImageMemoryBarrier *pmemory_barrier = &prePresentBarrier;
-    demo->draw_cmd.pipelineBarrier(vk::PipelineStageFlagBits::eAllCommands,
+    scene.vkDrawCmd().pipelineBarrier(vk::PipelineStageFlagBits::eAllCommands,
                                    vk::PipelineStageFlagBits::eBottomOfPipe,
                                    vk::DependencyFlags(), 0, nullptr, 0,
                                    nullptr, 1, pmemory_barrier);
 
-    err = demo->draw_cmd.end();
+    err = scene.vkDrawCmd().end();
     assert(err == vk::Result::eSuccess);
 }
 
-static void demo_draw(Demo *demo, const engine::Scene& scene) {
+static void demo_draw(Demo *demo, engine::Scene& scene) {
     vk::Result U_ASSERT_ONLY err;
     VkResult vkErr;
     vk::Semaphore presentCompleteSemaphore;
@@ -214,17 +106,18 @@ static void demo_draw(Demo *demo, const engine::Scene& scene) {
 
     // Get the index of the next available swapchain image:
     vkErr = scene.vkApp().entryPoints.fpAcquireNextImageKHR(
-      scene.vkDevice(), demo->swapchain, UINT64_MAX, presentCompleteSemaphore,
-      (vk::Fence)nullptr, &demo->current_buffer);
+      scene.vkDevice(), scene.vkSwapchain(), UINT64_MAX, presentCompleteSemaphore,
+      (vk::Fence)nullptr, &scene.vkCurrentBuffer());
     if (vkErr == VK_ERROR_OUT_OF_DATE_KHR) {
-        // demo->swapchain is out of date (e.g. the window was resized) and
+        // scene.vkSwapchain() is out of date (e.g. the window was resized) and
         // must be recreated:
-        demo_resize(demo, scene);
+        //demo_resize(demo, scene);
+        throw std::runtime_error("Should resize swapchain");
         demo_draw(demo, scene);
         scene.vkDevice().destroySemaphore(presentCompleteSemaphore, nullptr);
         return;
     } else if (vkErr == VK_SUBOPTIMAL_KHR) {
-        // demo->swapchain is not as optimal as it could be, but the platform's
+        // scene.vkSwapchain() is not as optimal as it could be, but the platform's
         // presentation engine will still present the image correctly.
     } else {
         assert(vkErr == VK_SUCCESS);
@@ -232,11 +125,11 @@ static void demo_draw(Demo *demo, const engine::Scene& scene) {
 
     // Assume the command buffer has been run on current_buffer before so
     // we need to set the image layout back to COLOR_ATTACHMENT_OPTIMAL
-    demo_set_image_layout(demo, scene, demo->buffers[demo->current_buffer].image,
-                          vk::ImageAspectFlagBits::eColor,
-                          vk::ImageLayout::ePresentSrcKHR,
-                          vk::ImageLayout::eColorAttachmentOptimal);
-    demo_flush_init_cmd(demo, scene);
+    scene.SetImageLayout(scene.vkBuffers()[scene.vkCurrentBuffer()].image,
+                         vk::ImageAspectFlagBits::eColor,
+                         vk::ImageLayout::ePresentSrcKHR,
+                         vk::ImageLayout::eColorAttachmentOptimal);
+    scene.FlushInitCommand();
 
     // Wait for the present complete semaphore to be signaled to ensure
     // that the image won't be rendered to until the presentation
@@ -253,15 +146,15 @@ static void demo_draw(Demo *demo, const engine::Scene& scene) {
         .pWaitSemaphores(&presentCompleteSemaphore)
         .pWaitDstStageMask(&pipe_stage_flags)
         .commandBufferCount(1)
-        .pCommandBuffers(&demo->draw_cmd);
+        .pCommandBuffers(&scene.vkDrawCmd());
 
     err = scene.vkQueue().submit(1, &submit_info, nullFence);
     assert(err == vk::Result::eSuccess);
 
     vk::PresentInfoKHR present = vk::PresentInfoKHR()
         .swapchainCount(1)
-        .pSwapchains(&demo->swapchain)
-        .pImageIndices(&demo->current_buffer);
+        .pSwapchains(&scene.vkSwapchain())
+        .pImageIndices(&scene.vkCurrentBuffer());
     VkPresentInfoKHR& vkPresent =
       const_cast<VkPresentInfoKHR&>(
         static_cast<const VkPresentInfoKHR&>(present));
@@ -269,11 +162,12 @@ static void demo_draw(Demo *demo, const engine::Scene& scene) {
     // TBD/TODO: SHOULD THE "present" PARAMETER BE "const" IN THE HEADER?
     vkErr = scene.vkApp().entryPoints.fpQueuePresentKHR(scene.vkQueue(), &vkPresent);
     if (vkErr == VK_ERROR_OUT_OF_DATE_KHR) {
-        // demo->swapchain is out of date (e.g. the window was resized) and
+        // scene.vkSwapchain() is out of date (e.g. the window was resized) and
         // must be recreated:
-        demo_resize(demo, scene);
+        //demo_resize(demo, scene);
+        throw std::runtime_error("Should resize swapchain");
     } else if (vkErr == VK_SUBOPTIMAL_KHR) {
-        // demo->swapchain is not as optimal as it could be, but the platform's
+        // scene.vkSwapchain() is not as optimal as it could be, but the platform's
         // presentation engine will still present the image correctly.
     } else {
         assert(vkErr == VK_SUCCESS);
@@ -285,212 +179,8 @@ static void demo_draw(Demo *demo, const engine::Scene& scene) {
     scene.vkDevice().destroySemaphore(presentCompleteSemaphore, nullptr);
 }
 
-static void demo_prepare_buffers(Demo *demo, const engine::Scene& scene) {
-    vk::Result U_ASSERT_ONLY err;
-    VkResult U_ASSERT_ONLY vkErr;
-    vk::SwapchainKHR oldSwapchain = demo->swapchain;
-
-    // Check the surface capabilities and formats
-    vk::SurfaceCapabilitiesKHR surfCapabilities;
-    VkSurfaceCapabilitiesKHR& vkSurfCapabilities =
-      const_cast<VkSurfaceCapabilitiesKHR&>(
-        static_cast<const VkSurfaceCapabilitiesKHR&>(surfCapabilities));
-    vkErr = scene.vkApp().entryPoints.fpGetPhysicalDeviceSurfaceCapabilitiesKHR(
-        scene.vkGpu(), scene.vkSurface(), &vkSurfCapabilities);
-    assert(vkErr == VK_SUCCESS);
-
-    uint32_t presentModeCount;
-    vkErr = scene.vkApp().entryPoints.fpGetPhysicalDeviceSurfacePresentModesKHR(
-        scene.vkGpu(), scene.vkSurface(), &presentModeCount, nullptr);
-    assert(vkErr == VK_SUCCESS);
-
-    VkPresentModeKHR *presentModes = new VkPresentModeKHR[presentModeCount];
-    assert(presentModes);
-
-    vkErr = scene.vkApp().entryPoints.fpGetPhysicalDeviceSurfacePresentModesKHR(
-        scene.vkGpu(), scene.vkSurface(), &presentModeCount, presentModes);
-    assert(vkErr == VK_SUCCESS);
-
-    vk::Extent2D swapchainExtent;
-    // width and height are either both -1, or both not -1.
-    if (surfCapabilities.currentExtent().width() == (uint32_t)-1) {
-        // If the surface size is undefined, the size is set to
-        // the size of the images requested.
-        swapchainExtent.width(demo->width);
-        swapchainExtent.height(demo->height);
-    } else {
-        // If the surface size is defined, the swap chain size must match
-        swapchainExtent = surfCapabilities.currentExtent();
-        demo->width = surfCapabilities.currentExtent().width();
-        demo->height = surfCapabilities.currentExtent().height();
-    }
-
-#if VK_VSYNC
-    vk::PresentModeKHR swapchainPresentMode = vk::PresentModeKHR::eFifoKHR;
-#else
-    vk::PresentModeKHR swapchainPresentMode = vk::PresentModeKHR::eImmediateKHR;
-#endif
-
-    // Determine the number of vk::Image's to use in the swap chain (we desire to
-    // own only 1 image at a time, besides the images being displayed and
-    // queued for display):
-    uint32_t desiredNumberOfSwapchainImages =
-        surfCapabilities.minImageCount() + 1;
-    if ((surfCapabilities.maxImageCount() > 0) &&
-        (desiredNumberOfSwapchainImages > surfCapabilities.maxImageCount())) {
-        // Application must settle for fewer images than desired:
-        desiredNumberOfSwapchainImages = surfCapabilities.maxImageCount();
-    }
-
-    vk::SurfaceTransformFlagBitsKHR preTransform;
-    if (surfCapabilities.supportedTransforms() &
-        vk::SurfaceTransformFlagBitsKHR::eIdentity) {
-        preTransform = vk::SurfaceTransformFlagBitsKHR::eIdentity;
-    } else {
-        preTransform = surfCapabilities.currentTransform();
-    }
-
-    const vk::SwapchainCreateInfoKHR swapchain = vk::SwapchainCreateInfoKHR()
-        .surface(scene.vkSurface())
-        .minImageCount(desiredNumberOfSwapchainImages)
-        .imageFormat(scene.vkSurfaceFormat())
-        .imageColorSpace(scene.vkSurfaceColorSpace())
-        .imageExtent(vk::Extent2D{swapchainExtent.width(), swapchainExtent.height()})
-        .imageUsage(vk::ImageUsageFlagBits::eColorAttachment)
-        .preTransform(preTransform)
-        .compositeAlpha(vk::CompositeAlphaFlagBitsKHR::eOpaque)
-        .imageArrayLayers(1)
-        .imageSharingMode(vk::SharingMode::eExclusive)
-        .queueFamilyIndexCount(0)
-        .pQueueFamilyIndices(nullptr)
-        .presentMode(swapchainPresentMode)
-        .oldSwapchain(oldSwapchain)
-        .clipped(true);
-
-    const VkSwapchainCreateInfoKHR& vkSwapchainInfo = swapchain;
-    VkSwapchainKHR vkSwapchain = demo->swapchain;
-    vkErr = scene.vkApp().entryPoints.fpCreateSwapchainKHR(
-        scene.vkDevice(), &vkSwapchainInfo, nullptr, &vkSwapchain);
-    demo->swapchain = vkSwapchain;
-    assert(vkErr == VK_SUCCESS);
-
-    // If we just re-created an existing swapchain, we should destroy the old
-    // swapchain at this point.
-    // Note: destroying the swapchain also cleans up all its associated
-    // presentable images once the platform is done with them.
-    if (oldSwapchain != VK_NULL_HANDLE) {
-        scene.vkApp().entryPoints.fpDestroySwapchainKHR(scene.vkDevice(), oldSwapchain, nullptr);
-    }
-
-    vkErr = scene.vkApp().entryPoints.fpGetSwapchainImagesKHR(
-        scene.vkDevice(), demo->swapchain, &demo->swapchainImageCount, nullptr);
-    assert(vkErr == VK_SUCCESS);
-
-    VkImage *swapchainImages = new VkImage[demo->swapchainImageCount];
-    vkErr = scene.vkApp().entryPoints.fpGetSwapchainImagesKHR(
-        scene.vkDevice(), demo->swapchain, &demo->swapchainImageCount, swapchainImages);
-    assert(vkErr == VK_SUCCESS);
-
-    demo->buffers = new SwapchainBuffers[demo->swapchainImageCount];
-
-    for (uint32_t i = 0; i < demo->swapchainImageCount; i++) {
-        vk::ImageViewCreateInfo color_attachment_view = vk::ImageViewCreateInfo()
-            .format(scene.vkSurfaceFormat())
-            .subresourceRange(vk::ImageSubresourceRange()
-              .aspectMask(vk::ImageAspectFlagBits::eColor)
-              .baseMipLevel(0)
-              .levelCount(1)
-              .baseArrayLayer(0)
-              .layerCount(1)
-            )
-            .viewType(vk::ImageViewType::e2D);
-
-        demo->buffers[i].image = swapchainImages[i];
-
-        // Render loop will expect image to have been used before and in
-        // vk::ImageLayout::ePresentSrcKHR
-        // layout and will change to COLOR_ATTACHMENT_OPTIMAL, so init the image
-        // to that state
-        demo_set_image_layout(
-            demo, scene, demo->buffers[i].image, vk::ImageAspectFlagBits::eColor,
-            vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR);
-
-        color_attachment_view.image(demo->buffers[i].image);
-
-        err = scene.vkDevice().createImageView(&color_attachment_view, nullptr,
-                                           &demo->buffers[i].view);
-        assert(err == vk::Result::eSuccess);
-    }
-
-    demo->current_buffer = 0;
-
-    if (nullptr != presentModes) {
-        delete[] presentModes;
-    }
-}
-
-static void demo_prepare_depth(Demo *demo, const engine::Scene& scene) {
-    const vk::Format depth_format = vk::Format::eD16Unorm;
-    const vk::ImageCreateInfo image = vk::ImageCreateInfo()
-        .imageType(vk::ImageType::e2D)
-        .format(depth_format)
-        .extent(vk::Extent3D(demo->width, demo->height, 1))
-        .mipLevels(1)
-        .arrayLayers(1)
-        .samples(vk::SampleCountFlagBits::e1)
-        .tiling(vk::ImageTiling::eOptimal)
-        .usage(vk::ImageUsageFlagBits::eDepthStencilAttachment);
-
-    vk::MemoryAllocateInfo mem_alloc;
-    vk::ImageViewCreateInfo view = vk::ImageViewCreateInfo()
-      .format(depth_format)
-      .subresourceRange(vk::ImageSubresourceRange()
-        .aspectMask(vk::ImageAspectFlagBits::eDepth)
-        .baseMipLevel(0)
-        .levelCount(1)
-        .baseArrayLayer(0)
-        .layerCount(1)
-      )
-      .viewType(vk::ImageViewType::e2D);
-
-    vk::MemoryRequirements mem_reqs;
-    vk::Result U_ASSERT_ONLY err;
-
-    demo->depth.format = depth_format;
-
-    /* create image */
-    err = scene.vkDevice().createImage(&image, nullptr, &demo->depth.image);
-    assert(err == vk::Result::eSuccess);
-
-    /* get memory requirements for this object */
-    scene.vkDevice().getImageMemoryRequirements(demo->depth.image, &mem_reqs);
-
-    /* select memory size and type */
-    mem_alloc.allocationSize(mem_reqs.size());
-    memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
-                                vk::MemoryPropertyFlags(), /* No requirements */
-                                mem_alloc);
-
-    /* allocate memory */
-    err = scene.vkDevice().allocateMemory(&mem_alloc, nullptr, &demo->depth.mem);
-    assert(err == vk::Result::eSuccess);
-
-    /* bind memory */
-    err = scene.vkDevice().bindImageMemory(demo->depth.image, demo->depth.mem, 0);
-    assert(err == vk::Result::eSuccess);
-
-    demo_set_image_layout(demo, scene, demo->depth.image, vk::ImageAspectFlagBits::eDepth,
-                          vk::ImageLayout::eUndefined,
-                          vk::ImageLayout::eDepthStencilAttachmentOptimal);
-
-    /* create image view */
-    view.image(demo->depth.image);
-    err = scene.vkDevice().createImageView(&view, nullptr, &demo->depth.view);
-    assert(err == vk::Result::eSuccess);
-}
-
 static void
-demo_prepare_texture_image(Demo *demo, const engine::Scene& scene,
+demo_prepare_texture_image(Demo *demo, engine::Scene& scene,
                            const uint32_t *tex_colors,
                            TextureObject *tex_obj, vk::ImageTiling tiling,
                            vk::ImageUsageFlags usage,
@@ -523,8 +213,9 @@ demo_prepare_texture_image(Demo *demo, const engine::Scene& scene,
     scene.vkDevice().getImageMemoryRequirements(tex_obj->image, &mem_reqs);
 
     mem_alloc.allocationSize(mem_reqs.size());
-    memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
-                                required_props, mem_alloc);
+    MemoryTypeFromProperties(scene.vkGpuMemoryProperties(),
+                             mem_reqs.memoryTypeBits(),
+                             required_props, mem_alloc);
 
     /* allocate memory */
     err = scene.vkDevice().allocateMemory(&mem_alloc, nullptr, &tex_obj->mem);
@@ -556,20 +247,20 @@ demo_prepare_texture_image(Demo *demo, const engine::Scene& scene,
     }
 
     tex_obj->imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
-    demo_set_image_layout(demo, scene, tex_obj->image, vk::ImageAspectFlagBits::eColor,
-                          vk::ImageLayout::eUndefined, tex_obj->imageLayout);
+    scene.SetImageLayout(tex_obj->image, vk::ImageAspectFlagBits::eColor,
+                         vk::ImageLayout::eUndefined, tex_obj->imageLayout);
     /* setting the image layout does not reference the actual memory so no need
      * to add a mem ref */
 }
 
-static void demo_destroy_texture_image(Demo *demo, const engine::Scene& scene,
+static void demo_destroy_texture_image(Demo *demo, engine::Scene& scene,
                                        TextureObject *tex_obj) {
     /* clean up staging resources */
     scene.vkDevice().destroyImage(tex_obj->image, nullptr);
     scene.vkDevice().freeMemory(tex_obj->mem, nullptr);
 }
 
-static void demo_prepare_textures(Demo *demo, const engine::Scene& scene) {
+static void demo_prepare_textures(Demo *demo, engine::Scene& scene) {
     const vk::Format tex_format = vk::Format::eB8G8R8A8Unorm;
     vk::FormatProperties props;
     const uint32_t tex_colors[DEMO_TEXTURE_COUNT][2] = {
@@ -604,31 +295,31 @@ static void demo_prepare_textures(Demo *demo, const engine::Scene& scene) {
                 (vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled),
                 vk::MemoryPropertyFlagBits::eDeviceLocal);
 
-            demo_set_image_layout(demo, scene, staging_texture.image,
-                                  vk::ImageAspectFlagBits::eColor,
-                                  staging_texture.imageLayout,
-                                  vk::ImageLayout::eTransferSrcOptimal);
+            scene.SetImageLayout(staging_texture.image,
+                                 vk::ImageAspectFlagBits::eColor,
+                                 staging_texture.imageLayout,
+                                 vk::ImageLayout::eTransferSrcOptimal);
 
-            demo_set_image_layout(demo, scene, demo->textures[i].image,
-                                  vk::ImageAspectFlagBits::eColor,
-                                  demo->textures[i].imageLayout,
-                                  vk::ImageLayout::eTransferDstOptimal);
+            scene.SetImageLayout(demo->textures[i].image,
+                                 vk::ImageAspectFlagBits::eColor,
+                                 demo->textures[i].imageLayout,
+                                 vk::ImageLayout::eTransferDstOptimal);
 
             vk::ImageCopy copy_region = vk::ImageCopy()
                 .srcSubresource({vk::ImageAspectFlagBits::eColor, 0, 0, 1})
                 .dstSubresource({vk::ImageAspectFlagBits::eColor, 0, 0, 1})
                 .extent(vk::Extent3D(staging_texture.tex_width,
                                      staging_texture.tex_height, 1));
-            demo->setup_cmd.copyImage(staging_texture.image,
+            scene.vkSetupCmd().copyImage(staging_texture.image,
                 vk::ImageLayout::eTransferSrcOptimal, demo->textures[i].image,
                 vk::ImageLayout::eTransferDstOptimal, 1, &copy_region);
 
-            demo_set_image_layout(demo, scene, demo->textures[i].image,
-                                  vk::ImageAspectFlagBits::eColor,
-                                  vk::ImageLayout::eTransferDstOptimal,
-                                  demo->textures[i].imageLayout);
+            scene.SetImageLayout(demo->textures[i].image,
+                                 vk::ImageAspectFlagBits::eColor,
+                                 vk::ImageLayout::eTransferDstOptimal,
+                                 demo->textures[i].imageLayout);
 
-            demo_flush_init_cmd(demo, scene);
+            scene.FlushInitCommand();
 
             demo_destroy_texture_image(demo, scene, &staging_texture);
         } else {
@@ -669,7 +360,7 @@ static void demo_prepare_textures(Demo *demo, const engine::Scene& scene) {
     }
 }
 
-static void demo_prepare_indices(Demo *demo, const engine::Scene& scene,
+static void demo_prepare_indices(Demo *demo, engine::Scene& scene,
                                  const std::vector<uint16_t>& indices) {
   // const GLushort indices[] = {
   //   0, 1, 2, 2, 1, 3
@@ -690,9 +381,10 @@ static void demo_prepare_indices(Demo *demo, const engine::Scene& scene,
   assert(err == vk::Result::eSuccess);
 
   mem_alloc.allocationSize(mem_reqs.size());
-  memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
-                              vk::MemoryPropertyFlagBits::eHostVisible,
-                              mem_alloc);
+  MemoryTypeFromProperties(scene.vkGpuMemoryProperties(),
+                           mem_reqs.memoryTypeBits(),
+                           vk::MemoryPropertyFlagBits::eHostVisible,
+                           mem_alloc);
 
   err = scene.vkDevice().allocateMemory(&mem_alloc, nullptr, &demo->indices.mem);
   assert(err == vk::Result::eSuccess);
@@ -709,7 +401,7 @@ static void demo_prepare_indices(Demo *demo, const engine::Scene& scene,
   assert(err == vk::Result::eSuccess);
 }
 
-static void demo_prepare_vertices(Demo *demo, const engine::Scene& scene) {
+static void demo_prepare_vertices(Demo *demo, engine::Scene& scene) {
   const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
       .size(sizeof(svec2) * demo->gridMesh.positions_.size())
       .usage(vk::BufferUsageFlagBits::eVertexBuffer);
@@ -726,9 +418,10 @@ static void demo_prepare_vertices(Demo *demo, const engine::Scene& scene) {
   assert(err == vk::Result::eSuccess);
 
   mem_alloc.allocationSize(mem_reqs.size());
-  memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
-                              vk::MemoryPropertyFlagBits::eHostVisible,
-                              mem_alloc);
+  MemoryTypeFromProperties(scene.vkGpuMemoryProperties(),
+                           mem_reqs.memoryTypeBits(),
+                           vk::MemoryPropertyFlagBits::eHostVisible,
+                           mem_alloc);
 
   err = scene.vkDevice().allocateMemory(&mem_alloc, nullptr, &demo->vertices.mem);
   assert(err == vk::Result::eSuccess);
@@ -762,7 +455,7 @@ static void demo_prepare_vertices(Demo *demo, const engine::Scene& scene) {
   demo->vertices.vi_attrs[0].offset(0);
 }
 
-static void demo_prepare_descriptor_layout(Demo *demo, const engine::Scene& scene) {
+static void demo_prepare_descriptor_layout(Demo *demo, engine::Scene& scene) {
     const vk::DescriptorSetLayoutBinding layout_binding[2] = {
       vk::DescriptorSetLayoutBinding()
         .binding(0)
@@ -797,7 +490,7 @@ static void demo_prepare_descriptor_layout(Demo *demo, const engine::Scene& scen
     assert(err == vk::Result::eSuccess);
 }
 
-static void demo_prepare_render_pass(Demo *demo, const engine::Scene& scene) {
+static void demo_prepare_render_pass(Demo *demo, engine::Scene& scene) {
     const vk::AttachmentDescription attachments[2] = {
       vk::AttachmentDescription()
         .format(scene.vkSurfaceFormat())
@@ -809,7 +502,7 @@ static void demo_prepare_render_pass(Demo *demo, const engine::Scene& scene) {
         .initialLayout(vk::ImageLayout::eColorAttachmentOptimal)
         .finalLayout(vk::ImageLayout::eColorAttachmentOptimal),
       vk::AttachmentDescription()
-        .format(demo->depth.format)
+        .format(scene.vkDepthBuffer().format)
         .samples(vk::SampleCountFlagBits::e1)
         .loadOp(vk::AttachmentLoadOp::eClear)
         .storeOp(vk::AttachmentStoreOp::eDontCare)
@@ -840,7 +533,7 @@ static void demo_prepare_render_pass(Demo *demo, const engine::Scene& scene) {
     assert(err == vk::Result::eSuccess);
 }
 
-static void demo_prepare_descriptor_pool(Demo *demo, const engine::Scene& scene) {
+static void demo_prepare_descriptor_pool(Demo *demo, engine::Scene& scene) {
     const vk::DescriptorPoolSize type_count[] = {
       vk::DescriptorPoolSize()
         .type(vk::DescriptorType::eCombinedImageSampler)
@@ -862,7 +555,7 @@ static void demo_prepare_descriptor_pool(Demo *demo, const engine::Scene& scene)
     assert(err == vk::Result::eSuccess);
 }
 
-static void init_uniform_buffer(Demo *demo, const engine::Scene& scene) {
+static void init_uniform_buffer(Demo *demo, engine::Scene& scene) {
     vk::BufferCreateInfo buf_info = vk::BufferCreateInfo{}
         .usage(vk::BufferUsageFlagBits::eUniformBuffer)
         .size(16*sizeof(float))
@@ -874,9 +567,10 @@ static void init_uniform_buffer(Demo *demo, const engine::Scene& scene) {
 
     vk::MemoryAllocateInfo alloc_info;
     alloc_info.allocationSize(mem_reqs.size());
-    memory_type_from_properties(demo, scene, mem_reqs.memoryTypeBits(),
-                                vk::MemoryPropertyFlagBits::eHostVisible,
-                                alloc_info);
+    MemoryTypeFromProperties(scene.vkGpuMemoryProperties(),
+                             mem_reqs.memoryTypeBits(),
+                             vk::MemoryPropertyFlagBits::eHostVisible,
+                             alloc_info);
 
     vk::chk(scene.vkDevice().allocateMemory(&alloc_info, NULL,
                                             &demo->uniformData.mem));
@@ -889,7 +583,7 @@ static void init_uniform_buffer(Demo *demo, const engine::Scene& scene) {
     demo->uniformData.bufferInfo.range(16*sizeof(float));
 }
 
-static void demo_prepare_descriptor_set(Demo *demo, const engine::Scene& scene) {
+static void demo_prepare_descriptor_set(Demo *demo, engine::Scene& scene) {
     vk::DescriptorImageInfo tex_descs[DEMO_TEXTURE_COUNT];
     vk::WriteDescriptorSet writes[2];
     vk::Result U_ASSERT_ONLY err;
@@ -923,52 +617,31 @@ static void demo_prepare_descriptor_set(Demo *demo, const engine::Scene& scene) 
     scene.vkDevice().updateDescriptorSets(2, writes, 0, nullptr);
 }
 
-static void demo_prepare_framebuffers(Demo *demo, const engine::Scene& scene) {
+static void demo_prepare_framebuffers(Demo *demo, engine::Scene& scene) {
     vk::ImageView attachments[2];
-    attachments[1] = demo->depth.view;
+    attachments[1] = scene.vkDepthBuffer().view;
 
     const vk::FramebufferCreateInfo fb_info =
       vk::FramebufferCreateInfo()
         .renderPass(demo->render_pass)
         .attachmentCount(2)
         .pAttachments(attachments)
-        .width(demo->width)
-        .height(demo->height)
+        .width(scene.framebufferSize().x)
+        .height(scene.framebufferSize().y)
         .layers(1);
     vk::Result U_ASSERT_ONLY err;
 
-    demo->framebuffers = new vk::Framebuffer[demo->swapchainImageCount];
+    demo->framebuffers = new vk::Framebuffer[scene.vkSwapchainImageCount()];
 
-    for (uint32_t i = 0; i < demo->swapchainImageCount; i++) {
-        attachments[0] = demo->buffers[i].view;
+    for (uint32_t i = 0; i < scene.vkSwapchainImageCount(); i++) {
+        attachments[0] = scene.vkBuffers()[i].view;
         err = scene.vkDevice().createFramebuffer(&fb_info, nullptr,
                                              &demo->framebuffers[i]);
         assert(err == vk::Result::eSuccess);
     }
 }
 
-static void demo_prepare(Demo *demo, const engine::Scene& scene) {
-    vk::Result U_ASSERT_ONLY err;
-
-    const vk::CommandPoolCreateInfo cmd_pool_info =
-      vk::CommandPoolCreateInfo()
-        .queueFamilyIndex(scene.vkGraphicsQueueNodeIndex())
-        .flags(vk::CommandPoolCreateFlagBits::eResetCommandBuffer);
-
-    err = scene.vkDevice().createCommandPool(&cmd_pool_info, nullptr,
-                                             &demo->cmd_pool);
-    assert(err == vk::Result::eSuccess);
-
-    const vk::CommandBufferAllocateInfo cmd = vk::CommandBufferAllocateInfo()
-      .commandPool(demo->cmd_pool)
-      .level(vk::CommandBufferLevel::ePrimary)
-      .commandBufferCount(1);
-
-    err = scene.vkDevice().allocateCommandBuffers(&cmd, &demo->draw_cmd);
-    assert(err == vk::Result::eSuccess);
-
-    demo_prepare_buffers(demo, scene);
-    demo_prepare_depth(demo, scene);
+static void demo_prepare(Demo *demo, engine::Scene& scene) {
     demo_prepare_textures(demo, scene);
     demo_prepare_vertices(demo, scene);
     demo_prepare_descriptor_layout(demo, scene);
@@ -983,18 +656,12 @@ static void demo_prepare(Demo *demo, const engine::Scene& scene) {
     demo_prepare_framebuffers(demo, scene);
 }
 
-static void demo_cleanup(Demo *demo, const engine::Scene& scene) {
-    for (uint32_t i = 0; i < demo->swapchainImageCount; i++) {
+static void demo_cleanup(Demo *demo, engine::Scene& scene) {
+    for (uint32_t i = 0; i < scene.vkSwapchainImageCount(); i++) {
         scene.vkDevice().destroyFramebuffer(demo->framebuffers[i], nullptr);
     }
     delete[] demo->framebuffers;
     scene.vkDevice().destroyDescriptorPool(demo->desc_pool, nullptr);
-
-    if (demo->setup_cmd) {
-        scene.vkDevice().freeCommandBuffers(demo->cmd_pool, 1, &demo->setup_cmd);
-    }
-    scene.vkDevice().freeCommandBuffers(demo->cmd_pool, 1, &demo->draw_cmd);
-    scene.vkDevice().destroyCommandPool(demo->cmd_pool, nullptr);
 
     scene.vkDevice().destroyPipeline(demo->pipeline, nullptr);
     scene.vkDevice().destroyRenderPass(demo->render_pass, nullptr);
@@ -1015,85 +682,23 @@ static void demo_cleanup(Demo *demo, const engine::Scene& scene) {
         scene.vkDevice().freeMemory(demo->textures[i].mem, nullptr);
         scene.vkDevice().destroySampler(demo->textures[i].sampler, nullptr);
     }
-
-    for (uint32_t i = 0; i < demo->swapchainImageCount; i++) {
-        scene.vkDevice().destroyImageView(demo->buffers[i].view, nullptr);
-    }
-
-    scene.vkDevice().destroyImageView(demo->depth.view, nullptr);
-    scene.vkDevice().destroyImage(demo->depth.image, nullptr);
-    scene.vkDevice().freeMemory(demo->depth.mem, nullptr);
-
-    scene.vkApp().entryPoints.fpDestroySwapchainKHR(scene.vkDevice(), demo->swapchain, nullptr);
-    delete[] demo->buffers;
-}
-
-static void demo_resize(Demo *demo, const engine::Scene& scene) {
-    for (uint32_t i = 0; i < demo->swapchainImageCount; i++) {
-        scene.vkDevice().destroyFramebuffer(demo->framebuffers[i], nullptr);
-    }
-    delete[] demo->framebuffers;
-    scene.vkDevice().destroyDescriptorPool(demo->desc_pool, nullptr);
-
-    if (demo->setup_cmd) {
-        scene.vkDevice().freeCommandBuffers(demo->cmd_pool, 1, &demo->setup_cmd);
-    }
-    scene.vkDevice().freeCommandBuffers(demo->cmd_pool, 1, &demo->draw_cmd);
-    scene.vkDevice().destroyCommandPool(demo->cmd_pool, nullptr);
-
-    scene.vkDevice().destroyPipeline(demo->pipeline, nullptr);
-    scene.vkDevice().destroyRenderPass(demo->render_pass, nullptr);
-    scene.vkDevice().destroyPipelineLayout(demo->pipeline_layout, nullptr);
-    scene.vkDevice().destroyDescriptorSetLayout(demo->desc_layout, nullptr);
-
-    scene.vkDevice().destroyBuffer(demo->uniformData.buf, nullptr);
-    scene.vkDevice().freeMemory(demo->uniformData.mem, nullptr);
-
-    scene.vkDevice().destroyBuffer(demo->vertices.buf, nullptr);
-    scene.vkDevice().freeMemory(demo->vertices.mem, nullptr);
-    scene.vkDevice().destroyBuffer(demo->indices.buf, nullptr);
-    scene.vkDevice().freeMemory(demo->indices.mem, nullptr);
-
-    for (uint32_t i = 0; i < DEMO_TEXTURE_COUNT; i++) {
-        scene.vkDevice().destroyImageView(demo->textures[i].view, nullptr);
-        scene.vkDevice().destroyImage(demo->textures[i].image, nullptr);
-        scene.vkDevice().freeMemory(demo->textures[i].mem, nullptr);
-        scene.vkDevice().destroySampler(demo->textures[i].sampler, nullptr);
-    }
-
-    for (uint32_t i = 0; i < demo->swapchainImageCount; i++) {
-        scene.vkDevice().destroyImageView(demo->buffers[i].view, nullptr);
-    }
-
-    scene.vkDevice().destroyImageView(demo->depth.view, nullptr);
-    scene.vkDevice().destroyImage(demo->depth.image, nullptr);
-    scene.vkDevice().freeMemory(demo->depth.mem, nullptr);
-
-    delete[] demo->buffers;
-
-    // Second, re-perform the demo_prepare() function, which will re-create the
-    // swapchain:
-    demo_prepare(demo, scene);
 }
 
 DemoScene::DemoScene(GLFWwindow *window) : Scene(window) {
-  glfwGetWindowSize(window, &demo_.width, &demo_.height);
   demo_.window = window;
-
   demo_prepare(&demo_, *this);
-
-  set_camera(addComponent<engine::FreeFlyCamera>(glm::radians(60.0), 0.1, 100, glm::dvec3(1, 1, -1)));
+  set_camera(AddComponent<engine::FreeFlyCamera>(glm::radians(60.0), 0.1, 100, glm::dvec3(1, 1, -1)));
 }
 
 DemoScene::~DemoScene() {
   demo_cleanup(&demo_, *this);
 }
 
-void DemoScene::render() {
+void DemoScene::Render() {
   demo_draw(&demo_, *this);
 }
 
-void DemoScene::update() {
+void DemoScene::Update() {
   glm::mat4 mvp = scene()->camera()->projectionMatrix() *
                   scene()->camera()->cameraMatrix();
 
@@ -1104,14 +709,41 @@ void DemoScene::update() {
   std::memcpy(pData, &mvp, sizeof(mvp));
 
   vkDevice().unmapMemory(demo_.uniformData.mem);
-
-  // Wait for work to finish before updating MVP.
-  //demo_.device.waitIdle();
 }
 
-void DemoScene::screenResized(size_t width, size_t height) {
-  demo_.width = width;
-  demo_.height = width;
-  demo_resize(&demo_, *this);
+
+void DemoScene::ScreenResizedClean() {
+  for (uint32_t i = 0; i < scene()->vkSwapchainImageCount(); i++) {
+    scene()->vkDevice().destroyFramebuffer(demo_.framebuffers[i], nullptr);
+  }
+  delete[] demo_.framebuffers;
+  scene()->vkDevice().destroyDescriptorPool(demo_.desc_pool, nullptr);
+
+  scene()->vkDevice().destroyPipeline(demo_.pipeline, nullptr);
+  scene()->vkDevice().destroyRenderPass(demo_.render_pass, nullptr);
+  scene()->vkDevice().destroyPipelineLayout(demo_.pipeline_layout, nullptr);
+  scene()->vkDevice().destroyDescriptorSetLayout(demo_.desc_layout, nullptr);
+
+  scene()->vkDevice().destroyBuffer(demo_.uniformData.buf, nullptr);
+  scene()->vkDevice().freeMemory(demo_.uniformData.mem, nullptr);
+
+  scene()->vkDevice().destroyBuffer(demo_.vertices.buf, nullptr);
+  scene()->vkDevice().freeMemory(demo_.vertices.mem, nullptr);
+  scene()->vkDevice().destroyBuffer(demo_.indices.buf, nullptr);
+  scene()->vkDevice().freeMemory(demo_.indices.mem, nullptr);
+
+  for (uint32_t i = 0; i < DEMO_TEXTURE_COUNT; i++) {
+    scene()->vkDevice().destroyImageView(demo_.textures[i].view, nullptr);
+    scene()->vkDevice().destroyImage(demo_.textures[i].image, nullptr);
+    scene()->vkDevice().freeMemory(demo_.textures[i].mem, nullptr);
+    scene()->vkDevice().destroySampler(demo_.textures[i].sampler, nullptr);
+  }
+
+  Scene::ScreenResizedClean();
+}
+
+void DemoScene::ScreenResized(size_t width, size_t height) {
+  Scene::ScreenResized(width, height);
+  demo_prepare(&demo_, *this);
 }
 

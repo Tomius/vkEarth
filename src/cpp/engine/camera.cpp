@@ -5,7 +5,7 @@
 
 namespace engine {
 
-void FreeFlyCamera::update() {
+void FreeFlyCamera::Update() {
   glm::dvec2 cursor_pos;
   GLFWwindow* window = scene_->window();
   glfwGetCursorPos(window, &cursor_pos.x, &cursor_pos.y);
@@ -61,7 +61,7 @@ void FreeFlyCamera::update() {
   update_cache();
 }
 
-void ThirdPersonalCamera::update() {
+void ThirdPersonalCamera::Update() {
   static glm::dvec2 prev_cursor_pos;
   glm::dvec2 cursor_pos;
   GLFWwindow* window = scene_->window();

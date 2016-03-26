@@ -6,8 +6,68 @@
 #include <GLFW/glfw3.h>
 
 #include "common/error_checking.hpp"
+#include "common/vulkan_memory.hpp"
 
 namespace engine {
+
+/******************************************************
+*                      SetImageLayout                 *
+*******************************************************/
+void Scene::SetImageLayout(const vk::Image& image,
+                           const vk::ImageAspectFlags& aspectMask,
+                           const vk::ImageLayout& oldImageLayout,
+                           const vk::ImageLayout& newImageLayout) {
+    if (vkSetupCmd_ == VK_NULL_HANDLE) {
+        const vk::CommandBufferAllocateInfo cmd = vk::CommandBufferAllocateInfo()
+            .commandPool(vkCmdPool_)
+            .level(vk::CommandBufferLevel::ePrimary)
+            .commandBufferCount(1);
+
+        vk::chk(vkDevice_.allocateCommandBuffers(&cmd, &vkSetupCmd_));
+
+        vk::CommandBufferInheritanceInfo cmdBufInhInfo =
+            vk::CommandBufferInheritanceInfo();
+
+        vk::CommandBufferBeginInfo cmdBufInfo =
+          vk::CommandBufferBeginInfo().pInheritanceInfo(&cmdBufInhInfo);
+
+        vk::chk(vkSetupCmd_.begin(&cmdBufInfo));
+    }
+
+    vk::ImageMemoryBarrier imageMemoryBarrier = vk::ImageMemoryBarrier()
+        .oldLayout(oldImageLayout)
+        .newLayout(newImageLayout)
+        .image(image)
+        .subresourceRange({aspectMask, 0, 1, 0, 1});
+
+    if (newImageLayout == vk::ImageLayout::eTransferDstOptimal) {
+        /* Make sure anything that was copying from this image has completed */
+        imageMemoryBarrier.dstAccessMask(vk::AccessFlagBits::eTransferRead);
+    }
+
+    if (newImageLayout == vk::ImageLayout::eColorAttachmentOptimal) {
+        imageMemoryBarrier.dstAccessMask(
+            vk::AccessFlagBits::eColorAttachmentWrite);
+    }
+
+    if (newImageLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal) {
+        imageMemoryBarrier.dstAccessMask(
+            vk::AccessFlagBits::eDepthStencilAttachmentWrite);
+    }
+
+    if (newImageLayout == vk::ImageLayout::eShaderReadOnlyOptimal) {
+        /* Make sure any Copy or CPU writes to image are flushed */
+        imageMemoryBarrier.dstAccessMask(vk::AccessFlagBits::eShaderRead |
+            vk::AccessFlagBits::eInputAttachmentRead);
+    }
+
+    vk::PipelineStageFlags srcStages = vk::PipelineStageFlagBits::eTopOfPipe;
+    vk::PipelineStageFlags destStages = vk::PipelineStageFlagBits::eTopOfPipe;
+
+    vkSetupCmd_.pipelineBarrier(srcStages, destStages,
+      vk::DependencyFlags(), 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
+}
+
 
 /******************************************************
 *                  GET_INSTANCE_PROC_ADDR             *
@@ -321,6 +381,224 @@ void Scene::GetSurfaceProperties(const vk::PhysicalDevice& gpu,
     // Get Memory information and properties
     gpu.getMemoryProperties(&memoryProperties);
 }
+
+
+/******************************************************
+*                  GetSurfaceProperties               *
+*******************************************************/
+Scene::DepthBuffer Scene::CreateDepthBuffer(GLFWwindow* window,
+                                            const vk::Device& vkDevice,
+                                            Scene& scene) {
+  DepthBuffer depth;
+
+  const vk::Format depth_format = vk::Format::eD16Unorm;
+  const vk::ImageCreateInfo image = vk::ImageCreateInfo()
+      .imageType(vk::ImageType::e2D)
+      .format(depth_format)
+      .extent(vk::Extent3D(scene.framebufferSize().x, scene.framebufferSize().y, 1))
+      .mipLevels(1)
+      .arrayLayers(1)
+      .samples(vk::SampleCountFlagBits::e1)
+      .tiling(vk::ImageTiling::eOptimal)
+      .usage(vk::ImageUsageFlagBits::eDepthStencilAttachment);
+
+  vk::MemoryAllocateInfo mem_alloc;
+  vk::ImageViewCreateInfo view = vk::ImageViewCreateInfo()
+    .format(depth_format)
+    .subresourceRange(vk::ImageSubresourceRange()
+      .aspectMask(vk::ImageAspectFlagBits::eDepth)
+      .baseMipLevel(0)
+      .levelCount(1)
+      .baseArrayLayer(0)
+      .layerCount(1)
+    )
+    .viewType(vk::ImageViewType::e2D);
+
+  vk::MemoryRequirements mem_reqs;
+
+  depth.format = depth_format;
+
+  /* create image */
+  vk::chk(vkDevice.createImage(&image, nullptr, &depth.image));
+
+  /* get memory requirements for this object */
+  vkDevice.getImageMemoryRequirements(depth.image, &mem_reqs);
+
+  /* select memory size and type */
+  mem_alloc.allocationSize(mem_reqs.size());
+  MemoryTypeFromProperties(scene.vkGpuMemoryProperties(),
+                           mem_reqs.memoryTypeBits(),
+                           vk::MemoryPropertyFlags(), /* No requirements */
+                           mem_alloc);
+
+  /* allocate memory */
+  vk::chk(vkDevice.allocateMemory(&mem_alloc, nullptr, &depth.mem));
+
+  /* bind memory */
+  vk::chk(vkDevice.bindImageMemory(depth.image, depth.mem, 0));
+
+  scene.SetImageLayout(depth.image, vk::ImageAspectFlagBits::eDepth,
+                 vk::ImageLayout::eUndefined,
+                 vk::ImageLayout::eDepthStencilAttachmentOptimal);
+
+  /* create image view */
+  view.image(depth.image);
+  vk::chk(vkDevice.createImageView(&view, nullptr, &depth.view));
+
+  return depth;
+}
+
+
+void Scene::FlushInitCommand() {
+  if (vkSetupCmd_ == VK_NULL_HANDLE)
+    return;
+
+  vk::chk(vkSetupCmd_.end());
+
+  const vk::CommandBuffer commandBuffers[] = {vkSetupCmd_};
+  vk::Fence nullFence = {VK_NULL_HANDLE};
+  vk::SubmitInfo submitInfo = vk::SubmitInfo()
+                               .commandBufferCount(1)
+                               .pCommandBuffers(commandBuffers);
+
+  vk::chk(vkQueue_.submit(1, &submitInfo, nullFence));
+  vk::chk(vkQueue_.waitIdle());
+
+  vkDevice_.freeCommandBuffers(vkCmdPool_, 1, commandBuffers);
+  vkSetupCmd_ = VK_NULL_HANDLE;
+}
+
+
+void Scene::PrepareBuffers() {
+  vk::SwapchainKHR oldSwapchain = vkSwapchain_;
+
+  // Check the surface capabilities and formats
+  vk::SurfaceCapabilitiesKHR surfCapabilities;
+  VkSurfaceCapabilitiesKHR& vkSurfCapabilities =
+      const_cast<VkSurfaceCapabilitiesKHR&>(
+        static_cast<const VkSurfaceCapabilitiesKHR&>(surfCapabilities));
+  VkChk(vkApp_.entryPoints.fpGetPhysicalDeviceSurfaceCapabilitiesKHR(
+      vkGpu_, vkSurface_, &vkSurfCapabilities));
+
+  uint32_t presentModeCount;
+  VkChk(vkApp_.entryPoints.fpGetPhysicalDeviceSurfacePresentModesKHR(
+      vkGpu_, vkSurface_, &presentModeCount, nullptr));
+
+  std::unique_ptr<VkPresentModeKHR> presentModes{
+    new VkPresentModeKHR[presentModeCount]};
+
+  VkChk(vkApp_.entryPoints.fpGetPhysicalDeviceSurfacePresentModesKHR(
+        vkGpu_, vkSurface_, &presentModeCount, presentModes.get()));
+
+  vk::Extent2D swapchainExtent;
+  // width and height are either both -1, or both not -1.
+  if (surfCapabilities.currentExtent().width() == (uint32_t)-1) {
+      // If the surface size is undefined, the size is set to
+      // the size of the images requested.
+      swapchainExtent.width(framebufferSize_.x);
+      swapchainExtent.height(framebufferSize_.y);
+  } else {
+      // If the surface size is defined, the swap chain size must match
+      swapchainExtent = surfCapabilities.currentExtent();
+      framebufferSize_.x = surfCapabilities.currentExtent().width();
+      framebufferSize_.y = surfCapabilities.currentExtent().height();
+  }
+
+#if VK_VSYNC
+  vk::PresentModeKHR swapchainPresentMode = vk::PresentModeKHR::eFifoKHR;
+#else
+  vk::PresentModeKHR swapchainPresentMode = vk::PresentModeKHR::eImmediateKHR;
+#endif
+
+  // Determine the number of vk::Image's to use in the swap chain (we desire to
+  // own only 1 image at a time, besides the images being displayed and
+  // queued for display):
+  uint32_t desiredNumberOfSwapchainImages = surfCapabilities.minImageCount() + 1;
+  if ((surfCapabilities.maxImageCount() > 0) &&
+      (desiredNumberOfSwapchainImages > surfCapabilities.maxImageCount())) {
+      // Application must settle for fewer images than desired:
+      desiredNumberOfSwapchainImages = surfCapabilities.maxImageCount();
+  }
+
+  vk::SurfaceTransformFlagBitsKHR preTransform;
+  if (surfCapabilities.supportedTransforms() & vk::SurfaceTransformFlagBitsKHR::eIdentity) {
+      preTransform = vk::SurfaceTransformFlagBitsKHR::eIdentity;
+  } else {
+      preTransform = surfCapabilities.currentTransform();
+  }
+
+  const vk::SwapchainCreateInfoKHR swapchainInfo = vk::SwapchainCreateInfoKHR()
+      .surface(vkSurface_)
+      .minImageCount(desiredNumberOfSwapchainImages)
+      .imageFormat(vkSurfaceFormat_)
+      .imageColorSpace(vkSurfaceColorSpace_)
+      .imageExtent(vk::Extent2D{swapchainExtent.width(), swapchainExtent.height()})
+      .imageUsage(vk::ImageUsageFlagBits::eColorAttachment)
+      .preTransform(preTransform)
+      .compositeAlpha(vk::CompositeAlphaFlagBitsKHR::eOpaque)
+      .imageArrayLayers(1)
+      .imageSharingMode(vk::SharingMode::eExclusive)
+      .queueFamilyIndexCount(0)
+      .pQueueFamilyIndices(nullptr)
+      .presentMode(swapchainPresentMode)
+      .oldSwapchain(oldSwapchain)
+      .clipped(true);
+
+  const VkSwapchainCreateInfoKHR& vkSwapchainInfo = swapchainInfo;
+  VkSwapchainKHR vkSwapchain = vkSwapchain_;
+  VkChk(vkApp_.entryPoints.fpCreateSwapchainKHR(
+      vkDevice_, &vkSwapchainInfo, nullptr, &vkSwapchain));
+  vkSwapchain_ = vkSwapchain;
+
+  // If we just re-created an existing swapchain, we should destroy the old
+  // swapchain at this point.
+  // Note: destroying the swapchain also cleans up all its associated
+  // presentable images once the platform is done with them.
+  if (oldSwapchain != VK_NULL_HANDLE) {
+      vkApp_.entryPoints.fpDestroySwapchainKHR(vkDevice_, oldSwapchain, nullptr);
+  }
+
+  VkChk(vkApp_.entryPoints.fpGetSwapchainImagesKHR(
+       vkDevice_, vkSwapchain_, &vkSwapchainImageCount_, nullptr));
+
+  VkImage *swapchainImages = new VkImage[vkSwapchainImageCount_];
+  VkChk(vkApp_.entryPoints.fpGetSwapchainImagesKHR(
+      vkDevice_, vkSwapchain_, &vkSwapchainImageCount_, swapchainImages));
+
+  vkBuffers_ = new SwapchainBuffers[vkSwapchainImageCount_];
+
+  for (uint32_t i = 0; i < vkSwapchainImageCount_; i++) {
+      vk::ImageViewCreateInfo color_attachment_view = vk::ImageViewCreateInfo()
+          .format(vkSurfaceFormat_)
+          .subresourceRange(vk::ImageSubresourceRange()
+            .aspectMask(vk::ImageAspectFlagBits::eColor)
+            .baseMipLevel(0)
+            .levelCount(1)
+            .baseArrayLayer(0)
+            .layerCount(1)
+          )
+          .viewType(vk::ImageViewType::e2D);
+
+      vkBuffers_[i].image = swapchainImages[i];
+
+      // Render loop will expect image to have been used before and in
+      // vk::ImageLayout::ePresentSrcKHR
+      // layout and will change to COLOR_ATTACHMENT_OPTIMAL, so init the image
+      // to that state
+      SetImageLayout(vkBuffers_[i].image,
+                     vk::ImageAspectFlagBits::eColor,
+                     vk::ImageLayout::eUndefined,
+                     vk::ImageLayout::ePresentSrcKHR);
+
+      color_attachment_view.image(vkBuffers_[i].image);
+
+      vkDevice_.createImageView(&color_attachment_view, nullptr,
+                                &vkBuffers_[i].view);
+  }
+
+  vkCurrentBuffer_ = 0;
+}
+
 
 #if VK_VALIDATE
 

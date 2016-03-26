@@ -21,11 +21,11 @@ GameObject::~GameObject() {
   }
   // this shouldn't be neccessary, but just in case...
   if (parent_) {
-    parent_->removeComponent(this);
+    parent_->RemoveComponent(this);
   }
 }
 
-GameObject* GameObject::addComponent(std::unique_ptr<GameObject>&& component) {
+GameObject* GameObject::AddComponent(std::unique_ptr<GameObject>&& component) {
   try {
     GameObject *obj = component.get();
     components_.push_back(std::move(component));
@@ -72,110 +72,112 @@ void GameObject::set_group(int value) {
   }
 }
 
-void GameObject::shadowRenderAll() {
+void GameObject::RenderAll() {
   for (auto& component : sorted_components_) {
     if (component == this) {
-      _TRY_(shadowRender());
+      _TRY_(Render());
     } else {
-      component->shadowRenderAll();
+      component->RenderAll();
     }
   }
 }
 
-void GameObject::renderAll() {
+void GameObject::Render2DAll() {
   for (auto& component : sorted_components_) {
     if (component == this) {
-      _TRY_(render());
+      _TRY_(Render2D());
     } else {
-      component->renderAll();
+      component->Render2DAll();
     }
   }
 }
 
-void GameObject::render2DAll() {
+void GameObject::ScreenResizedCleanAll() {
+  for (auto& component : sorted_components_) {
+    if (component != this) {
+      component->ScreenResizedCleanAll();
+    }
+  }
+  _TRY_(ScreenResizedClean());
+}
+
+void GameObject::ScreenResizedAll(size_t width, size_t height) {
+  _TRY_(ScreenResized(width, height));
+  for (auto& component : sorted_components_) {
+    if (component != this) {
+      component->ScreenResizedAll(width, height);
+    }
+  }
+}
+
+void GameObject::UpdateAll() {
+  InternalUpdate();
   for (auto& component : sorted_components_) {
     if (component == this) {
-      _TRY_(render2D());
+      _TRY_(Update());
     } else {
-      component->render2DAll();
+      component->UpdateAll();
     }
   }
 }
 
-void GameObject::screenResizedAll(size_t width, size_t height) {
+void GameObject::KeyActionAll(int key, int scancode, int action, int mods) {
   for (auto& component : sorted_components_) {
     if (component == this) {
-      _TRY_(screenResized(width, height));
+      _TRY_(KeyAction(key, scancode, action, mods));
     } else {
-      component->screenResizedAll(width, height);
+      component->KeyActionAll(key, scancode, action, mods);
     }
   }
 }
 
-void GameObject::updateAll() {
-  internalUpdate();
+void GameObject::CharTypedAll(unsigned codepoint) {
   for (auto& component : sorted_components_) {
-    if (component != this) {
-      component->updateAll();
+    if (component == this) {
+      _TRY_(CharTyped(codepoint));
+    } else {
+      component->CharTypedAll(codepoint);
     }
   }
 }
 
-void GameObject::keyActionAll(int key, int scancode, int action, int mods) {
+void GameObject::MouseScrolledAll(double xoffset, double yoffset) {
   for (auto& component : sorted_components_) {
-    if (component != this) {
-      component->keyActionAll(key, scancode, action, mods);
+    if (component == this) {
+      _TRY_(MouseScrolled(xoffset, yoffset));
+    } else {
+      component->MouseScrolledAll(xoffset, yoffset);
     }
   }
 }
 
-void GameObject::charTypedAll(unsigned codepoint) {
+void GameObject::MouseButtonPressedAll(int button, int action, int mods) {
   for (auto& component : sorted_components_) {
-    if (component != this) {
-      component->charTypedAll(codepoint);
+    if (component == this) {
+      _TRY_(MouseButtonPressed(button, action, mods));
+    } else {
+      component->MouseButtonPressedAll(button, action, mods);
     }
   }
 }
 
-void GameObject::mouseScrolledAll(double xoffset, double yoffset) {
+void GameObject::MouseMovedAll(double xpos, double ypos) {
   for (auto& component : sorted_components_) {
-    if (component != this) {
-      component->mouseScrolledAll(xoffset, yoffset);
+    if (component == this) {
+      _TRY_(MouseMoved(xpos, ypos));
+    } else {
+      component->MouseMovedAll(xpos, ypos);
     }
   }
 }
 
-void GameObject::mouseButtonPressedAll(int button, int action, int mods) {
-  for (auto& component : sorted_components_) {
-    if (component != this) {
-      component->mouseButtonPressedAll(button, action, mods);
-    }
-  }
+void GameObject::InternalUpdate() {
+  RemoveComponents();
+  UpdateSortedComponents();
 }
 
-void GameObject::mouseMovedAll(double xpos, double ypos) {
-  for (auto& component : sorted_components_) {
-    if (component != this) {
-      component->mouseMovedAll(xpos, ypos);
-    }
-  }
-}
-
-void GameObject::collisionAll(const GameObject* other) {
-  for (auto& component : sorted_components_) {
-    if (component != this) {
-      component->collisionAll(other);
-    }
-  }
-}
-
-void GameObject::internalUpdate() {
-  removeComponents();
-  updateSortedComponents();
-}
-
-void GameObject::updateSortedComponents() {
-  removeComponents();
+void GameObject::UpdateSortedComponents() {
+  RemoveComponents();
   for (const auto& element : components_just_disabled_) {
     sorted_components_.erase(element);
   }
@@ -186,12 +188,12 @@ void GameObject::updateSortedComponents() {
   int width, height;
   glfwGetWindowSize(scene()->window(), &width, &height);
   for (const auto& component : components_just_enabled_) {
-    component->screenResizedAll(width, height);
+    component->ScreenResizedAll(width, height);
   }
   components_just_enabled_.clear();
 }
 
-void GameObject::removeComponents() {
+void GameObject::RemoveComponents() {
   if (!remove_predicate_.components_.empty()) {
     components_.erase(std::remove_if(components_.begin(), components_.end(),
       remove_predicate_), components_.end());

@@ -18,7 +18,7 @@ GameObject::GameObject(GameObject* parent, const Transform_t& transform)
 }
 
 template<typename T, typename... Args>
-T* GameObject::addComponent(Args&&... args) {
+T* GameObject::AddComponent(Args&&... args) {
   static_assert(std::is_base_of<GameObject, T>::value, "Unknown type");
 
   try {
@@ -34,46 +34,7 @@ T* GameObject::addComponent(Args&&... args) {
   }
 }
 
-template<typename T>
-T* GameObject::FindComponent(const GameObject* go) {
-  if (!go) { return nullptr; }
-
-  for (auto& comp_ptr : go->components_) {
-    GameObject* comp = comp_ptr.get();
-    T* t = dynamic_cast<T*>(comp);
-    if (t) {
-      return t;
-    } else {
-      t = FindComponent<T>(comp);
-      if (t) { return t; }
-    }
-  }
-  return nullptr;
-}
-
-template<typename T>
-void GameObject::FindComponents(const GameObject* go, std::vector<T*> *found) {
-  if (!go) { return; }
-
-  for (auto& comp_ptr : go->components_) {
-    GameObject* comp = comp_ptr.get();
-    T* t = dynamic_cast<T*>(comp);
-    if (t) {
-      found->push_back(t);
-    }
-    FindComponent<T>(comp);
-  }
-  return;
-}
-
-template<typename T>
-std::vector<T*> GameObject::findComponents() const {
-  std::vector<T*> found;
-  FindComponents<T>(this, &found);
-  return found;
-}
-
-inline bool GameObject::stealComponent(GameObject* go) {
+inline bool GameObject::StealComponent(GameObject* go) {
   if (!go) { return false; }
   GameObject* parent = go->parent();
   if (!parent) {return false; }
@@ -87,7 +48,7 @@ inline bool GameObject::stealComponent(GameObject* go) {
       parent->components_just_disabled_.push_back(comp);
       // The iter->release() leaves a nullptr in the parent->components_
       // that should be removed, as it decrases performance
-      parent->removeComponent(nullptr);
+      parent->RemoveComponent(nullptr);
       comp->parent_ = this;
       comp->transform_->set_parent(transform_.get());
       comp->scene_ = scene_;
@@ -103,16 +64,10 @@ inline int GameObject::NextUid() {
   return uid++;
 }
 
-inline void GameObject::removeComponent(GameObject* component_to_remove) {
+inline void GameObject::RemoveComponent(GameObject* component_to_remove) {
   if (component_to_remove == nullptr) { return; }
   components_just_disabled_.push_back(component_to_remove);
   remove_predicate_.components_.insert(component_to_remove);
-}
-
-template <typename T>
-void GameObject::removeComponents(T begin, T end) {
-  components_just_disabled_.insert(components_just_disabled_.end(), begin, end);
-  remove_predicate_.components_.insert(begin, end);
 }
 
 }  // namespace engine

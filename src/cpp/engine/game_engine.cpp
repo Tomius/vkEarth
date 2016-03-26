@@ -33,7 +33,7 @@ GameEngine::GameEngine() {
   glfwSetWindowUserPointer(window_, this);
   glfwSetKeyCallback(window_, KeyCallback);
   glfwSetCharCallback(window_, CharCallback);
-  glfwSetFramebufferSizeCallback(window_, ScreenResizeCallback);
+  //glfwSetFramebufferSizeCallback(window_, ScreenResizeCallback);
   glfwSetScrollCallback(window_, MouseScrolledCallback);
   glfwSetMouseButtonCallback(window_, MouseButtonPressed);
   glfwSetCursorPosCallback(window_, MouseMoved);
@@ -112,7 +112,7 @@ void GameEngine::KeyCallback(GLFWwindow* window, int key, int scancode,
 
   GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
   if (gameEngine && gameEngine->scene_) {
-    gameEngine->scene_->keyActionAll(key, scancode, action, mods);
+    gameEngine->scene_->KeyActionAll(key, scancode, action, mods);
   }
 }
 

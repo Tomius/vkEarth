@@ -35,7 +35,7 @@ class GameEngine {
   static void CharCallback(GLFWwindow* window, unsigned codepoint) {
     GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
     if (gameEngine && gameEngine->scene_) {
-      gameEngine->scene_->charTypedAll(codepoint);
+      gameEngine->scene_->CharTypedAll(codepoint);
     }
   }
 
@@ -43,7 +43,8 @@ class GameEngine {
     GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
     if (gameEngine && gameEngine->scene_) {
       std::cout << "Screen resized to " << width << "x" << height << "." << std::endl;
-      gameEngine->scene_->screenResizedAll(width, height);
+      gameEngine->scene_->ScreenResizedCleanAll();
+      gameEngine->scene_->ScreenResizedAll(width, height);
     }
   }
 
@@ -51,7 +52,7 @@ class GameEngine {
                                     double yoffset) {
     GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
     if (gameEngine && gameEngine->scene_) {
-      gameEngine->scene_->mouseScrolledAll(xoffset, yoffset);
+      gameEngine->scene_->MouseScrolledAll(xoffset, yoffset);
     }
   }
 
@@ -59,14 +60,14 @@ class GameEngine {
                                  int action, int mods) {
     GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
     if (gameEngine && gameEngine->scene_) {
-      gameEngine->scene_->mouseButtonPressedAll(button, action, mods);
+      gameEngine->scene_->MouseButtonPressedAll(button, action, mods);
     }
   }
 
   static void MouseMoved(GLFWwindow* window, double xpos, double ypos) {
     GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
     if (gameEngine && gameEngine->scene_) {
-      gameEngine->scene_->mouseMovedAll(xpos, ypos);
+      gameEngine->scene_->MouseMovedAll(xpos, ypos);
     }
   }
 };

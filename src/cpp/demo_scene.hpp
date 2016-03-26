@@ -21,31 +21,9 @@ struct TextureObject {
     int32_t tex_width = 0, tex_height = 0;
 };
 
-struct SwapchainBuffers {
-    vk::Image image;
-    vk::CommandBuffer cmd;
-    vk::ImageView view;
-};
-
 struct Demo {
     GLFWwindow* window;
     bool use_staging_buffer = false;
-
-    int width = 600, height = 600;
-
-    uint32_t swapchainImageCount = 0;
-    vk::SwapchainKHR swapchain;
-    SwapchainBuffers *buffers = nullptr;
-
-    vk::CommandPool cmd_pool;
-
-    struct {
-        vk::Format format;
-
-        vk::Image image;
-        vk::DeviceMemory mem;
-        vk::ImageView view;
-    } depth;
 
     struct TextureObject textures[DEMO_TEXTURE_COUNT];
 
@@ -69,8 +47,6 @@ struct Demo {
         vk::DeviceMemory mem;
     } indices;
 
-    vk::CommandBuffer setup_cmd; // Command Buffer for initialization commands
-    vk::CommandBuffer draw_cmd;  // Command Buffer for drawing commands
     vk::PipelineLayout pipeline_layout;
     vk::DescriptorSetLayout desc_layout;
     vk::RenderPass render_pass;
@@ -81,8 +57,6 @@ struct Demo {
 
     vk::Framebuffer *framebuffers = nullptr;
 
-    uint32_t current_buffer = 0;
-
     GridMesh gridMesh{64};
 };
 
@@ -91,9 +65,10 @@ public:
   DemoScene(GLFWwindow *window);
   ~DemoScene();
 
-  virtual void render() override;
-  virtual void update() override;
-  virtual void screenResized(size_t width, size_t height) override;
+  virtual void Render() override;
+  virtual void Update() override;
+  virtual void ScreenResizedClean() override;
+  virtual void ScreenResized(size_t width, size_t height) override;
 
 private:
   Demo demo_;
