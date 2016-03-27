@@ -34,3 +34,12 @@ GridMesh::GridMesh(uint8_t dimension) : dimension_(dimension) {
 
   assert(index_count_ == indices_.size());
 }
+
+void GridMesh::addToRenderList(const glm::vec4& renderData) {
+  renderData_.push_back(renderData);
+}
+
+void GridMesh::clearRenderList() {
+  renderData_.clear();
+}
+

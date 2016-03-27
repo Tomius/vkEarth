@@ -19,7 +19,7 @@ void FreeFlyCamera::Update() {
     first_call_ = false;
   }
 
-  const double dt = scene_->camera_time().dt;
+  const double dt = scene_->cameraTime().dt;
 
   // Mouse movement - update the coordinate system
   if (diff.x || diff.y) {
@@ -75,7 +75,7 @@ void ThirdPersonalCamera::Update() {
     first_call_ = false;
   }
 
-  const double dt = scene_->camera_time().dt;
+  const double dt = scene_->cameraTime().dt;
 
   // Mouse movement - update the coordinate system
   if (diff.x || diff.y) {

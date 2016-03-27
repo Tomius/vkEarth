@@ -21,15 +21,15 @@ class Scene : public GameObject {
   Scene(GLFWwindow *window);
   ~Scene();
 
-  const Timer& camera_time() const { return camera_time_; }
-  Timer& camera_time() { return camera_time_; }
+  const Timer& cameraTime() const { return cameraTime_; }
+  Timer& cameraTime() { return cameraTime_; }
 
   const Camera* camera() const { return camera_; }
   Camera* camera() { return camera_; }
-  void set_camera(Camera* camera) { camera_ = camera; }
+  void setCamera(Camera* camera) { camera_ = camera; }
 
   GLFWwindow* window() const { return window_; }
-  void set_window(GLFWwindow* window) { window_ = window; }
+  void setWindow(GLFWwindow* window) { window_ = window; }
 
   virtual void KeyAction(int key, int scancode, int action, int mods) override;
   virtual void turn();
@@ -54,7 +54,8 @@ class Scene : public GameObject {
 
   const vk::SwapchainKHR& vkSwapchain() const { return vkSwapchain_; }
   uint32_t vkSwapchainImageCount() const { return vkSwapchainImageCount_; }
-  const SwapchainBuffers* vkBuffers() const { return vkBuffers_; }
+  const SwapchainBuffers* vkBuffers() const { return vkBuffers_.get(); }
+  SwapchainBuffers* vkBuffers() { return vkBuffers_.get(); }
   uint32_t& vkCurrentBuffer() { return vkCurrentBuffer_; }
 
   struct DepthBuffer {
@@ -76,7 +77,7 @@ class Scene : public GameObject {
 
  private:
   Camera* camera_;
-  Timer camera_time_;
+  Timer cameraTime_;
   GLFWwindow* window_;
 
   VulkanApplication vkApp_;
@@ -99,7 +100,7 @@ class Scene : public GameObject {
 
   vk::SwapchainKHR vkSwapchain_;
   uint32_t vkSwapchainImageCount_ = 0;
-  SwapchainBuffers* vkBuffers_ = nullptr;
+  std::unique_ptr<SwapchainBuffers> vkBuffers_;
   uint32_t vkCurrentBuffer_ = 0;
 
   vk::CommandPool vkCmdPool_;

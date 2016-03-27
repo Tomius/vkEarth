@@ -565,7 +565,8 @@ void Scene::PrepareBuffers() {
   VkChk(vkApp_.entryPoints.fpGetSwapchainImagesKHR(
       vkDevice_, vkSwapchain_, &vkSwapchainImageCount_, swapchainImages));
 
-  vkBuffers_ = new SwapchainBuffers[vkSwapchainImageCount_];
+  vkBuffers_ = std::unique_ptr<SwapchainBuffers>(
+      new SwapchainBuffers[vkSwapchainImageCount_]);
 
   for (uint32_t i = 0; i < vkSwapchainImageCount_; i++) {
       vk::ImageViewCreateInfo color_attachment_view = vk::ImageViewCreateInfo()
@@ -579,21 +580,21 @@ void Scene::PrepareBuffers() {
           )
           .viewType(vk::ImageViewType::e2D);
 
-      vkBuffers_[i].image = swapchainImages[i];
+      vkBuffers()[i].image = swapchainImages[i];
 
       // Render loop will expect image to have been used before and in
       // vk::ImageLayout::ePresentSrcKHR
       // layout and will change to COLOR_ATTACHMENT_OPTIMAL, so init the image
       // to that state
-      SetImageLayout(vkBuffers_[i].image,
+      SetImageLayout(vkBuffers()[i].image,
                      vk::ImageAspectFlagBits::eColor,
                      vk::ImageLayout::eUndefined,
                      vk::ImageLayout::ePresentSrcKHR);
 
-      color_attachment_view.image(vkBuffers_[i].image);
+      color_attachment_view.image(vkBuffers()[i].image);
 
       vkDevice_.createImageView(&color_attachment_view, nullptr,
-                                &vkBuffers_[i].view);
+                                &vkBuffers()[i].view);
   }
 
   vkCurrentBuffer_ = 0;

@@ -18,6 +18,7 @@
 #include "common/vulkan_memory.hpp"
 
 #define VERTEX_BUFFER_BIND_ID 0
+#define INSTANCE_BUFFER_BIND_ID 1
 
 #if defined(NDEBUG) && defined(__GNUC__)
   #define U_ASSERT_ONLY __attribute__((unused))
@@ -35,7 +36,7 @@ static void demo_draw_build_cmd(Demo *demo, engine::Scene& scene) {
         vk::ClearValue().depthStencil(vk::ClearDepthStencilValue{1.0, 0})
     };
     const vk::RenderPassBeginInfo rp_begin = vk::RenderPassBeginInfo()
-        .renderPass(demo->render_pass)
+        .renderPass(demo->renderPass)
         .framebuffer(demo->framebuffers[scene.vkCurrentBuffer()])
         .renderArea({vk::Offset2D(0, 0),
             vk::Extent2D(scene.framebufferSize().x, scene.framebufferSize().y)})
@@ -49,7 +50,7 @@ static void demo_draw_build_cmd(Demo *demo, engine::Scene& scene) {
     scene.vkDrawCmd().beginRenderPass(&rp_begin, vk::SubpassContents::eInline);
     scene.vkDrawCmd().bindPipeline(vk::PipelineBindPoint::eGraphics, demo->pipeline);
     scene.vkDrawCmd().bindDescriptorSets(vk::PipelineBindPoint::eGraphics,
-        demo->pipeline_layout, 0, 1, &demo->desc_set, 0, nullptr);
+        demo->pipelineLayout, 0, 1, &demo->descSet, 0, nullptr);
 
     vk::Viewport viewport = vk::Viewport()
       .width(scene.framebufferSize().x)
@@ -63,15 +64,18 @@ static void demo_draw_build_cmd(Demo *demo, engine::Scene& scene) {
 
     vk::DeviceSize offsets[1] = {0};
     scene.vkDrawCmd().bindVertexBuffers(VERTEX_BUFFER_BIND_ID, 1,
-                                     &demo->vertices.buf, offsets);
+                                        &demo->vertexAttribs.buf, offsets);
+    scene.vkDrawCmd().bindVertexBuffers(INSTANCE_BUFFER_BIND_ID, 1,
+                                        &demo->instanceAttribs.buf, offsets);
     scene.vkDrawCmd().bindIndexBuffer(demo->indices.buf,
-                                   vk::DeviceSize{},
-                                   vk::IndexType::eUint16);
+                                      vk::DeviceSize{},
+                                      vk::IndexType::eUint16);
 
     scene.vkDrawCmd().setLineWidth(2.0f);
 
     // scene.vkDrawCmd().draw(6, 1, 0, 0);
-    scene.vkDrawCmd().drawIndexed(demo->gridMesh.index_count_, 1, 0, 0, 0);
+    scene.vkDrawCmd().drawIndexed(demo->gridMesh.mesh_.index_count_,
+                                  demo->gridMesh.mesh_.renderData_.size(), 0, 0, 0);
     scene.vkDrawCmd().endRenderPass();
 
     vk::ImageMemoryBarrier prePresentBarrier = vk::ImageMemoryBarrier()
@@ -273,7 +277,7 @@ static void demo_prepare_textures(Demo *demo, engine::Scene& scene) {
     for (uint32_t i = 0; i < DEMO_TEXTURE_COUNT; i++) {
         if ((props.linearTilingFeatures() &
              vk::FormatFeatureFlagBits::eSampledImage) &&
-            !demo->use_staging_buffer) {
+            !demo->kUseStagingBuffer) {
             /* Device can texture using linear textures */
             demo_prepare_texture_image(demo, scene, tex_colors[i], &demo->textures[i],
                                        vk::ImageTiling::eLinear,
@@ -402,57 +406,78 @@ static void demo_prepare_indices(Demo *demo, engine::Scene& scene,
 }
 
 static void demo_prepare_vertices(Demo *demo, engine::Scene& scene) {
-  const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
-      .size(sizeof(svec2) * demo->gridMesh.positions_.size())
-      .usage(vk::BufferUsageFlagBits::eVertexBuffer);
-
   vk::MemoryAllocateInfo mem_alloc;
   vk::MemoryRequirements mem_reqs;
-  vk::Result U_ASSERT_ONLY err;
-  void *data;
 
-  err = scene.vkDevice().createBuffer(&buf_info, nullptr, &demo->vertices.buf);
-  assert(err == vk::Result::eSuccess);
+  { // vertexAttribs
+    const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
+      .size(sizeof(svec2) * demo->gridMesh.mesh_.positions_.size())
+      .usage(vk::BufferUsageFlagBits::eVertexBuffer);
 
-  scene.vkDevice().getBufferMemoryRequirements(demo->vertices.buf, &mem_reqs);
-  assert(err == vk::Result::eSuccess);
+    vk::chk(scene.vkDevice().createBuffer(&buf_info, nullptr, &demo->vertexAttribs.buf));
 
-  mem_alloc.allocationSize(mem_reqs.size());
-  MemoryTypeFromProperties(scene.vkGpuMemoryProperties(),
-                           mem_reqs.memoryTypeBits(),
-                           vk::MemoryPropertyFlagBits::eHostVisible,
-                           mem_alloc);
+    scene.vkDevice().getBufferMemoryRequirements(demo->vertexAttribs.buf, &mem_reqs);
 
-  err = scene.vkDevice().allocateMemory(&mem_alloc, nullptr, &demo->vertices.mem);
-  assert(err == vk::Result::eSuccess);
+    mem_alloc.allocationSize(mem_reqs.size());
+    MemoryTypeFromProperties(scene.vkGpuMemoryProperties(),
+                             mem_reqs.memoryTypeBits(),
+                             vk::MemoryPropertyFlagBits::eHostVisible,
+                             mem_alloc);
 
-  err = scene.vkDevice().mapMemory(demo->vertices.mem, 0, mem_alloc.allocationSize(),
-                               vk::MemoryMapFlags{}, &data);
-  assert(err == vk::Result::eSuccess);
+    vk::chk(scene.vkDevice().allocateMemory(&mem_alloc, nullptr, &demo->vertexAttribs.mem));
+    vk::chk(scene.vkDevice().bindBufferMemory(demo->vertexAttribs.buf, demo->vertexAttribs.mem, 0));
 
-  std::memcpy(data, demo->gridMesh.positions_.data(),
-              sizeof(svec2) * demo->gridMesh.positions_.size());
+    void *data;
+    vk::chk(scene.vkDevice().mapMemory(demo->vertexAttribs.mem, 0, mem_alloc.allocationSize(),
+                                 vk::MemoryMapFlags{}, &data));
 
-  scene.vkDevice().unmapMemory(demo->vertices.mem);
+    std::memcpy(data, demo->gridMesh.mesh_.positions_.data(),
+                sizeof(svec2) * demo->gridMesh.mesh_.positions_.size());
 
-  err = scene.vkDevice().bindBufferMemory(demo->vertices.buf, demo->vertices.mem, 0);
-  assert(err == vk::Result::eSuccess);
+    scene.vkDevice().unmapMemory(demo->vertexAttribs.mem);
+  }
 
-  demo_prepare_indices(demo, scene, demo->gridMesh.indices_);
+  { // instanceAttribs
+    const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
+      .size(sizeof(glm::vec4) * MAX_INSTANCE_COUNT)
+      .usage(vk::BufferUsageFlagBits::eVertexBuffer);
 
-  demo->vertices.vi.vertexBindingDescriptionCount(1);
-  demo->vertices.vi.pVertexBindingDescriptions(demo->vertices.vi_bindings);
-  demo->vertices.vi.vertexAttributeDescriptionCount(1);
-  demo->vertices.vi.pVertexAttributeDescriptions(demo->vertices.vi_attrs);
+    vk::chk(scene.vkDevice().createBuffer(&buf_info, nullptr, &demo->instanceAttribs.buf));
 
-  demo->vertices.vi_bindings[0].binding(VERTEX_BUFFER_BIND_ID);
-  demo->vertices.vi_bindings[0].stride(sizeof(svec2));
-  demo->vertices.vi_bindings[0].inputRate(vk::VertexInputRate::eVertex);
+    scene.vkDevice().getBufferMemoryRequirements(demo->instanceAttribs.buf, &mem_reqs);
 
-  demo->vertices.vi_attrs[0].binding(VERTEX_BUFFER_BIND_ID);
-  demo->vertices.vi_attrs[0].location(0);
-  demo->vertices.vi_attrs[0].format(vk::Format::eR16G16Sint);
-  demo->vertices.vi_attrs[0].offset(0);
+    mem_alloc.allocationSize(mem_reqs.size());
+    MemoryTypeFromProperties(scene.vkGpuMemoryProperties(),
+                             mem_reqs.memoryTypeBits(),
+                             vk::MemoryPropertyFlagBits::eHostVisible,
+                             mem_alloc);
+
+    vk::chk(scene.vkDevice().allocateMemory(&mem_alloc, nullptr, &demo->instanceAttribs.mem));
+    vk::chk(scene.vkDevice().bindBufferMemory(demo->instanceAttribs.buf, demo->instanceAttribs.mem, 0));
+  }
+
+  demo->vertexInput.vertexBindingDescriptionCount(2);
+  demo->vertexInput.pVertexBindingDescriptions(demo->vertexInputBindings);
+  demo->vertexInput.vertexAttributeDescriptionCount(2);
+  demo->vertexInput.pVertexAttributeDescriptions(demo->vertexInputAttribs);
+
+  demo->vertexInputBindings[0].binding(VERTEX_BUFFER_BIND_ID);
+  demo->vertexInputBindings[0].stride(sizeof(svec2));
+  demo->vertexInputBindings[0].inputRate(vk::VertexInputRate::eVertex);
+
+  demo->vertexInputAttribs[0].binding(VERTEX_BUFFER_BIND_ID);
+  demo->vertexInputAttribs[0].location(0);
+  demo->vertexInputAttribs[0].format(vk::Format::eR16G16Sint);
+  demo->vertexInputAttribs[0].offset(0);
+
+  demo->vertexInputBindings[1].binding(INSTANCE_BUFFER_BIND_ID);
+  demo->vertexInputBindings[1].stride(sizeof(glm::vec4));
+  demo->vertexInputBindings[1].inputRate(vk::VertexInputRate::eInstance);
+
+  demo->vertexInputAttribs[1].binding(INSTANCE_BUFFER_BIND_ID);
+  demo->vertexInputAttribs[1].location(1);
+  demo->vertexInputAttribs[1].format(vk::Format::eR32G32B32A32Sfloat);
+  demo->vertexInputAttribs[1].offset(0);
 }
 
 static void demo_prepare_descriptor_layout(Demo *demo, engine::Scene& scene) {
@@ -477,20 +502,20 @@ static void demo_prepare_descriptor_layout(Demo *demo, engine::Scene& scene) {
     vk::Result U_ASSERT_ONLY err;
 
     err = scene.vkDevice().createDescriptorSetLayout(&descriptor_layout, nullptr,
-                                                 &demo->desc_layout);
+                                                 &demo->descLayout);
     assert(err == vk::Result::eSuccess);
 
     const vk::PipelineLayoutCreateInfo pPipelineLayoutCreateInfo =
       vk::PipelineLayoutCreateInfo()
         .setLayoutCount(1)
-        .pSetLayouts(&demo->desc_layout);
+        .pSetLayouts(&demo->descLayout);
 
     err = scene.vkDevice().createPipelineLayout(&pPipelineLayoutCreateInfo, nullptr,
-                                            &demo->pipeline_layout);
+                                            &demo->pipelineLayout);
     assert(err == vk::Result::eSuccess);
 }
 
-static void demo_prepare_render_pass(Demo *demo, engine::Scene& scene) {
+static void demo_prepare_renderPass(Demo *demo, engine::Scene& scene) {
     const vk::AttachmentDescription attachments[2] = {
       vk::AttachmentDescription()
         .format(scene.vkSurfaceFormat())
@@ -529,7 +554,7 @@ static void demo_prepare_render_pass(Demo *demo, engine::Scene& scene) {
         .pSubpasses(&subpass);
     vk::Result U_ASSERT_ONLY err;
 
-    err = scene.vkDevice().createRenderPass(&rp_info, nullptr, &demo->render_pass);
+    err = scene.vkDevice().createRenderPass(&rp_info, nullptr, &demo->renderPass);
     assert(err == vk::Result::eSuccess);
 }
 
@@ -551,14 +576,14 @@ static void demo_prepare_descriptor_pool(Demo *demo, engine::Scene& scene) {
 
     vk::Result U_ASSERT_ONLY err;
     err = scene.vkDevice().createDescriptorPool(&descriptor_pool, nullptr,
-                                            &demo->desc_pool);
+                                            &demo->descPool);
     assert(err == vk::Result::eSuccess);
 }
 
 static void init_uniform_buffer(Demo *demo, engine::Scene& scene) {
     vk::BufferCreateInfo buf_info = vk::BufferCreateInfo{}
         .usage(vk::BufferUsageFlagBits::eUniformBuffer)
-        .size(16*sizeof(float))
+        .size(sizeof(UniformData))
         .sharingMode(vk::SharingMode::eExclusive);
     vk::chk(scene.vkDevice().createBuffer(&buf_info, NULL, &demo->uniformData.buf));
 
@@ -580,7 +605,7 @@ static void init_uniform_buffer(Demo *demo, engine::Scene& scene) {
 
     demo->uniformData.bufferInfo.buffer(demo->uniformData.buf);
     demo->uniformData.bufferInfo.offset(0);
-    demo->uniformData.bufferInfo.range(16*sizeof(float));
+    demo->uniformData.bufferInfo.range(sizeof(UniformData));
 }
 
 static void demo_prepare_descriptor_set(Demo *demo, engine::Scene& scene) {
@@ -590,10 +615,10 @@ static void demo_prepare_descriptor_set(Demo *demo, engine::Scene& scene) {
 
     vk::DescriptorSetAllocateInfo alloc_info =
       vk::DescriptorSetAllocateInfo()
-        .descriptorPool(demo->desc_pool)
+        .descriptorPool(demo->descPool)
         .descriptorSetCount(1)
-        .pSetLayouts(&demo->desc_layout);
-    err = scene.vkDevice().allocateDescriptorSets(&alloc_info, &demo->desc_set);
+        .pSetLayouts(&demo->descLayout);
+    err = scene.vkDevice().allocateDescriptorSets(&alloc_info, &demo->descSet);
     assert(err == vk::Result::eSuccess);
 
     for (uint32_t i = 0; i < DEMO_TEXTURE_COUNT; i++) {
@@ -603,13 +628,13 @@ static void demo_prepare_descriptor_set(Demo *demo, engine::Scene& scene) {
     }
 
     writes[0].dstBinding(0);
-    writes[0].dstSet(demo->desc_set);
+    writes[0].dstSet(demo->descSet);
     writes[0].descriptorCount(DEMO_TEXTURE_COUNT);
     writes[0].descriptorType(vk::DescriptorType::eCombinedImageSampler);
     writes[0].pImageInfo(tex_descs);
 
     writes[1].dstBinding(1);
-    writes[1].dstSet(demo->desc_set);
+    writes[1].dstSet(demo->descSet);
     writes[1].descriptorCount(1);
     writes[1].descriptorType(vk::DescriptorType::eUniformBuffer);
     writes[1].pBufferInfo(&demo->uniformData.bufferInfo);
@@ -623,7 +648,7 @@ static void demo_prepare_framebuffers(Demo *demo, engine::Scene& scene) {
 
     const vk::FramebufferCreateInfo fb_info =
       vk::FramebufferCreateInfo()
-        .renderPass(demo->render_pass)
+        .renderPass(demo->renderPass)
         .attachmentCount(2)
         .pAttachments(attachments)
         .width(scene.framebufferSize().x)
@@ -644,14 +669,16 @@ static void demo_prepare_framebuffers(Demo *demo, engine::Scene& scene) {
 static void demo_prepare(Demo *demo, engine::Scene& scene) {
     demo_prepare_textures(demo, scene);
     demo_prepare_vertices(demo, scene);
-    demo_prepare_descriptor_layout(demo, scene);
-    demo_prepare_render_pass(demo, scene);
-    demo->pipeline = Initialize::PreparePipeline(scene.vkDevice(), demo->vertices.vi,
-                                                 demo->pipeline_layout, demo->render_pass);
-    init_uniform_buffer(demo, scene);
+    demo_prepare_indices(demo, scene, demo->gridMesh.mesh_.indices_);
 
+    demo_prepare_descriptor_layout(demo, scene);
+    init_uniform_buffer(demo, scene);
     demo_prepare_descriptor_pool(demo, scene);
     demo_prepare_descriptor_set(demo, scene);
+
+    demo_prepare_renderPass(demo, scene);
+    demo->pipeline = Initialize::PreparePipeline(scene.vkDevice(), demo->vertexInput,
+                                                 demo->pipelineLayout, demo->renderPass);
 
     demo_prepare_framebuffers(demo, scene);
 }
@@ -661,18 +688,20 @@ static void demo_cleanup(Demo *demo, engine::Scene& scene) {
         scene.vkDevice().destroyFramebuffer(demo->framebuffers[i], nullptr);
     }
     delete[] demo->framebuffers;
-    scene.vkDevice().destroyDescriptorPool(demo->desc_pool, nullptr);
+    scene.vkDevice().destroyDescriptorPool(demo->descPool, nullptr);
 
     scene.vkDevice().destroyPipeline(demo->pipeline, nullptr);
-    scene.vkDevice().destroyRenderPass(demo->render_pass, nullptr);
-    scene.vkDevice().destroyPipelineLayout(demo->pipeline_layout, nullptr);
-    scene.vkDevice().destroyDescriptorSetLayout(demo->desc_layout, nullptr);
+    scene.vkDevice().destroyRenderPass(demo->renderPass, nullptr);
+    scene.vkDevice().destroyPipelineLayout(demo->pipelineLayout, nullptr);
+    scene.vkDevice().destroyDescriptorSetLayout(demo->descLayout, nullptr);
 
     scene.vkDevice().destroyBuffer(demo->uniformData.buf, nullptr);
     scene.vkDevice().freeMemory(demo->uniformData.mem, nullptr);
 
-    scene.vkDevice().destroyBuffer(demo->vertices.buf, nullptr);
-    scene.vkDevice().freeMemory(demo->vertices.mem, nullptr);
+    scene.vkDevice().destroyBuffer(demo->vertexAttribs.buf, nullptr);
+    scene.vkDevice().freeMemory(demo->vertexAttribs.mem, nullptr);
+    scene.vkDevice().destroyBuffer(demo->instanceAttribs.buf, nullptr);
+    scene.vkDevice().freeMemory(demo->instanceAttribs.mem, nullptr);
     scene.vkDevice().destroyBuffer(demo->indices.buf, nullptr);
     scene.vkDevice().freeMemory(demo->indices.mem, nullptr);
 
@@ -684,61 +713,72 @@ static void demo_cleanup(Demo *demo, engine::Scene& scene) {
     }
 }
 
+#include <ctime>
+static clock_t startTime;
+static int renderedFrames;
+
 DemoScene::DemoScene(GLFWwindow *window) : Scene(window) {
   demo_.window = window;
   demo_prepare(&demo_, *this);
-  set_camera(AddComponent<engine::FreeFlyCamera>(glm::radians(60.0), 0.1, 100, glm::dvec3(1, 1, -1)));
+  setCamera(AddComponent<engine::FreeFlyCamera>(glm::radians(60.0), 1, 100000, glm::dvec3(0, 10, 0), glm::dvec3{10, 0, 10}, 10));
+  startTime = clock();
 }
 
 DemoScene::~DemoScene() {
   demo_cleanup(&demo_, *this);
+  clock_t endTime = clock();
+  double elapsedSecs = double(endTime - startTime) / CLOCKS_PER_SEC;
+  std::cout << "Average FPS: " << renderedFrames / elapsedSecs << std::endl;
 }
 
 void DemoScene::Render() {
   demo_draw(&demo_, *this);
+  renderedFrames++;
 }
 
 void DemoScene::Update() {
-  glm::mat4 mvp = scene()->camera()->projectionMatrix() *
-                  scene()->camera()->cameraMatrix();
+  {
+    glm::mat4 mvp = scene()->camera()->projectionMatrix() *
+                    scene()->camera()->cameraMatrix();
 
-  uint8_t *pData;
-  vk::chk(vkDevice().mapMemory(demo_.uniformData.mem, 0, sizeof(mvp),
-                                     vk::MemoryMapFlags(), (void **)&pData));
+    UniformData* uniformData;
+    vk::chk(vkDevice().mapMemory(demo_.uniformData.mem, 0, sizeof(mvp),
+                                 vk::MemoryMapFlags{}, (void **)&uniformData));
 
-  std::memcpy(pData, &mvp, sizeof(mvp));
+    uniformData->mvp = mvp;
+    uniformData->cameraPos = scene()->camera()->transform()->pos();
+    uniformData->terrainSmallestGeometryLodDistance = Settings::kSmallestGeometryLodDistance;
+    uniformData->terrainMaxLoadLevel = demo_.quadTree.maxNodeLevel();
 
-  vkDevice().unmapMemory(demo_.uniformData.mem);
+    vkDevice().unmapMemory(demo_.uniformData.mem);
+  }
+
+  // update instances to draw
+  demo_.gridMesh.clearRenderList();
+  demo_.quadTree.SelectNodes(*scene()->camera(), demo_.gridMesh);
+
+  if (demo_.gridMesh.mesh_.renderData_.size() > MAX_INSTANCE_COUNT) {
+    std::cerr << "Number of instances used: " << demo_.gridMesh.mesh_.renderData_.size() << std::endl;
+    std::terminate();
+  }
+
+  {
+    glm::vec4 *renderData;
+    vk::chk(vkDevice().mapMemory(demo_.instanceAttribs.mem, 0,
+                                 MAX_INSTANCE_COUNT * sizeof(glm::vec4),
+                                 vk::MemoryMapFlags{}, (void **)&renderData));
+
+    for (int i = 0; i < demo_.gridMesh.mesh_.renderData_.size(); ++i) {
+      renderData[i] = demo_.gridMesh.mesh_.renderData_[i];
+    }
+
+    vkDevice().unmapMemory(demo_.instanceAttribs.mem);
+  }
 }
 
 
 void DemoScene::ScreenResizedClean() {
-  for (uint32_t i = 0; i < scene()->vkSwapchainImageCount(); i++) {
-    scene()->vkDevice().destroyFramebuffer(demo_.framebuffers[i], nullptr);
-  }
-  delete[] demo_.framebuffers;
-  scene()->vkDevice().destroyDescriptorPool(demo_.desc_pool, nullptr);
-
-  scene()->vkDevice().destroyPipeline(demo_.pipeline, nullptr);
-  scene()->vkDevice().destroyRenderPass(demo_.render_pass, nullptr);
-  scene()->vkDevice().destroyPipelineLayout(demo_.pipeline_layout, nullptr);
-  scene()->vkDevice().destroyDescriptorSetLayout(demo_.desc_layout, nullptr);
-
-  scene()->vkDevice().destroyBuffer(demo_.uniformData.buf, nullptr);
-  scene()->vkDevice().freeMemory(demo_.uniformData.mem, nullptr);
-
-  scene()->vkDevice().destroyBuffer(demo_.vertices.buf, nullptr);
-  scene()->vkDevice().freeMemory(demo_.vertices.mem, nullptr);
-  scene()->vkDevice().destroyBuffer(demo_.indices.buf, nullptr);
-  scene()->vkDevice().freeMemory(demo_.indices.mem, nullptr);
-
-  for (uint32_t i = 0; i < DEMO_TEXTURE_COUNT; i++) {
-    scene()->vkDevice().destroyImageView(demo_.textures[i].view, nullptr);
-    scene()->vkDevice().destroyImage(demo_.textures[i].image, nullptr);
-    scene()->vkDevice().freeMemory(demo_.textures[i].mem, nullptr);
-    scene()->vkDevice().destroySampler(demo_.textures[i].sampler, nullptr);
-  }
-
+  demo_cleanup(&demo_, *this);
   Scene::ScreenResizedClean();
 }
 

@@ -27,24 +27,23 @@ struct svec2 {
 // use unsigned shorts instead of ints or floats), but for CDLOD, you need
 // pow2 sizes, so there 128*128 is the max
 class GridMesh {
-  std::vector<glm::vec4> render_data_; // xy: offset, z: level, w: face
-
   uint16_t indexOf(int x, int y);
 
  public:
   int index_count_, dimension_;
   std::vector<svec2> positions_;
   std::vector<uint16_t> indices_;
+  std::vector<glm::vec4> renderData_; // xy: offset, z: level, w: face
 
   GridMesh(uint8_t dimension);
 
-  void addToRenderList(const glm::vec4& render_data);
+  void addToRenderList(const glm::vec4& renderData);
   void clearRenderList();
 
   void render();
 
   int dimension() const {return dimension_;}
-  size_t node_count() const { return render_data_.size(); }
+  size_t node_count() const { return renderData_.size(); }
 };
 
 #endif // CDLOD_GRID_MESH_H_

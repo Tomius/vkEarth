@@ -5,25 +5,32 @@
 #include <GLFW/glfw3.h>
 
 #include "engine/scene.hpp"
-#include "cdlod/grid_mesh.hpp"
+#include "cdlod/cdlod_quad_tree.hpp"
 #include "common/vulkan_application.hpp"
 
 #define DEMO_TEXTURE_COUNT 1
 
 struct TextureObject {
-    vk::Sampler sampler;
+  vk::Sampler sampler;
 
-    vk::Image image;
-    vk::ImageLayout imageLayout;
+  vk::Image image;
+  vk::ImageLayout imageLayout;
 
-    vk::DeviceMemory mem;
-    vk::ImageView view;
-    int32_t tex_width = 0, tex_height = 0;
+  vk::DeviceMemory mem;
+  vk::ImageView view;
+  int32_t tex_width = 0, tex_height = 0;
+};
+
+struct UniformData {
+  glm::mat4 mvp;
+  glm::vec3 cameraPos;
+  float terrainSmallestGeometryLodDistance;
+  int terrainMaxLoadLevel;
 };
 
 struct Demo {
     GLFWwindow* window;
-    bool use_staging_buffer = false;
+    bool kUseStagingBuffer = false;
 
     struct TextureObject textures[DEMO_TEXTURE_COUNT];
 
@@ -33,31 +40,27 @@ struct Demo {
       vk::DescriptorBufferInfo bufferInfo;
     } uniformData;
 
-    struct {
-        vk::Buffer buf;
-        vk::DeviceMemory mem;
-
-        vk::PipelineVertexInputStateCreateInfo vi;
-        vk::VertexInputBindingDescription vi_bindings[1];
-        vk::VertexInputAttributeDescription vi_attrs[2];
-    } vertices;
+    vk::PipelineVertexInputStateCreateInfo vertexInput;
+    vk::VertexInputBindingDescription vertexInputBindings[2];
+    vk::VertexInputAttributeDescription vertexInputAttribs[2];
 
     struct {
         vk::Buffer buf;
         vk::DeviceMemory mem;
-    } indices;
+    } vertexAttribs, instanceAttribs, indices;
 
-    vk::PipelineLayout pipeline_layout;
-    vk::DescriptorSetLayout desc_layout;
-    vk::RenderPass render_pass;
+    vk::PipelineLayout pipelineLayout;
+    vk::DescriptorSetLayout descLayout;
+    vk::RenderPass renderPass;
     vk::Pipeline pipeline;
 
-    vk::DescriptorPool desc_pool;
-    vk::DescriptorSet desc_set;
+    vk::DescriptorPool descPool;
+    vk::DescriptorSet descSet;
 
     vk::Framebuffer *framebuffers = nullptr;
 
-    GridMesh gridMesh{64};
+    QuadGridMesh gridMesh{Settings::kNodeDimension};
+    CdlodQuadTree quadTree{Settings::kFaceSize, CubeFace::kPosX};
 };
 
 class DemoScene : public engine::Scene {

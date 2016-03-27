@@ -55,10 +55,8 @@ Scene::~Scene() {
   vkDevice_.freeMemory(vkDepthBuffer_.mem, nullptr);
 
   for (uint32_t i = 0; i < vkSwapchainImageCount_; i++) {
-    vkDevice_.destroyImageView(vkBuffers_[i].view, nullptr);
+    vkDevice_.destroyImageView(vkBuffers()[i].view, nullptr);
   }
-
-  delete[] vkBuffers_;
 
   vkApp_.entryPoints.fpDestroySwapchainKHR(vkDevice_, vkSwapchain_, nullptr);
 
@@ -70,7 +68,7 @@ void Scene::KeyAction(int key, int scancode, int action, int mods) {
   if (action == GLFW_PRESS) {
     switch (key) {
       case GLFW_KEY_F1:
-        // camera_time_.toggle();
+        cameraTime_.toggle();
         break;
       default:
         break;
@@ -85,7 +83,7 @@ void Scene::turn() {
 }
 
 void Scene::UpdateAll() {
-  camera_time_.tick();
+  cameraTime_.tick();
 
   GameObject::UpdateAll();
 }
@@ -115,10 +113,8 @@ void Scene::ScreenResizedClean() {
   vkDevice_.freeMemory(vkDepthBuffer_.mem, nullptr);
 
   for (uint32_t i = 0; i < vkSwapchainImageCount_; i++) {
-    vkDevice_.destroyImageView(vkBuffers_[i].view, nullptr);
+    vkDevice_.destroyImageView(vkBuffers()[i].view, nullptr);
   }
-
-  delete[] vkBuffers_;
 }
 
 void Scene::ScreenResized(size_t width, size_t height) {
