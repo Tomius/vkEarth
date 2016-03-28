@@ -717,10 +717,19 @@ static void demo_cleanup(Demo *demo, engine::Scene& scene) {
 static clock_t startTime;
 static int renderedFrames;
 
-DemoScene::DemoScene(GLFWwindow *window) : Scene(window) {
+DemoScene::DemoScene(GLFWwindow *window)
+    : Scene(window)
+    , quadTrees{
+        {Settings::kFaceSize, CubeFace::kPosX},
+        {Settings::kFaceSize, CubeFace::kNegX},
+        {Settings::kFaceSize, CubeFace::kPosY},
+        {Settings::kFaceSize, CubeFace::kNegY},
+        {Settings::kFaceSize, CubeFace::kPosZ},
+        {Settings::kFaceSize, CubeFace::kNegZ},
+      } {
   demo_.window = window;
   demo_prepare(&demo_, *this);
-  setCamera(AddComponent<engine::FreeFlyCamera>(glm::radians(60.0), 1, 100000, glm::dvec3(0, 10, 0), glm::dvec3{10, 0, 10}, 10));
+  setCamera(AddComponent<engine::FreeFlyCamera>(glm::radians(60.0), 1, 100000, glm::dvec3(0, 10, 0), glm::dvec3{10, 0, 10}, 1000));
   startTime = clock();
 }
 
@@ -748,14 +757,17 @@ void DemoScene::Update() {
     uniformData->mvp = mvp;
     uniformData->cameraPos = scene()->camera()->transform()->pos();
     uniformData->terrainSmallestGeometryLodDistance = Settings::kSmallestGeometryLodDistance;
-    uniformData->terrainMaxLoadLevel = demo_.quadTree.maxNodeLevel();
+    uniformData->terrainMaxLoadLevel = quadTrees[0].maxNodeLevel();
+    uniformData->terrainSphereRadius = Settings::kSphereRadius;
 
     vkDevice().unmapMemory(demo_.uniformData.mem);
   }
 
   // update instances to draw
   demo_.gridMesh.clearRenderList();
-  demo_.quadTree.SelectNodes(*scene()->camera(), demo_.gridMesh);
+  for (CdlodQuadTree& quadTree : quadTrees) {
+    quadTree.SelectNodes(*scene()->camera(), demo_.gridMesh);
+  }
 
   if (demo_.gridMesh.mesh_.renderData_.size() > MAX_INSTANCE_COUNT) {
     std::cerr << "Number of instances used: " << demo_.gridMesh.mesh_.renderData_.size() << std::endl;

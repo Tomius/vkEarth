@@ -25,42 +25,42 @@ struct UniformData {
   glm::mat4 mvp;
   glm::vec3 cameraPos;
   float terrainSmallestGeometryLodDistance;
+  float terrainSphereRadius;
   int terrainMaxLoadLevel;
 };
 
 struct Demo {
-    GLFWwindow* window;
-    bool kUseStagingBuffer = false;
+  GLFWwindow* window;
+  bool kUseStagingBuffer = false;
 
-    struct TextureObject textures[DEMO_TEXTURE_COUNT];
+  struct TextureObject textures[DEMO_TEXTURE_COUNT];
 
-    struct {
-      vk::Buffer buf;
-      vk::DeviceMemory mem;
-      vk::DescriptorBufferInfo bufferInfo;
-    } uniformData;
+  struct {
+    vk::Buffer buf;
+    vk::DeviceMemory mem;
+    vk::DescriptorBufferInfo bufferInfo;
+  } uniformData;
 
-    vk::PipelineVertexInputStateCreateInfo vertexInput;
-    vk::VertexInputBindingDescription vertexInputBindings[2];
-    vk::VertexInputAttributeDescription vertexInputAttribs[2];
+  vk::PipelineVertexInputStateCreateInfo vertexInput;
+  vk::VertexInputBindingDescription vertexInputBindings[2];
+  vk::VertexInputAttributeDescription vertexInputAttribs[2];
 
-    struct {
-        vk::Buffer buf;
-        vk::DeviceMemory mem;
-    } vertexAttribs, instanceAttribs, indices;
+  struct {
+    vk::Buffer buf;
+    vk::DeviceMemory mem;
+  } vertexAttribs, instanceAttribs, indices;
 
-    vk::PipelineLayout pipelineLayout;
-    vk::DescriptorSetLayout descLayout;
-    vk::RenderPass renderPass;
-    vk::Pipeline pipeline;
+  vk::PipelineLayout pipelineLayout;
+  vk::DescriptorSetLayout descLayout;
+  vk::RenderPass renderPass;
+  vk::Pipeline pipeline;
 
-    vk::DescriptorPool descPool;
-    vk::DescriptorSet descSet;
+  vk::DescriptorPool descPool;
+  vk::DescriptorSet descSet;
 
-    vk::Framebuffer *framebuffers = nullptr;
+  vk::Framebuffer *framebuffers = nullptr;
 
-    QuadGridMesh gridMesh{Settings::kNodeDimension};
-    CdlodQuadTree quadTree{Settings::kFaceSize, CubeFace::kPosX};
+  QuadGridMesh gridMesh{Settings::kNodeDimension};
 };
 
 class DemoScene : public engine::Scene {
@@ -74,6 +74,7 @@ public:
   virtual void ScreenResized(size_t width, size_t height) override;
 
 private:
+  CdlodQuadTree quadTrees[6];
   Demo demo_;
 };
 

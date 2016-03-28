@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 link_libraries(glfw)
 link_libraries(glslang OGLCompiler OSDependent SPIRV)
 
-set (CMAKE_CXX_FLAGS "-g -std=c++11")
+set (CMAKE_CXX_FLAGS "-O3 -std=c++11")
 
 if (BUILD_SHARED_LIBS)
     link_libraries("${MATH_LIBRARY}")

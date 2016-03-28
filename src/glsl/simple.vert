@@ -10,6 +10,7 @@ layout (std140, binding = 1) uniform bufferVals {
   mat4 mvp;
   vec3 cameraPos;
   float terrainSmallestGeometryLodDistance;
+  float terrainSphereRadius;
   int terrainMaxLoadLevel;
 } uniforms;
 
@@ -25,6 +26,48 @@ vec2 terrainOffset = aRenderData.xy;
 float terrainLevel = aRenderData.z;
 float terrainScale = pow(2, terrainLevel);
 int terrainFace = int(aRenderData.w);
+
+/* Cube 2 Sphere */
+
+const int kPosX = 0;
+const int kNegX = 1;
+const int kPosY = 2;
+const int kNegY = 3;
+const int kPosZ = 4;
+const int kNegZ = 5;
+
+float sqr(float x) {
+  return x * x;
+}
+
+vec3 Spherify(vec3 p) {
+  // return p;
+  return vec3(
+    p.x * sqrt(1 - sqr(p.y)/2 - sqr(p.z)/2 + sqr(p.y*p.z)/3),
+    p.y * sqrt(1 - sqr(p.z)/2 - sqr(p.x)/2 + sqr(p.z*p.x)/3),
+    p.z * sqrt(1 - sqr(p.x)/2 - sqr(p.y)/2 + sqr(p.x*p.y)/3)
+  );
+}
+
+float Radius() {
+  return uniforms.terrainSphereRadius;
+}
+
+vec3 WorldPos(vec3 pos) {
+  float height = pos.y; pos.y = 0;
+  pos = (pos - Radius()) / (Radius());
+  switch (terrainFace) {
+    case kPosX: pos = vec3(-pos.y, -pos.z, -pos.x); break;
+    case kNegX: pos = vec3(+pos.y, -pos.z, +pos.x); break;
+    case kPosY: pos = vec3(-pos.z, -pos.y, +pos.x); break;
+    case kNegY: pos = vec3(+pos.z, +pos.y, +pos.x); break;
+    case kPosZ: pos = vec3(-pos.x, -pos.z, +pos.y); break;
+    case kNegZ: pos = vec3(+pos.x, -pos.z, -pos.y); break;
+  }
+  return (Radius() + height) * Spherify(pos);
+}
+
+/* Cube 2 Sphere */
 
 
 vec2 MorphVertex(vec2 vertex, float morph) {
@@ -42,11 +85,11 @@ vec2 NodeLocal2Global(vec2 nodeCoord) {
 float EstimateDistance(vec2 geomPos) {
   float estHeight = GetHeight(geomPos);
   vec3 estPos = vec3(geomPos.x, estHeight, geomPos.y);
-  vec3 estDiff = uniforms.cameraPos - estPos;
+  vec3 estDiff = uniforms.cameraPos - WorldPos(estPos);
   return length(estDiff);
 }
 
-vec4 ModelPos(vec2 m_pos) {
+vec3 ModelPos(vec2 m_pos) {
   vec2 pos = NodeLocal2Global(m_pos);
   float dist = EstimateDistance(pos);
   float morph = 0;
@@ -62,13 +105,13 @@ vec4 ModelPos(vec2 m_pos) {
   }
 
   float height = GetHeight(pos);
-  return vec4(pos.x, height, pos.y, morph);
+  return vec3(pos.x, height, pos.y);
 }
 
 void main() {
   vTexCoord = vec2(0);
-  vec4 modelPos = ModelPos(aPos);
-  gl_Position = uniforms.mvp * vec4(modelPos.xyz, 1);
+  vec3 worldPos = WorldPos(ModelPos(aPos));
+  gl_Position = uniforms.mvp * vec4(worldPos.xyz, 1);
 
   // GL->VK conventions
   gl_Position.y = -gl_Position.y;
