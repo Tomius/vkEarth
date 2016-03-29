@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #include "engine/scene.hpp"
 
 #include <stdexcept>
@@ -58,7 +60,7 @@ Scene::~Scene() {
     vkDevice_.destroyImageView(vkBuffers()[i].view, nullptr);
   }
 
-  vkApp_.entryPoints.fpDestroySwapchainKHR(vkDevice_, vkSwapchain_, nullptr);
+  vkApp_.entry_points.DestroySwapchainKHR(vkDevice_, vkSwapchain_, nullptr);
 
   vkDevice_.destroy(nullptr);
   vkInstance_.destroySurfaceKHR(vkSurface_, nullptr);

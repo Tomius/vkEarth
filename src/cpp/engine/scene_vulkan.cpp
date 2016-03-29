@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #include "engine/scene.hpp"
 
 #include <memory>
@@ -73,9 +75,9 @@ void Scene::SetImageLayout(const vk::Image& image,
 *                  GET_INSTANCE_PROC_ADDR             *
 *******************************************************/
 #define GET_INSTANCE_PROC_ADDR(instance, app, entrypoint) {                                \
-  app.entryPoints.fp##entrypoint =                                                         \
+  app.entry_points.entrypoint =                                                            \
     (PFN_vk##entrypoint)instance.getProcAddr("vk" #entrypoint);                            \
-  if (app.entryPoints.fp##entrypoint == nullptr) {                                         \
+  if (app.entry_points.entrypoint == nullptr) {                                            \
     throw std::runtime_error("vk::getInstanceProcAddr failed to find vk" #entrypoint);     \
   }                                                                                        \
 }
@@ -96,8 +98,8 @@ vk::Instance Scene::CreateInstance(VulkanApplication& app) {
                                                  instanceLayers.get()));
 
 #if VK_VALIDATE
-      CheckForMissingLayers(app.instanceValidationLayers.size(),
-                            app.instanceValidationLayers.data(),
+      CheckForMissingLayers(app.instance_validation_layers.size(),
+                            app.instance_validation_layers.data(),
                             allInstanceLayerCount,
                             instanceLayers.get());
 #endif
@@ -114,15 +116,15 @@ vk::Instance Scene::CreateInstance(VulkanApplication& app) {
   }
 
   for (uint32_t i = 0; i < required_extension_count; i++) {
-    app.instanceExtensionNames.push_back(required_extensions[i]);
+    app.instance_extension_names.push_back(required_extensions[i]);
   }
 
   vk::InstanceCreateInfo inst_info = vk::InstanceCreateInfo()
-      .pApplicationInfo(&app.applicationInfo)
-      .enabledLayerCount(app.instanceValidationLayers.size())
-      .ppEnabledLayerNames((const char* const*)app.instanceValidationLayers.data())
-      .enabledExtensionCount(app.instanceExtensionNames.size())
-      .ppEnabledExtensionNames((const char* const*)app.instanceExtensionNames.data());
+      .pApplicationInfo(&app.application_info)
+      .enabledLayerCount(app.instance_validation_layers.size())
+      .ppEnabledLayerNames((const char* const*)app.instance_validation_layers.data())
+      .enabledExtensionCount(app.instance_extension_names.size())
+      .ppEnabledExtensionNames((const char* const*)app.instance_extension_names.data());
 
   vk::Instance instance;
   vk::Result err = vk::createInstance(&inst_info, nullptr, &instance);
@@ -188,8 +190,8 @@ vk::PhysicalDevice Scene::CreatePhysicalDevice(vk::Instance& instance,
                                                     device_layers.get()));
 
 #if VK_VALIDATE
-      CheckForMissingLayers(app.deviceValidationLayers.size(),
-                            app.deviceValidationLayers.data(),
+      CheckForMissingLayers(app.device_validation_layers.size(),
+                            app.device_validation_layers.data(),
                             device_layer_count,
                             device_layers.get());
 #endif
@@ -238,7 +240,7 @@ uint32_t Scene::SelectQraphicsQueueNodeIndex(const vk::PhysicalDevice& gpu,
   // Iterate over each queue to learn whether it supports presenting:
   std::unique_ptr<vk::Bool32> supportsPresent{new vk::Bool32[queueCount]};
   for (uint32_t i = 0; i < queueCount; i++) {
-    app.entryPoints.fpGetPhysicalDeviceSurfaceSupportKHR(
+    app.entry_points.GetPhysicalDeviceSurfaceSupportKHR(
         gpu, i, surface, &supportsPresent.get()[i]);
   }
 
@@ -293,9 +295,9 @@ uint32_t Scene::SelectQraphicsQueueNodeIndex(const vk::PhysicalDevice& gpu,
 *                   GET_DEVICE_PROC_ADDR              *
 *******************************************************/
 #define GET_DEVICE_PROC_ADDR(device, app, entrypoint) {                                  \
-  app.entryPoints.fp##entrypoint =                                                       \
+  app.entry_points.entrypoint =                                                          \
     (PFN_vk##entrypoint)device.getProcAddr("vk" #entrypoint);                            \
-  if (app.entryPoints.fp##entrypoint == nullptr) {                                       \
+  if (app.entry_points.entrypoint == nullptr) {                                          \
     throw std::runtime_error("vk::getDeviceProcAddr failed to find vk" #entrypoint);     \
   }                                                                                      \
 }
@@ -318,10 +320,10 @@ vk::Device Scene::CreateDevice(const vk::PhysicalDevice& gpu,
   vk::DeviceCreateInfo deviceCreateInfo = vk::DeviceCreateInfo()
       .queueCreateInfoCount(1)
       .pQueueCreateInfos(&queue)
-      .enabledLayerCount(app.deviceValidationLayers.size())
-      .ppEnabledLayerNames(app.deviceValidationLayers.data())
-      .enabledExtensionCount(app.deviceExtensionNames.size())
-      .ppEnabledExtensionNames(app.deviceExtensionNames.data())
+      .enabledLayerCount(app.device_validation_layers.size())
+      .ppEnabledLayerNames(app.device_validation_layers.data())
+      .enabledExtensionCount(app.device_extension_names.size())
+      .ppEnabledExtensionNames(app.device_extension_names.data())
       .pEnabledFeatures(&features);
 
   vk::Device device;
@@ -360,11 +362,11 @@ void Scene::GetSurfaceProperties(const vk::PhysicalDevice& gpu,
 
     // Get the list of vk::Format's that are supported:
     uint32_t formatCount;
-    VkChk(app.entryPoints.fpGetPhysicalDeviceSurfaceFormatsKHR(
+    VkChk(app.entry_points.GetPhysicalDeviceSurfaceFormatsKHR(
           gpu, surface, &formatCount, nullptr));
 
     std::unique_ptr<VkSurfaceFormatKHR> surfFormats{new VkSurfaceFormatKHR[formatCount]};
-    VkChk(app.entryPoints.fpGetPhysicalDeviceSurfaceFormatsKHR(
+    VkChk(app.entry_points.GetPhysicalDeviceSurfaceFormatsKHR(
         gpu, surface, &formatCount, surfFormats.get()));
 
     // If the format list includes just one entry of VK_FORMAT_UNDEFINED,
@@ -477,17 +479,17 @@ void Scene::PrepareBuffers() {
   VkSurfaceCapabilitiesKHR& vkSurfCapabilities =
       const_cast<VkSurfaceCapabilitiesKHR&>(
         static_cast<const VkSurfaceCapabilitiesKHR&>(surfCapabilities));
-  VkChk(vkApp_.entryPoints.fpGetPhysicalDeviceSurfaceCapabilitiesKHR(
+  VkChk(vkApp_.entry_points.GetPhysicalDeviceSurfaceCapabilitiesKHR(
       vkGpu_, vkSurface_, &vkSurfCapabilities));
 
   uint32_t presentModeCount;
-  VkChk(vkApp_.entryPoints.fpGetPhysicalDeviceSurfacePresentModesKHR(
+  VkChk(vkApp_.entry_points.GetPhysicalDeviceSurfacePresentModesKHR(
       vkGpu_, vkSurface_, &presentModeCount, nullptr));
 
   std::unique_ptr<VkPresentModeKHR> presentModes{
     new VkPresentModeKHR[presentModeCount]};
 
-  VkChk(vkApp_.entryPoints.fpGetPhysicalDeviceSurfacePresentModesKHR(
+  VkChk(vkApp_.entry_points.GetPhysicalDeviceSurfacePresentModesKHR(
         vkGpu_, vkSurface_, &presentModeCount, presentModes.get()));
 
   vk::Extent2D swapchainExtent;
@@ -546,7 +548,7 @@ void Scene::PrepareBuffers() {
 
   const VkSwapchainCreateInfoKHR& vkSwapchainInfo = swapchainInfo;
   VkSwapchainKHR vkSwapchain = vkSwapchain_;
-  VkChk(vkApp_.entryPoints.fpCreateSwapchainKHR(
+  VkChk(vkApp_.entry_points.CreateSwapchainKHR(
       vkDevice_, &vkSwapchainInfo, nullptr, &vkSwapchain));
   vkSwapchain_ = vkSwapchain;
 
@@ -555,14 +557,14 @@ void Scene::PrepareBuffers() {
   // Note: destroying the swapchain also cleans up all its associated
   // presentable images once the platform is done with them.
   if (oldSwapchain != VK_NULL_HANDLE) {
-      vkApp_.entryPoints.fpDestroySwapchainKHR(vkDevice_, oldSwapchain, nullptr);
+      vkApp_.entry_points.DestroySwapchainKHR(vkDevice_, oldSwapchain, nullptr);
   }
 
-  VkChk(vkApp_.entryPoints.fpGetSwapchainImagesKHR(
+  VkChk(vkApp_.entry_points.GetSwapchainImagesKHR(
        vkDevice_, vkSwapchain_, &vkSwapchainImageCount_, nullptr));
 
   VkImage *swapchainImages = new VkImage[vkSwapchainImageCount_];
-  VkChk(vkApp_.entryPoints.fpGetSwapchainImagesKHR(
+  VkChk(vkApp_.entry_points.GetSwapchainImagesKHR(
       vkDevice_, vkSwapchain_, &vkSwapchainImageCount_, swapchainImages));
 
   vkBuffers_ = std::unique_ptr<SwapchainBuffers>(

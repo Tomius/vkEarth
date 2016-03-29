@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #include "demo_scene.hpp"
 
 #include <cstdio>
@@ -109,7 +111,7 @@ static void demo_draw(Demo *demo, engine::Scene& scene) {
     assert(err == vk::Result::eSuccess);
 
     // Get the index of the next available swapchain image:
-    vkErr = scene.vkApp().entryPoints.fpAcquireNextImageKHR(
+    vkErr = scene.vkApp().entry_points.AcquireNextImageKHR(
       scene.vkDevice(), scene.vkSwapchain(), UINT64_MAX, presentCompleteSemaphore,
       (vk::Fence)nullptr, &scene.vkCurrentBuffer());
     if (vkErr == VK_ERROR_OUT_OF_DATE_KHR) {
@@ -164,7 +166,7 @@ static void demo_draw(Demo *demo, engine::Scene& scene) {
         static_cast<const VkPresentInfoKHR&>(present));
 
     // TBD/TODO: SHOULD THE "present" PARAMETER BE "const" IN THE HEADER?
-    vkErr = scene.vkApp().entryPoints.fpQueuePresentKHR(scene.vkQueue(), &vkPresent);
+    vkErr = scene.vkApp().entry_points.QueuePresentKHR(scene.vkQueue(), &vkPresent);
     if (vkErr == VK_ERROR_OUT_OF_DATE_KHR) {
         // scene.vkSwapchain() is out of date (e.g. the window was resized) and
         // must be recreated:
@@ -439,7 +441,7 @@ static void demo_prepare_vertices(Demo *demo, engine::Scene& scene) {
 
   { // instanceAttribs
     const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
-      .size(sizeof(glm::vec4) * MAX_INSTANCE_COUNT)
+      .size(sizeof(glm::vec4) * Settings::kMaxInstanceCount)
       .usage(vk::BufferUsageFlagBits::eVertexBuffer);
 
     vk::chk(scene.vkDevice().createBuffer(&buf_info, nullptr, &demo->instanceAttribs.buf));
@@ -755,21 +757,21 @@ void DemoScene::Update() {
                                  vk::MemoryMapFlags{}, (void **)&uniformData));
 
     uniformData->mvp = mvp;
-    uniformData->cameraPos = scene()->camera()->transform()->pos();
+    uniformData->cameraPos = scene()->camera()->transform().pos();
     uniformData->terrainSmallestGeometryLodDistance = Settings::kSmallestGeometryLodDistance;
-    uniformData->terrainMaxLoadLevel = quadTrees[0].maxNodeLevel();
+    uniformData->terrainMaxLoadLevel = quadTrees[0].max_node_level();
     uniformData->terrainSphereRadius = Settings::kSphereRadius;
 
     vkDevice().unmapMemory(demo_.uniformData.mem);
   }
 
   // update instances to draw
-  demo_.gridMesh.clearRenderList();
+  demo_.gridMesh.ClearRenderList();
   for (CdlodQuadTree& quadTree : quadTrees) {
     quadTree.SelectNodes(*scene()->camera(), demo_.gridMesh);
   }
 
-  if (demo_.gridMesh.mesh_.renderData_.size() > MAX_INSTANCE_COUNT) {
+  if (demo_.gridMesh.mesh_.renderData_.size() > Settings::kMaxInstanceCount) {
     std::cerr << "Number of instances used: " << demo_.gridMesh.mesh_.renderData_.size() << std::endl;
     std::terminate();
   }
@@ -777,7 +779,7 @@ void DemoScene::Update() {
   {
     glm::vec4 *renderData;
     vk::chk(vkDevice().mapMemory(demo_.instanceAttribs.mem, 0,
-                                 MAX_INSTANCE_COUNT * sizeof(glm::vec4),
+                                 Settings::kMaxInstanceCount * sizeof(glm::vec4),
                                  vk::MemoryMapFlags{}, (void **)&renderData));
 
     for (int i = 0; i < demo_.gridMesh.mesh_.renderData_.size(); ++i) {

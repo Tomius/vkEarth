@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #ifndef DEMO_SCENE_HPP_
 #define DEMO_SCENE_HPP_
 

@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #version 400
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_ARB_shading_language_420pack : enable
@@ -36,16 +38,16 @@ const int kNegY = 3;
 const int kPosZ = 4;
 const int kNegZ = 5;
 
-float sqr(float x) {
+float Sqr(float x) {
   return x * x;
 }
 
 vec3 Spherify(vec3 p) {
   // return p;
   return vec3(
-    p.x * sqrt(1 - sqr(p.y)/2 - sqr(p.z)/2 + sqr(p.y*p.z)/3),
-    p.y * sqrt(1 - sqr(p.z)/2 - sqr(p.x)/2 + sqr(p.z*p.x)/3),
-    p.z * sqrt(1 - sqr(p.x)/2 - sqr(p.y)/2 + sqr(p.x*p.y)/3)
+    p.x * sqrt(1 - Sqr(p.y)/2 - Sqr(p.z)/2 + Sqr(p.y*p.z)/3),
+    p.y * sqrt(1 - Sqr(p.z)/2 - Sqr(p.x)/2 + Sqr(p.z*p.x)/3),
+    p.z * sqrt(1 - Sqr(p.x)/2 - Sqr(p.y)/2 + Sqr(p.x*p.y)/3)
   );
 }
 

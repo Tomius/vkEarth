@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #ifndef VULKAN_COMMON_H_
 #define VULKAN_COMMON_H_
 
@@ -5,19 +7,19 @@
 #include <vector>
 #include <vulkan/vk_cpp.h>
 
-#include "common/defines.hpp"
+#include "common/settings.hpp"
 
 struct VulkanApplication {
-  const vk::ApplicationInfo applicationInfo = vk::ApplicationInfo()
+  const vk::ApplicationInfo application_info = vk::ApplicationInfo()
       .pApplicationName("vkEarth")
       .applicationVersion(0)
       .pEngineName("vkEarth")
       .engineVersion(0)
-      .apiVersion(VK_MAKE_VERSION(1, 0, 4));
+      .apiVersion(VK_MAKE_VERSION(1, 0, 5));
 
-  std::vector<const char*> instanceValidationLayers{
+  std::vector<const char*> instance_validation_layers{
 #if VK_VALIDATE
-    // "VK_LAYER_GOOGLE_threading",
+    "VK_LAYER_GOOGLE_threading",
     "VK_LAYER_LUNARG_param_checker",
     "VK_LAYER_LUNARG_device_limits",
     "VK_LAYER_LUNARG_object_tracker",
@@ -29,15 +31,15 @@ struct VulkanApplication {
 #endif
   };
 
-  std::vector<const char*> instanceExtensionNames{
+  std::vector<const char*> instance_extension_names{
 #if VK_VALIDATE
     VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
 #endif
   };
 
-  std::vector<const char*> deviceValidationLayers{
+  std::vector<const char*> device_validation_layers{
 #if VK_VALIDATE
-    // "VK_LAYER_GOOGLE_threading",
+    "VK_LAYER_GOOGLE_threading",
     "VK_LAYER_LUNARG_param_checker",
     "VK_LAYER_LUNARG_device_limits",
     "VK_LAYER_LUNARG_object_tracker",
@@ -49,25 +51,25 @@ struct VulkanApplication {
 #endif
   };
 
-  std::vector<const char*> deviceExtensionNames{
+  std::vector<const char*> device_extension_names{
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
   };
 
   struct GlfwVulkanEntryPoints {
     PFN_vkGetPhysicalDeviceSurfaceSupportKHR
-        fpGetPhysicalDeviceSurfaceSupportKHR = nullptr;
+        GetPhysicalDeviceSurfaceSupportKHR = nullptr;
     PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR
-        fpGetPhysicalDeviceSurfaceCapabilitiesKHR = nullptr;
+        GetPhysicalDeviceSurfaceCapabilitiesKHR = nullptr;
     PFN_vkGetPhysicalDeviceSurfaceFormatsKHR
-        fpGetPhysicalDeviceSurfaceFormatsKHR = nullptr;
+        GetPhysicalDeviceSurfaceFormatsKHR = nullptr;
     PFN_vkGetPhysicalDeviceSurfacePresentModesKHR
-        fpGetPhysicalDeviceSurfacePresentModesKHR = nullptr;
-    PFN_vkCreateSwapchainKHR fpCreateSwapchainKHR = nullptr;
-    PFN_vkDestroySwapchainKHR fpDestroySwapchainKHR = nullptr;
-    PFN_vkGetSwapchainImagesKHR fpGetSwapchainImagesKHR = nullptr;
-    PFN_vkAcquireNextImageKHR fpAcquireNextImageKHR = nullptr;
-    PFN_vkQueuePresentKHR fpQueuePresentKHR = nullptr;
-  } entryPoints;
+        GetPhysicalDeviceSurfacePresentModesKHR = nullptr;
+    PFN_vkCreateSwapchainKHR CreateSwapchainKHR = nullptr;
+    PFN_vkDestroySwapchainKHR DestroySwapchainKHR = nullptr;
+    PFN_vkGetSwapchainImagesKHR GetSwapchainImagesKHR = nullptr;
+    PFN_vkAcquireNextImageKHR AcquireNextImageKHR = nullptr;
+    PFN_vkQueuePresentKHR QueuePresentKHR = nullptr;
+  } entry_points;
 };
 
 

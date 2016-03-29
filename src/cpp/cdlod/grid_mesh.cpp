@@ -1,6 +1,8 @@
+// Copyright (c) 2016, Tamas Csala
+
 #include "cdlod/grid_mesh.hpp"
 
-uint16_t GridMesh::indexOf(int x, int y) {
+uint16_t GridMesh::IndexOf(int x, int y) {
   x += dimension_/2;
   y += dimension_/2;
   return (dimension_ + 1) * y + x;
@@ -22,24 +24,24 @@ GridMesh::GridMesh(uint8_t dimension) : dimension_(dimension) {
 
   for (int y = -dim2; y < dim2; ++y) {
     for (int x = -dim2; x < dim2; ++x) {
-      indices_.push_back(indexOf(x, y));
-      indices_.push_back(indexOf(x, y+1));
-      indices_.push_back(indexOf(x+1, y));
+      indices_.push_back(IndexOf(x, y));
+      indices_.push_back(IndexOf(x, y+1));
+      indices_.push_back(IndexOf(x+1, y));
 
-      indices_.push_back(indexOf(x+1, y));
-      indices_.push_back(indexOf(x, y+1));
-      indices_.push_back(indexOf(x+1, y+1));
+      indices_.push_back(IndexOf(x+1, y));
+      indices_.push_back(IndexOf(x, y+1));
+      indices_.push_back(IndexOf(x+1, y+1));
     }
   }
 
   assert(index_count_ == indices_.size());
 }
 
-void GridMesh::addToRenderList(const glm::vec4& renderData) {
+void GridMesh::AddToRenderList(const glm::vec4& renderData) {
   renderData_.push_back(renderData);
 }
 
-void GridMesh::clearRenderList() {
+void GridMesh::ClearRenderList() {
   renderData_.clear();
 }
 

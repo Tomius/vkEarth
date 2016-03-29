@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #include "initialize/create_pipeline.hpp"
 
 #include "common/file_utils.hpp"

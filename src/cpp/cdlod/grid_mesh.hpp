@@ -1,14 +1,13 @@
+// Copyright (c) 2016, Tamas Csala
+
 #ifndef CDLOD_GRID_MESH_H_
 #define CDLOD_GRID_MESH_H_
 
 #include <vector>
 #include <cstdint>
+#include "common/glm.hpp"
 
-#define GLM_FORCE_RADIANS
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#include <glm/glm.hpp>
-
-// A two-dimensional vector of GLshort values
+// A two-dimensional vector of unsigned short values
 struct svec2 {
   uint16_t x, y;
   svec2() : x(0), y(0) {}
@@ -27,7 +26,7 @@ struct svec2 {
 // use unsigned shorts instead of ints or floats), but for CDLOD, you need
 // pow2 sizes, so there 128*128 is the max
 class GridMesh {
-  uint16_t indexOf(int x, int y);
+  uint16_t IndexOf(int x, int y);
 
  public:
   int index_count_, dimension_;
@@ -37,10 +36,8 @@ class GridMesh {
 
   GridMesh(uint8_t dimension);
 
-  void addToRenderList(const glm::vec4& renderData);
-  void clearRenderList();
-
-  void render();
+  void AddToRenderList(const glm::vec4& renderData);
+  void ClearRenderList();
 
   int dimension() const {return dimension_;}
   size_t node_count() const { return renderData_.size(); }

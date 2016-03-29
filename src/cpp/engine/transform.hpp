@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Tamas Csala
+// Copyright (c) 2016, Tamas Csala
 
 #ifndef ENGINE_TRANSFORM_H_
 #define ENGINE_TRANSFORM_H_
@@ -7,9 +7,8 @@
 #include <vector>
 #include <algorithm>
 
-#define GLM_FORCE_RADIANS
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#include <glm/glm.hpp>
+#include "common/settings.hpp"
+#include "common/glm.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -128,7 +127,7 @@ class Transformation {
     vec3 axis = glm::cross(local, world);
 
     // If they are not parallel
-    if (glm::length(axis) > 1e-3) {
+    if (glm::length(axis) > Settings::kEpsilon) {
       // Dot gives us the cosine of their angle
       T cosangle = glm::dot(local, world);
       // We need the angle in radians
@@ -140,7 +139,7 @@ class Transformation {
       // when they go the opposite direction
       if (glm::dot(local, world) < 0) {
         // Check if local is parallel to the X axis
-        if (fabs(glm::dot(local, vec3(1, 0, 0))) > 1e-3) {
+        if (fabs(glm::dot(local, vec3(1, 0, 0))) > Settings::kEpsilon) {
           // If not, we can use it, to generate the axis to rotate around
           vec3 axis = glm::cross(vec3(1, 0, 0), local);
           set_rot(glm::quat_cast(glm::rotate(mat4(), T(M_PI), axis)));

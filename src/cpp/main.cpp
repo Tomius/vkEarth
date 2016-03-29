@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #include <vulkan/vk_cpp.h>
 #include <GLFW/glfw3.h>
 

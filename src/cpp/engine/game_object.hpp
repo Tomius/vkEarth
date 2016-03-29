@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Tamas Csala
+// Copyright (c) 2016, Tamas Csala
 
 #ifndef ENGINE_GAME_OBJECT_H_
 #define ENGINE_GAME_OBJECT_H_
@@ -32,8 +32,8 @@ class GameObject {
 
   void RemoveComponent(GameObject* component_to_remove);
 
-  Transform* transform() { return transform_.get(); }
-  const Transform* transform() const { return transform_.get(); }
+  Transform& transform() { return *transform_.get(); }
+  const Transform& transform() const { return *transform_.get(); }
 
   GameObject* parent() { return parent_; }
   const GameObject* parent() const { return parent_; }
@@ -44,10 +44,7 @@ class GameObject {
   void set_scene(Scene* scene) { scene_ = scene; }
 
   bool enabled() const { return enabled_; }
-  void set_enabled(bool value);
-
-  int group() const { return group_; }
-  void set_group(int value);
+  void set_enabled(bool value) { enabled_ = value; }
 
   virtual void Render() {}
   virtual void Render2D() {}
@@ -76,29 +73,14 @@ class GameObject {
   GameObject* parent_;
   std::unique_ptr<Transform> transform_;
   std::vector<std::unique_ptr<GameObject>> components_;
-  std::vector<GameObject*> components_just_enabled_, components_just_disabled_;
-
-  struct CompareGameObjects {
-    bool operator() (GameObject* x, GameObject* y) const;
-  };
-
-  std::set<GameObject*, CompareGameObjects> sorted_components_;
-  int uid_, group_;
+  std::vector<std::unique_ptr<GameObject>> components_just_added_;
+  std::set<GameObject*> components_to_remove_;
   bool enabled_;
 
   void InternalUpdate();
 
  private:
-  static int NextUid();
-
-  struct ComponentRemoveHelper {
-    std::set<GameObject*> components_;
-    bool operator()(const std::unique_ptr<GameObject>& go_ptr) {
-      return components_.find(go_ptr.get()) != components_.end();
-    }
-  } remove_predicate_;
-
-  void UpdateSortedComponents();
+  void AddNewComponents();
   void RemoveComponents();
 };
 

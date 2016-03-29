@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Tamas Csala
+// Copyright (c) 2016, Tamas Csala
 
 #include "engine/scene.hpp"
 #include "engine/game_object.hpp"
@@ -28,10 +28,8 @@ GameObject::~GameObject() {
 GameObject* GameObject::AddComponent(std::unique_ptr<GameObject>&& component) {
   try {
     GameObject *obj = component.get();
-    components_.push_back(std::move(component));
-    components_just_enabled_.push_back(obj);
+    components_just_added_.push_back(std::move(component));
     obj->parent_ = this;
-    obj->uid_ = NextUid();
     obj->transform_->set_parent(transform_.get());
     obj->scene_ = scene_;
 
@@ -44,180 +42,156 @@ GameObject* GameObject::AddComponent(std::unique_ptr<GameObject>&& component) {
 
 void GameObject::set_parent(GameObject* parent) {
   parent_ = parent;
-  if (parent) { transform_->set_parent(parent_->transform()); }
-}
-
-void GameObject::set_enabled(bool value) {
-  enabled_ = value;
-  if (value) {
-    components_just_enabled_.push_back(this);
-    if (parent_) {
-      parent_->components_just_enabled_.push_back(this);
-    }
-  } else {
-    components_just_disabled_.push_back(this);
-    if (parent_) {
-      parent_->components_just_disabled_.push_back(this);
-    }
-  }
-}
-
-void GameObject::set_group(int value) {
-  group_ = value;
-  components_just_enabled_.push_back(this);
-  components_just_disabled_.push_back(this);
-  if (parent_) {
-    parent_->components_just_enabled_.push_back(this);
-    parent_->components_just_disabled_.push_back(this);
-  }
+  if (parent) { transform_->set_parent(&parent_->transform()); }
 }
 
 void GameObject::RenderAll() {
-  for (auto& component : sorted_components_) {
-    if (component == this) {
-      _TRY_(Render());
-    } else {
-      component->RenderAll();
-    }
+  if (!enabled_) { return; }
+
+  _TRY_(Render());
+  for (auto& component : components_) {
+    component->RenderAll();
   }
 }
 
 void GameObject::Render2DAll() {
-  for (auto& component : sorted_components_) {
-    if (component == this) {
-      _TRY_(Render2D());
-    } else {
-      component->Render2DAll();
-    }
+  if (!enabled_) { return; }
+
+  _TRY_(Render2D());
+  for (auto& component : components_) {
+    component->Render2DAll();
   }
 }
 
 void GameObject::ScreenResizedCleanAll() {
-  for (auto& component : sorted_components_) {
-    if (component != this) {
-      component->ScreenResizedCleanAll();
-    }
+  if (!enabled_) { return; }
+
+  for (auto& component : components_) {
+    component->ScreenResizedCleanAll();
   }
   _TRY_(ScreenResizedClean());
 }
 
 void GameObject::ScreenResizedAll(size_t width, size_t height) {
+  if (!enabled_) { return; }
+
   _TRY_(ScreenResized(width, height));
-  for (auto& component : sorted_components_) {
-    if (component != this) {
-      component->ScreenResizedAll(width, height);
-    }
+  for (auto& component : components_) {
+    component->ScreenResizedAll(width, height);
   }
 }
 
 void GameObject::UpdateAll() {
+  if (!enabled_) { return; }
+
   InternalUpdate();
-  for (auto& component : sorted_components_) {
-    if (component == this) {
-      _TRY_(Update());
-    } else {
-      component->UpdateAll();
-    }
+  _TRY_(Update());
+  for (auto& component : components_) {
+    component->UpdateAll();
   }
 }
 
 void GameObject::KeyActionAll(int key, int scancode, int action, int mods) {
-  for (auto& component : sorted_components_) {
-    if (component == this) {
-      _TRY_(KeyAction(key, scancode, action, mods));
-    } else {
-      component->KeyActionAll(key, scancode, action, mods);
-    }
+  if (!enabled_) { return; }
+
+  _TRY_(KeyAction(key, scancode, action, mods));
+  for (auto& component : components_) {
+    component->KeyActionAll(key, scancode, action, mods);
   }
 }
 
 void GameObject::CharTypedAll(unsigned codepoint) {
-  for (auto& component : sorted_components_) {
-    if (component == this) {
-      _TRY_(CharTyped(codepoint));
-    } else {
-      component->CharTypedAll(codepoint);
-    }
+  if (!enabled_) { return; }
+
+  _TRY_(CharTyped(codepoint));
+  for (auto& component : components_) {
+    component->CharTypedAll(codepoint);
   }
 }
 
 void GameObject::MouseScrolledAll(double xoffset, double yoffset) {
-  for (auto& component : sorted_components_) {
-    if (component == this) {
-      _TRY_(MouseScrolled(xoffset, yoffset));
-    } else {
-      component->MouseScrolledAll(xoffset, yoffset);
-    }
+  if (!enabled_) { return; }
+
+  _TRY_(MouseScrolled(xoffset, yoffset));
+  for (auto& component : components_) {
+    component->MouseScrolledAll(xoffset, yoffset);
   }
 }
 
 void GameObject::MouseButtonPressedAll(int button, int action, int mods) {
-  for (auto& component : sorted_components_) {
-    if (component == this) {
-      _TRY_(MouseButtonPressed(button, action, mods));
-    } else {
-      component->MouseButtonPressedAll(button, action, mods);
-    }
+  if (!enabled_) { return; }
+
+  _TRY_(MouseButtonPressed(button, action, mods));
+  for (auto& component : components_) {
+    component->MouseButtonPressedAll(button, action, mods);
   }
 }
 
 void GameObject::MouseMovedAll(double xpos, double ypos) {
-  for (auto& component : sorted_components_) {
-    if (component == this) {
-      _TRY_(MouseMoved(xpos, ypos));
-    } else {
-      component->MouseMovedAll(xpos, ypos);
-    }
+  if (!enabled_) { return; }
+
+  _TRY_(MouseMoved(xpos, ypos));
+  for (auto& component : components_) {
+    component->MouseMovedAll(xpos, ypos);
   }
 }
 
 void GameObject::InternalUpdate() {
   RemoveComponents();
-  UpdateSortedComponents();
+  AddNewComponents();
 }
 
-void GameObject::UpdateSortedComponents() {
-  RemoveComponents();
-  for (const auto& element : components_just_disabled_) {
-    sorted_components_.erase(element);
+void GameObject::AddNewComponents() {
+  if (!components_just_added_.empty()) {
+    // make sure all the componenets just enabled are aware of the screen's size
+    int width, height;
+    glfwGetWindowSize(scene()->window(), &width, &height);
+    for (const auto& component : components_just_added_) {
+      component->ScreenResizedAll(width, height);
+    }
+
+    // move them to their new place
+    for (auto& component : components_just_added_) {
+      components_.push_back(std::move(component));
+    }
+
+    components_just_added_.clear();
   }
-  components_just_disabled_.clear();
-  sorted_components_.insert(components_just_enabled_.begin(),
-                            components_just_enabled_.end());
-  // make sure all the componenets just enabled are aware of the screen's size
-  int width, height;
-  glfwGetWindowSize(scene()->window(), &width, &height);
-  for (const auto& component : components_just_enabled_) {
-    component->ScreenResizedAll(width, height);
-  }
-  components_just_enabled_.clear();
 }
 
 void GameObject::RemoveComponents() {
-  if (!remove_predicate_.components_.empty()) {
+  if (!components_to_remove_.empty()) {
     components_.erase(std::remove_if(components_.begin(), components_.end(),
-      remove_predicate_), components_.end());
-    remove_predicate_.components_.clear();
+      [&](const std::unique_ptr<GameObject>& go_ptr){
+        return components_to_remove_.find(go_ptr.get()) != components_to_remove_.end();
+      }), components_.end());
+    components_to_remove_.clear();
   }
 }
 
-bool GameObject::CompareGameObjects::operator()(GameObject* x,
-                                                GameObject* y) const {
-  assert(x && y);
-  if (x->group() == y->group()) {
-    // if x and y are in the same group and they are in a parent child
-    // relation, then the parent should be handled first
-    if (y->parent() == x) {
+bool GameObject::StealComponent(GameObject* go) {
+  if (!go) { return false; }
+  GameObject* parent = go->parent();
+  if (!parent) { return false; }
+
+  for (auto& component : parent->components_) {
+    if (component.get() == go) {
+      components_just_added_.push_back(std::move(component));
+      // The move leaves a nullptr in the parent->components_
+      // that should be removed, as it decrases performance
+      parent->RemoveComponent(nullptr);
+      component->parent_ = this;
+      component->transform_->set_parent(transform_.get());
+      component->scene_ = scene_;
       return true;
-    } else if (x->parent() == y) {
-      return false;
-    } else {
-      // if x and y aren't "relatives", then the
-      // order of adding them should count
-      return x->uid_ < y->uid_;
     }
-  } else {
-    return x->group() < y->group();
+  }
+  return false;
+}
+
+void GameObject::RemoveComponent(GameObject* component_to_remove) {
+  if (component_to_remove) {
+    components_to_remove_.insert(component_to_remove);
   }
 }
 

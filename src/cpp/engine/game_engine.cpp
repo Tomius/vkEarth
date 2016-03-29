@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Tamas Csala
+// Copyright (c) 2016, Tamas Csala
 
 #include <string>
 #include <GLFW/glfw3.h>
@@ -88,6 +88,10 @@ void GameEngine::Run() {
   }
 }
 
+void GameEngine::ErrorCallback(int error, const char* message) {
+  std::cerr << "GLFW error: " << message << std::endl;
+}
+
 void GameEngine::KeyCallback(GLFWwindow* window, int key, int scancode,
                              int action, int mods) {
   if (action == GLFW_PRESS) {
@@ -113,6 +117,45 @@ void GameEngine::KeyCallback(GLFWwindow* window, int key, int scancode,
   GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
   if (gameEngine && gameEngine->scene_) {
     gameEngine->scene_->KeyActionAll(key, scancode, action, mods);
+  }
+}
+
+void GameEngine::CharCallback(GLFWwindow* window, unsigned codepoint) {
+  GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
+  if (gameEngine && gameEngine->scene_) {
+    gameEngine->scene_->CharTypedAll(codepoint);
+  }
+}
+
+void GameEngine::ScreenResizeCallback(GLFWwindow* window, int width, int height) {
+  GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
+  if (gameEngine && gameEngine->scene_) {
+    std::cout << "Screen resized to " << width << "x" << height << "." << std::endl;
+    gameEngine->scene_->ScreenResizedCleanAll();
+    gameEngine->scene_->ScreenResizedAll(width, height);
+  }
+}
+
+void GameEngine::MouseScrolledCallback(GLFWwindow* window, double xoffset,
+                                  double yoffset) {
+  GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
+  if (gameEngine && gameEngine->scene_) {
+    gameEngine->scene_->MouseScrolledAll(xoffset, yoffset);
+  }
+}
+
+void GameEngine::MouseButtonPressed(GLFWwindow* window, int button,
+                               int action, int mods) {
+  GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
+  if (gameEngine && gameEngine->scene_) {
+    gameEngine->scene_->MouseButtonPressedAll(button, action, mods);
+  }
+}
+
+void GameEngine::MouseMoved(GLFWwindow* window, double xpos, double ypos) {
+  GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
+  if (gameEngine && gameEngine->scene_) {
+    gameEngine->scene_->MouseMovedAll(xpos, ypos);
   }
 }
 

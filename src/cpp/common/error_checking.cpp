@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #include "common/error_checking.hpp"
 
 static const char* GetVulkanResultString(VkResult result)

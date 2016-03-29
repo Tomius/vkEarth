@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #include "common/debug_callback.hpp"
 
 #if VK_VALIDATE

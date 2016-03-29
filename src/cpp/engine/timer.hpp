@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Tamas Csala
+// Copyright (c) 2016, Tamas Csala
 
 #ifndef ENGINE_TIMER_H_
 #define ENGINE_TIMER_H_

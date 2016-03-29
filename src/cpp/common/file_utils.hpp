@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #ifndef FILE_UTILS_HPP_
 #define FILE_UTILS_HPP_
 

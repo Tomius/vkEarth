@@ -1,8 +1,10 @@
-#ifndef CREATE_DEBUG_CALLBACK_HPP_
-#define CREATE_DEBUG_CALLBACK_HPP_
+// Copyright (c) 2016, Tamas Csala
+
+#ifndef COMMON_DEBUG_CALLBACK_HPP_
+#define COMMON_DEBUG_CALLBACK_HPP_
 
 #include <vulkan/vk_cpp.h>
-#include "common/defines.hpp"
+#include "common/settings.hpp"
 
 #if VK_VALIDATE
 class DebugCallback {

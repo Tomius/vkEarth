@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #ifndef ERROR_CHECKING_HPP_
 #define ERROR_CHECKING_HPP_
 

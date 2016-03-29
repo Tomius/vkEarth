@@ -1,4 +1,4 @@
-// Copyright (c) 2015, Tamas Csala
+// Copyright (c) 2016, Tamas Csala
 
 #ifndef ENGINE_CAMERA_H_
 #define ENGINE_CAMERA_H_
@@ -25,7 +25,9 @@ class CameraTransform : public Transform {
 
   // We have custom up and right vectors
   virtual vec3 up() const override { return up_; }
-  virtual void set_up(const vec3& new_up) override { up_ = glm::normalize(new_up); }
+  virtual void set_up(const vec3& new_up) override {
+    up_ = glm::normalize(new_up);
+  }
   virtual vec3 right() const override {
     return glm::normalize(glm::cross(forward(), up()));
   }
@@ -41,17 +43,10 @@ class CameraTransform : public Transform {
 /// The base class for all cameras
 class Camera : public GameObject {
  public:
-  Camera(GameObject* parent, double fovy, double z_near, double z_far)
-      : GameObject(parent, CameraTransform{}), fovy_(fovy), z_near_(z_near)
-      , z_far_(z_far), width_(0), height_(0) {
-    assert(fovy_ < M_PI);
-  }
+  Camera(GameObject* parent, double fovy, double z_near, double z_far);
   virtual ~Camera() {}
 
-  virtual void ScreenResized(size_t width, size_t height) override {
-    width_ = width;
-    height_ = height;
-  }
+  virtual void ScreenResized(size_t width, size_t height) override;
 
   const glm::dmat4& cameraMatrix() const { return cam_mat_; }
   const glm::dmat4& projectionMatrix() const { return proj_mat_; }
@@ -66,22 +61,9 @@ class Camera : public GameObject {
   double z_far() const { return z_far_;}
   void set_z_far(double z_far) { z_far_ = z_far; }
 
-  bool isPointInsideFrustum(const glm::dvec3& p) const {
-    glm::dmat4 mat = projectionMatrix() * cameraMatrix();
-    glm::dvec4 proj = mat * glm::dvec4(p, 1);
-    proj /= proj.w;
-
-    return -1 < proj.x && proj.x < 1 && -1 < proj.y && proj.y < 1 &&
-            0 < proj.z && proj.z < 1;
-  }
-
  protected:
-  // it must be called through update()
-  void update_cache() {
-    updateCameraMatrix();
-    updateProjectionMatrix();
-    updateFrustum();
-  }
+  // it must be called through Derived::Update()
+  virtual void Update() override;
 
  private:
   double fovy_, z_near_, z_far_, width_, height_;
@@ -89,58 +71,9 @@ class Camera : public GameObject {
   glm::dmat4 cam_mat_, proj_mat_;
   Frustum frustum_;
 
-  void updateCameraMatrix() {
-    const Transform* t = transform();
-    cam_mat_ = glm::lookAt(t->pos(), t->pos()+t->forward(), t->up());
-  }
-
-  void updateProjectionMatrix() {
-    proj_mat_ = glm::perspectiveFov<double>(fovy_, width_, height_, z_near_, z_far_);
-  }
-
-  void updateFrustum() {
-    glm::dmat4 m = proj_mat_ * cam_mat_;
-
-    // REMEMBER: m[i][j] is j-th row, i-th column!!!
-
-    frustum_ = Frustum{{
-      // left
-     {m[0][3] + m[0][0],
-      m[1][3] + m[1][0],
-      m[2][3] + m[2][0],
-      m[3][3] + m[3][0]},
-
-      // right
-     {m[0][3] - m[0][0],
-      m[1][3] - m[1][0],
-      m[2][3] - m[2][0],
-      m[3][3] - m[3][0]},
-
-      // top
-     {m[0][3] - m[0][1],
-      m[1][3] - m[1][1],
-      m[2][3] - m[2][1],
-      m[3][3] - m[3][1]},
-
-      // bottom
-     {m[0][3] + m[0][1],
-      m[1][3] + m[1][1],
-      m[2][3] + m[2][1],
-      m[3][3] + m[3][1]},
-
-      // near
-     {m[0][2],
-      m[1][2],
-      m[2][2],
-      m[3][2]},
-
-      // far
-     {m[0][3] - m[0][2],
-      m[1][3] - m[1][2],
-      m[2][3] - m[2][2],
-      m[3][3] - m[3][2]}
-    }};
-  }
+  void UpdateCameraMatrix();
+  void UpdateProjectionMatrix();
+  void UpdateFrustum();
 };
 
 class FreeFlyCamera : public Camera {
@@ -149,15 +82,7 @@ class FreeFlyCamera : public Camera {
                 double z_far, const glm::dvec3& pos,
                 const glm::dvec3& target = glm::dvec3(),
                 double speed_per_sec = 5.0f,
-                double mouse_sensitivity = 5.0f)
-      : Camera(parent, fov, z_near, z_far)
-      , first_call_(true)
-      , speed_per_sec_(speed_per_sec)
-      , mouse_sensitivity_(mouse_sensitivity)
-      , cos_max_pitch_angle_(0.98f) {
-    transform()->set_pos(pos);
-    transform()->set_forward(target - pos);
-  }
+                double mouse_sensitivity = 5.0f);
 
   double speed_per_sec() const { return speed_per_sec_; }
   double mouse_sensitivity() const { return mouse_sensitivity_; }
@@ -187,29 +112,13 @@ class ThirdPersonalCamera : public Camera {
                       double min_dist_mod = 0.25,
                       double max_dist_mod = 4.00,
                       double base_distance = 0.0,
-                      double dist_offset = 0.0)
-      : Camera(parent, fov, z_near, z_far)
-      , target_(parent->transform())
-      , first_call_(true)
-      , initial_distance_(glm::length(target_->pos() - position) - dist_offset)
-      , base_distance_(base_distance == 0.0 ? initial_distance_ : base_distance)
-      , cos_max_pitch_angle_(0.999)
-      , mouse_sensitivity_(mouse_sensitivity)
-      , mouse_scroll_sensitivity_(mouse_scroll_sensitivity)
-      , min_dist_mod_(min_dist_mod)
-      , max_dist_mod_(max_dist_mod)
-      , dist_offset_(dist_offset)
-      , curr_dist_mod_(initial_distance_ / base_distance_)
-      , dest_dist_mod_(curr_dist_mod_){
-    transform()->set_pos(position);
-    transform()->set_forward(target_->pos() - position);
-  }
+                      double dist_offset = 0.0);
 
   virtual ~ThirdPersonalCamera() {}
 
  private:
   // The target object's transform, that the camera is following
-  Transform *target_;
+  Transform& target_;
 
   // We shouldn't interpolate at the first call.
   bool first_call_;
@@ -223,15 +132,7 @@ class ThirdPersonalCamera : public Camera {
   double curr_dist_mod_, dest_dist_mod_;
 
   virtual void Update() override;
-
-  virtual void MouseScrolled(double, double yoffset) override {
-    dest_dist_mod_ *= 1 + (-yoffset) * 0.1 * mouse_scroll_sensitivity_;
-    if (dest_dist_mod_ < min_dist_mod_) {
-      dest_dist_mod_ = min_dist_mod_;
-    } else if (dest_dist_mod_ > max_dist_mod_) {
-      dest_dist_mod_ = max_dist_mod_;
-    }
-  }
+  virtual void MouseScrolled(double, double yoffset) override;
 };  // ThirdPersonalCamera
 
 }  // namespace engine

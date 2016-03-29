@@ -1,11 +1,13 @@
+// Copyright (c) 2016, Tamas Csala
+
 #include "cdlod/cdlod_quad_tree.hpp"
 
 CdlodQuadTree::CdlodQuadTree(size_t kFaceSize, CubeFace face)
-  : maxNodeLevel_(log2(kFaceSize) - Settings::kNodeDimensionExp)
-  , root_(kFaceSize/2, kFaceSize/2, face, maxNodeLevel_) {}
+  : max_node_level_(log2(kFaceSize) - Settings::kNodeDimensionExp)
+  , root_(kFaceSize/2, kFaceSize/2, face, max_node_level_) {}
 
 void CdlodQuadTree::SelectNodes(const engine::Camera& cam, QuadGridMesh& mesh) {
-  root_.selectNodes(cam.transform()->pos(), cam.frustum(), mesh);
-  root_.age();
+  root_.SelectNodes(cam.transform().pos(), cam.frustum(), mesh);
+  root_.Age();
 }
 

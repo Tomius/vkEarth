@@ -1,3 +1,5 @@
+// Copyright (c) 2016, Tamas Csala
+
 #ifndef VULKAN_MEMORY_HPP_
 #define VULKAN_MEMORY_HPP_
 
