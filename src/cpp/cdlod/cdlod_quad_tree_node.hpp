@@ -22,7 +22,6 @@ class CdlodQuadTreeNode {
   CubeFace face_;
   int level_;
   SpherizedAABBDivided bbox_;
-  CdlodQuadTreeNode* parent_;
   std::unique_ptr<CdlodQuadTreeNode> children_[4];
   int last_used_ = 0;
 

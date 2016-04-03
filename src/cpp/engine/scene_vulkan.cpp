@@ -18,7 +18,8 @@ namespace engine {
 void Scene::SetImageLayout(const vk::Image& image,
                            const vk::ImageAspectFlags& aspectMask,
                            const vk::ImageLayout& oldImageLayout,
-                           const vk::ImageLayout& newImageLayout) {
+                           const vk::ImageLayout& newImageLayout,
+                           vk::AccessFlags srcAccess) {
     if (vkSetupCmd_ == VK_NULL_HANDLE) {
         const vk::CommandBufferAllocateInfo cmd = vk::CommandBufferAllocateInfo()
             .commandPool(vkCmdPool_)
@@ -40,11 +41,17 @@ void Scene::SetImageLayout(const vk::Image& image,
         .oldLayout(oldImageLayout)
         .newLayout(newImageLayout)
         .image(image)
+        .srcAccessMask(srcAccess)
         .subresourceRange({aspectMask, 0, 1, 0, 1});
+
+    if (newImageLayout == vk::ImageLayout::eTransferSrcOptimal) {
+        /* Make sure anything that was copying from this image has completed */
+        imageMemoryBarrier.dstAccessMask(vk::AccessFlagBits::eTransferRead);
+    }
 
     if (newImageLayout == vk::ImageLayout::eTransferDstOptimal) {
         /* Make sure anything that was copying from this image has completed */
-        imageMemoryBarrier.dstAccessMask(vk::AccessFlagBits::eTransferRead);
+        imageMemoryBarrier.dstAccessMask(vk::AccessFlagBits::eTransferWrite);
     }
 
     if (newImageLayout == vk::ImageLayout::eColorAttachmentOptimal) {
@@ -440,8 +447,9 @@ Scene::DepthBuffer Scene::CreateDepthBuffer(GLFWwindow* window,
   vk::chk(vkDevice.bindImageMemory(depth.image, depth.mem, 0));
 
   scene.SetImageLayout(depth.image, vk::ImageAspectFlagBits::eDepth,
-                 vk::ImageLayout::eUndefined,
-                 vk::ImageLayout::eDepthStencilAttachmentOptimal);
+                       vk::ImageLayout::eUndefined,
+                       vk::ImageLayout::eDepthStencilAttachmentOptimal,
+                       vk::AccessFlags{});
 
   /* create image view */
   view.image(depth.image);
@@ -591,7 +599,8 @@ void Scene::PrepareBuffers() {
       SetImageLayout(vkBuffers()[i].image,
                      vk::ImageAspectFlagBits::eColor,
                      vk::ImageLayout::eUndefined,
-                     vk::ImageLayout::ePresentSrcKHR);
+                     vk::ImageLayout::ePresentSrcKHR,
+                     vk::AccessFlags{});
 
       color_attachment_view.image(vkBuffers()[i].image);
 

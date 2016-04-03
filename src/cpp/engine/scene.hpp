@@ -73,7 +73,8 @@ class Scene : public GameObject {
   void SetImageLayout(const vk::Image& image,
                       const vk::ImageAspectFlags& aspectMask,
                       const vk::ImageLayout& oldImageLayout,
-                      const vk::ImageLayout& newImageLayout);
+                      const vk::ImageLayout& newImageLayout,
+                      vk::AccessFlags srcAccess);
 
   void FlushInitCommand();
 

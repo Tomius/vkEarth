@@ -6,7 +6,7 @@
 
 CdlodQuadTreeNode::CdlodQuadTreeNode(double x, double z, CubeFace face,
                                      int level, CdlodQuadTreeNode* parent)
-    : x_(x), z_(z), face_(face), level_(level), parent_(parent)
+    : x_(x), z_(z), face_(face), level_(level)
     , bbox_{glm::vec3{x - size()/2, 0, z - size()/2},
             glm::vec3{x + size()/2, 0, z + size()/2},
             face, Settings::kFaceSize}

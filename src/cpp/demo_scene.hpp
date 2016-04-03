@@ -25,44 +25,10 @@ struct TextureObject {
 
 struct UniformData {
   glm::mat4 mvp;
-  glm::vec3 cameraPos;
-  float terrainSmallestGeometryLodDistance;
-  float terrainSphereRadius;
-  int terrainMaxLoadLevel;
-};
-
-struct Demo {
-  GLFWwindow* window;
-  bool kUseStagingBuffer = false;
-
-  struct TextureObject textures[DEMO_TEXTURE_COUNT];
-
-  struct {
-    vk::Buffer buf;
-    vk::DeviceMemory mem;
-    vk::DescriptorBufferInfo bufferInfo;
-  } uniformData;
-
-  vk::PipelineVertexInputStateCreateInfo vertexInput;
-  vk::VertexInputBindingDescription vertexInputBindings[2];
-  vk::VertexInputAttributeDescription vertexInputAttribs[2];
-
-  struct {
-    vk::Buffer buf;
-    vk::DeviceMemory mem;
-  } vertexAttribs, instanceAttribs, indices;
-
-  vk::PipelineLayout pipelineLayout;
-  vk::DescriptorSetLayout descLayout;
-  vk::RenderPass renderPass;
-  vk::Pipeline pipeline;
-
-  vk::DescriptorPool descPool;
-  vk::DescriptorSet descSet;
-
-  vk::Framebuffer *framebuffers = nullptr;
-
-  QuadGridMesh gridMesh{Settings::kNodeDimension};
+  glm::vec3 camera_pos;
+  float terrain_smallest_geometry_lod_distance;
+  float terrain_sphere_radius;
+  int terrain_max_lod_level;
 };
 
 class DemoScene : public engine::Scene {
@@ -76,8 +42,57 @@ public:
   virtual void ScreenResized(size_t width, size_t height) override;
 
 private:
-  CdlodQuadTree quadTrees[6];
-  Demo demo_;
+  bool kUseStagingBuffer = true;
+
+  struct TextureObject textures_[DEMO_TEXTURE_COUNT];
+
+  struct {
+    vk::Buffer buf;
+    vk::DeviceMemory mem;
+    vk::DescriptorBufferInfo bufferInfo;
+  } uniform_data_;
+
+  vk::PipelineVertexInputStateCreateInfo vertex_input_;
+  vk::VertexInputBindingDescription vertex_input_bindings_[2];
+  vk::VertexInputAttributeDescription vertex_input_attribs_[2];
+
+  struct {
+    vk::Buffer buf;
+    vk::DeviceMemory mem;
+  } vertex_attribs_, instance_attribs_, indices_;
+
+  vk::PipelineLayout pipeline_layout_;
+  vk::DescriptorSetLayout desc_layout_;
+  vk::RenderPass render_pass_;
+  vk::Pipeline pipeline_;
+
+  vk::DescriptorPool desc_pool_;
+  vk::DescriptorSet desc_set_;
+
+  std::unique_ptr<vk::Framebuffer> framebuffers_;
+
+  QuadGridMesh grid_mesh_{Settings::kNodeDimension};
+  CdlodQuadTree quad_trees_[6];
+
+  void BuildDrawCmd();
+  void Draw();
+  void PrepareTextureImage(const uint32_t *tex_colors,
+                           int32_t tex_width, int32_t tex_height,
+                           TextureObject *tex_obj, vk::ImageTiling tiling,
+                           vk::ImageUsageFlags usage,
+                           vk::MemoryPropertyFlags required_props,
+                           vk::Format tex_format);
+  void PrepareTextures();
+  void PrepareIndices();
+  void PrepareVertices();
+  void PrepareDescriptorLayout();
+  void PrepareRenderPass();
+  void PrepareDescriptorPool();
+  void PrepareUniformBuffer();
+  void PrepareDescriptorSet();
+  void PrepareFramebuffers();
+  void Prepare();
+  void Cleanup();
 };
 
 #endif // DEMO_SCENE_HPP_

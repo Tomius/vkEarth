@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 2.8)
 link_libraries(glfw)
 link_libraries(glslang OGLCompiler OSDependent SPIRV)
 
-set (CMAKE_CXX_FLAGS "-O3 -std=c++11")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DVK_DEBUG")
 
 if (BUILD_SHARED_LIBS)
     link_libraries("${MATH_LIBRARY}")
@@ -13,18 +14,18 @@ if (MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-file(GLOB vkEarth_SOURCE "cpp/*.cpp" "cpp/*/*.cpp")
+file(GLOB vkEarth_SOURCE "cpp/*.cpp" "cpp/*/*.cpp" "../deps/lodepng/lodepng.cpp")
 add_executable(vkEarth WIN32 ${vkEarth_SOURCE} ${ICON})
 
 target_include_directories(vkEarth PRIVATE "${VULKAN_INCLUDE_DIR}")
 target_link_libraries(vkEarth "${VULKAN_LIBRARY}")
 set(WINDOWS_BINARIES vkEarth)
-SET(EXECUTABLE_OUTPUT_PATH ${vkEarth_SOURCE_DIR})
+set(EXECUTABLE_OUTPUT_PATH ${vkEarth_SOURCE_DIR})
 
 # Copy shader codes
-add_custom_command(TARGET vkEarth PRE_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                   ${CMAKE_SOURCE_DIR}/src/glsl $<TARGET_FILE_DIR:vkEarth>/src/glsl)
+# add_custom_command(TARGET vkEarth PRE_BUILD
+#                    COMMAND ${CMAKE_COMMAND} -E copy_directory
+#                    ${CMAKE_SOURCE_DIR}/src/glsl $<TARGET_FILE_DIR:vkEarth>/src/glsl)
 
 if (MSVC)
     # Tell MSVC to use main instead of WinMain for Windows subsystem executables

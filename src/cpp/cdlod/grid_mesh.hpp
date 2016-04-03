@@ -32,7 +32,7 @@ class GridMesh {
   int index_count_, dimension_;
   std::vector<svec2> positions_;
   std::vector<uint16_t> indices_;
-  std::vector<glm::vec4> renderData_; // xy: offset, z: level, w: face
+  std::vector<glm::vec4> render_data_; // xy: offset, z: level, w: face
 
   GridMesh(uint8_t dimension);
 
@@ -40,7 +40,7 @@ class GridMesh {
   void ClearRenderList();
 
   int dimension() const {return dimension_;}
-  size_t node_count() const { return renderData_.size(); }
+  size_t node_count() const { return render_data_.size(); }
 };
 
 #endif // CDLOD_GRID_MESH_H_

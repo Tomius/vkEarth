@@ -5,7 +5,13 @@
 
 #include <memory>
 
-#define VK_VALIDATE 1
+#ifndef VK_VALIDATE
+  #ifdef VK_DEBUG
+    #define VK_VALIDATE 1
+  #else
+    #define VK_VALIDATE 0
+  #endif
+#endif
 #define VK_VSYNC 0
 
 namespace Settings {

@@ -13,16 +13,20 @@ struct VulkanError : public std::runtime_error {
 };
 
 inline void VkChk(VkResult result) {
+#ifdef VK_DEBUG
   if (result != VK_SUCCESS) {
     throw VulkanError(result);
   }
+#endif
 }
 
 namespace vk {
   inline void chk(vk::Result result) {
+#ifdef VK_DEBUG
     if (result != vk::Result::eSuccess) {
       throw VulkanError(static_cast<VkResult>(result));
     }
+#endif
   }
 }
 

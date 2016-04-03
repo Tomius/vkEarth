@@ -13,9 +13,12 @@ set(vkEarth_VERSION_MINOR "0")
 set(vkEarth_VERSION_PATCH "0")
 set(vkEarth_VERSION_EXTRA "")
 
-set (CMAKE_CXX_FLAGS "-g -std=c++11")
-
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# Compiler flags
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -ffast-math")
+set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 #--------------------------------------------------------------------
 # Add subdirectories
@@ -31,6 +34,10 @@ include_directories(SYSTEM deps/glm)
 
 include_directories(SYSTEM deps/vkcpp)
 include_directories(${vkEarth_SOURCE_DIR}/src/cpp)
+
+include_directories(SYSTEM deps/lodepng)
+
+# This should be the last subdir / include
 add_subdirectory(src)
 
 set(CMAKE_MODULE_PATH "${vkEarth_SOURCE_DIR}/deps/glfw/CMake/modules")
