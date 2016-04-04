@@ -29,6 +29,7 @@ struct UniformData {
   float terrain_smallest_geometry_lod_distance;
   float terrain_sphere_radius;
   float face_size;
+  float height_scale;
   int terrain_max_lod_level;
 };
 

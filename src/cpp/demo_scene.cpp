@@ -472,7 +472,7 @@ void DemoScene::PrepareDescriptorLayout() {
       .binding(0)
       .descriptorType(vk::DescriptorType::eCombinedImageSampler)
       .descriptorCount(DEMO_TEXTURE_COUNT)
-      .stageFlags(vk::ShaderStageFlagBits::eFragment),
+      .stageFlags(vk::ShaderStageFlagBits::eFragment | vk::ShaderStageFlagBits::eVertex),
     vk::DescriptorSetLayoutBinding()
       .binding(1)
       .descriptorType(vk::DescriptorType::eUniformBuffer)
@@ -841,7 +841,9 @@ DemoScene::DemoScene(GLFWwindow *window)
         {Settings::kFaceSize, CubeFace::kNegZ},
       } {
   Prepare();
-  set_camera(AddComponent<engine::FreeFlyCamera>(glm::radians(60.0), 1, 100000, glm::dvec3(0, 10, 0), glm::dvec3{10, 0, 10}, 1000));
+  set_camera(AddComponent<engine::FreeFlyCamera>(
+      glm::radians(60.0), 10, 1000000, glm::dvec3{-54483.2, 38919.9, 13576.9},
+      glm::dvec3{10, 0, 10}, 5000));
   startTime = clock();
 }
 
@@ -871,6 +873,7 @@ void DemoScene::Update() {
     uniform_data->terrain_smallest_geometry_lod_distance = Settings::kSmallestGeometryLodDistance;
     uniform_data->terrain_sphere_radius = Settings::kSphereRadius;
     uniform_data->face_size = Settings::kFaceSize;
+    uniform_data->height_scale = Settings::kMaxHeight;
     uniform_data->terrain_max_lod_level = quad_trees_[0].max_node_level();
 
     vk_device().unmapMemory(uniform_data_.mem);

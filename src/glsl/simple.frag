@@ -7,11 +7,11 @@
 layout (location = 0) flat in int vFace;
 layout (location = 1) in vec2 vTexCoord;
 
-uniform sampler2D tex[6];
+uniform sampler2D heightmap[6];
 
 layout (location = 0) out vec4 outColor;
 
 void main() {
-  vec3 color = sqrt(texture(tex[vFace], vTexCoord).rgb);
+  vec3 color = sqrt(texture(heightmap[vFace], vTexCoord).rgb);
   outColor = vec4(color, 1);
 }

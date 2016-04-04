@@ -23,6 +23,11 @@ void Scene::KeyAction(int key, int scancode, int action, int mods) {
       case GLFW_KEY_F1:
         camera_time_.Toggle();
         break;
+      case GLFW_KEY_P:
+        if (camera()) {
+          std::cout << camera()->transform().pos() << std::endl;
+        }
+        break;
       default:
         break;
     }

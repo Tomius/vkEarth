@@ -30,8 +30,8 @@ static constexpr long kFaceSize = 65536;
 static constexpr double kSphereRadius = kFaceSize / 2;
 
 static constexpr double kMtEverestHeight = 8848 * (kSphereRadius / 6371000);
-static constexpr double kHeightScale = 1;
-static constexpr double kMaxHeight = kHeightScale * kMtEverestHeight;
+static constexpr double kScaleOfRealisticHeight = 128;
+static constexpr double kMaxHeight = kScaleOfRealisticHeight * kMtEverestHeight;
 
 // Geometry subdivision. This practially contols zooming into the heightmap.
 // If for ex. this is three, that means that a 8x8 geometry (9x9 vertices)

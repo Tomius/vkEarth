@@ -357,7 +357,8 @@ uint32_t VulkanScene::SelectQraphicsQueueNodeIndex(const vk::PhysicalDevice& gpu
   uint32_t graphics_queue_node_index = UINT32_MAX;
   uint32_t present_queue_node_index = UINT32_MAX;
   for (uint32_t i = 0; i < queue_count; i++) {
-    if ((queue_props[i].queueFlags() & vk::QueueFlagBits::eGraphics) != 0) {
+    if ((queue_props[i].queueFlags() & vk::QueueFlagBits::eGraphics)
+        != vk::QueueFlags{}) {
       if (graphics_queue_node_index == UINT32_MAX) {
         graphics_queue_node_index = i;
       }

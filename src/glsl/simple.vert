@@ -14,8 +14,11 @@ layout (std140, binding = 1) uniform bufferVals {
   float terrainSmallestGeometryLodDistance;
   float terrainSphereRadius;
   float faceSize;
+  float heightScale;
   int terrainMaxLoadLevel;
 } uniforms;
+
+uniform sampler2D heightmap[6];
 
 // out variables
 layout (location = 0) flat out int vFace;
@@ -73,13 +76,16 @@ vec3 WorldPos(vec3 pos) {
 
 /* Cube 2 Sphere */
 
-
-vec2 MorphVertex(vec2 vertex, float morph) {
-  return vertex - fract(vertex * 0.5) * 2.0 * morph;
+vec2 GetTexcoord(vec2 pos) {
+  return (pos / uniforms.faceSize + vec2(3.0 / 262.0)) * vec2(256.0 / 262.0);
 }
 
 float GetHeight(vec2 pos) {
-  return 0.0;
+  return texture(heightmap[terrainFace], GetTexcoord(pos)).r * uniforms.heightScale;
+}
+
+vec2 MorphVertex(vec2 vertex, float morph) {
+  return vertex - fract(vertex * 0.5) * 2.0 * morph;
 }
 
 vec2 NodeLocal2Global(vec2 nodeCoord) {
@@ -121,5 +127,5 @@ void main() {
   gl_Position.y = -gl_Position.y;
 
   vFace = terrainFace;
-  vTexCoord = modelPos.xz / uniforms.faceSize;
+  vTexCoord = GetTexcoord(modelPos.xz);
 }
