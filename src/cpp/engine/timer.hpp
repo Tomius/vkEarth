@@ -8,47 +8,19 @@
 namespace engine {
 
 class Timer {
-  double last_time_;
+  double last_time_, current_time_, dt_;
   bool stopped_;
 
  public:
-  double current, dt;
+  Timer() : last_time_(0), current_time_(0), dt_(0), stopped_(false) {}
 
-  Timer() : last_time_(0), stopped_(false), current(0), dt(0) {}
+  double Tick();
+  void   Stop();
+  void   Start();
+  void   Toggle();
 
-  double tick() {
-    if (!stopped_) {
-      double time = glfwGetTime();
-      if (last_time_ != 0) {
-        dt = time - last_time_;
-        // we don't want to take really big bursts into account.
-        if (dt > 0.5) {
-          dt = 0;
-        }
-      }
-      last_time_ = time;
-      current += dt;
-    }
-    return current;
-  }
-
-  void stop() {
-    stopped_ = true;
-    dt = 0;
-  }
-
-  void start() {
-    stopped_ = false;
-    last_time_ = glfwGetTime();
-  }
-
-  void toggle() {
-    if (stopped_) {
-      start();
-    } else {
-      stop();
-    }
-  }
+  double current_time() const { return current_time_; }
+  double dt() const { return dt_; }
 };
 
 }  // namespace engine

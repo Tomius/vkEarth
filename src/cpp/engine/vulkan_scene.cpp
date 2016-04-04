@@ -1,6 +1,6 @@
 // Copyright (c) 2016, Tamas Csala
 
-#include "engine/scene.hpp"
+#include "engine/vulkan_scene.hpp"
 
 #include <memory>
 #include <vector>
@@ -13,68 +13,169 @@
 namespace engine {
 
 /******************************************************
+*                          Ctor                       *
+*******************************************************/
+VulkanScene::VulkanScene(GLFWwindow *window)
+    : engine::Scene(window)
+    , vk_instance_(CreateInstance(vk_app_))
+#if VK_VALIDATE
+    , vk_debug_callback_(new DebugCallback(vk_instance_))
+#endif
+    , vk_gpu_(CreatePhysicalDevice(vk_instance_, vk_app_))
+    , vk_surface_(CreateSurface(vk_instance_, window))
+    , vk_graphics_queue_node_index_(
+        SelectQraphicsQueueNodeIndex(vk_gpu_, vk_surface_, vk_app_))
+    , vk_device_(CreateDevice(vk_gpu_, vk_graphics_queue_node_index_, vk_app_))
+    , vk_queue_(GetQueue(vk_device_, vk_graphics_queue_node_index_)) {
+  GetSurfaceProperties(vk_gpu_, vk_surface_, vk_app_, vk_surface_format_,
+                       vk_surface_color_space_, vk_gpu_memory_properties_);
+
+  const vk::CommandPoolCreateInfo cmd_pool_info = vk::CommandPoolCreateInfo()
+      .queueFamilyIndex(vk_graphics_queue_node_index_)
+      .flags(vk::CommandPoolCreateFlagBits::eResetCommandBuffer);
+
+  vk::chk(vk_device_.createCommandPool(&cmd_pool_info, nullptr, &vk_cmd_pool_));
+
+  const vk::CommandBufferAllocateInfo cmd = vk::CommandBufferAllocateInfo()
+      .commandPool(vk_cmd_pool_)
+      .level(vk::CommandBufferLevel::ePrimary)
+      .commandBufferCount(1);
+
+  vk::chk(vk_device_.allocateCommandBuffers(&cmd, &vk_draw_cmd_));
+
+  PrepareBuffers();
+
+  vk_depth_buffer_ = CreateDepthBuffer(window, vk_device_, *this);
+}
+
+/******************************************************
+*                          Dtor                       *
+*******************************************************/
+VulkanScene::~VulkanScene() {
+  if (vk_setup_cmd_) {
+    vk_device_.freeCommandBuffers(vk_cmd_pool_, 1, &vk_setup_cmd_);
+  }
+  vk_device_.freeCommandBuffers(vk_cmd_pool_, 1, &vk_draw_cmd_);
+  vk_device_.destroyCommandPool(vk_cmd_pool_, nullptr);
+
+  vk_device_.destroyImageView(vk_depth_buffer_.view, nullptr);
+  vk_device_.destroyImage(vk_depth_buffer_.image, nullptr);
+  vk_device_.freeMemory(vk_depth_buffer_.mem, nullptr);
+
+  for (uint32_t i = 0; i < vk_swapchain_image_count_; i++) {
+    vk_device_.destroyImageView(vk_buffers()[i].view, nullptr);
+  }
+
+  vk_app_.entry_points.DestroySwapchainKHR(vk_device_, vk_swapchain_, nullptr);
+
+  vk_device_.destroy(nullptr);
+  vk_instance_.destroySurfaceKHR(vk_surface_, nullptr);
+}
+
+/******************************************************
+*                      ScreenResizedClean                 *
+*******************************************************/
+void VulkanScene::ScreenResizedClean() {
+  if (vk_setup_cmd_) {
+    vk_device_.freeCommandBuffers(vk_cmd_pool_, 1, &vk_setup_cmd_);
+    vk_setup_cmd_ = VK_NULL_HANDLE;
+  }
+  vk_device_.freeCommandBuffers(vk_cmd_pool_, 1, &vk_draw_cmd_);
+  vk_device_.destroyCommandPool(vk_cmd_pool_, nullptr);
+
+  vk_device_.destroyImageView(vk_depth_buffer_.view, nullptr);
+  vk_device_.destroyImage(vk_depth_buffer_.image, nullptr);
+  vk_device_.freeMemory(vk_depth_buffer_.mem, nullptr);
+
+  for (uint32_t i = 0; i < vk_swapchain_image_count_; i++) {
+    vk_device_.destroyImageView(vk_buffers()[i].view, nullptr);
+  }
+}
+
+/******************************************************
+*                      ScreenResized                 *
+*******************************************************/
+void VulkanScene::ScreenResized(size_t width, size_t height) {
+  const vk::CommandPoolCreateInfo cmd_pool_info = vk::CommandPoolCreateInfo()
+      .queueFamilyIndex(vk_graphics_queue_node_index_)
+      .flags(vk::CommandPoolCreateFlagBits::eResetCommandBuffer);
+
+  vk::chk(vk_device_.createCommandPool(&cmd_pool_info, nullptr, &vk_cmd_pool_));
+
+  const vk::CommandBufferAllocateInfo cmd = vk::CommandBufferAllocateInfo()
+      .commandPool(vk_cmd_pool_)
+      .level(vk::CommandBufferLevel::ePrimary)
+      .commandBufferCount(1);
+
+  vk::chk(vk_device_.allocateCommandBuffers(&cmd, &vk_draw_cmd_));
+
+  PrepareBuffers();
+  vk_depth_buffer_ = CreateDepthBuffer(window(), vk_device_, *this);
+}
+
+/******************************************************
 *                      SetImageLayout                 *
 *******************************************************/
-void Scene::SetImageLayout(const vk::Image& image,
-                           const vk::ImageAspectFlags& aspectMask,
-                           const vk::ImageLayout& oldImageLayout,
-                           const vk::ImageLayout& newImageLayout,
-                           vk::AccessFlags srcAccess) {
-    if (vkSetupCmd_ == VK_NULL_HANDLE) {
+void VulkanScene::SetImageLayout(const vk::Image& image,
+                                 const vk::ImageAspectFlags& aspectMask,
+                                 const vk::ImageLayout& old_image_layout,
+                                 const vk::ImageLayout& new_image_layout,
+                                 vk::AccessFlags src_access) {
+    if (vk_setup_cmd_ == VK_NULL_HANDLE) {
         const vk::CommandBufferAllocateInfo cmd = vk::CommandBufferAllocateInfo()
-            .commandPool(vkCmdPool_)
+            .commandPool(vk_cmd_pool_)
             .level(vk::CommandBufferLevel::ePrimary)
             .commandBufferCount(1);
 
-        vk::chk(vkDevice_.allocateCommandBuffers(&cmd, &vkSetupCmd_));
+        vk::chk(vk_device_.allocateCommandBuffers(&cmd, &vk_setup_cmd_));
 
-        vk::CommandBufferInheritanceInfo cmdBufInhInfo =
+        vk::CommandBufferInheritanceInfo cmd_buf_inh_info =
             vk::CommandBufferInheritanceInfo();
 
-        vk::CommandBufferBeginInfo cmdBufInfo =
-          vk::CommandBufferBeginInfo().pInheritanceInfo(&cmdBufInhInfo);
+        vk::CommandBufferBeginInfo cmd_buf_info =
+          vk::CommandBufferBeginInfo().pInheritanceInfo(&cmd_buf_inh_info);
 
-        vk::chk(vkSetupCmd_.begin(&cmdBufInfo));
+        vk::chk(vk_setup_cmd_.begin(&cmd_buf_info));
     }
 
-    vk::ImageMemoryBarrier imageMemoryBarrier = vk::ImageMemoryBarrier()
-        .oldLayout(oldImageLayout)
-        .newLayout(newImageLayout)
+    vk::ImageMemoryBarrier image_memory_barrier = vk::ImageMemoryBarrier()
+        .oldLayout(old_image_layout)
+        .newLayout(new_image_layout)
         .image(image)
-        .srcAccessMask(srcAccess)
+        .srcAccessMask(src_access)
         .subresourceRange({aspectMask, 0, 1, 0, 1});
 
-    if (newImageLayout == vk::ImageLayout::eTransferSrcOptimal) {
+    if (new_image_layout == vk::ImageLayout::eTransferSrcOptimal) {
         /* Make sure anything that was copying from this image has completed */
-        imageMemoryBarrier.dstAccessMask(vk::AccessFlagBits::eTransferRead);
+        image_memory_barrier.dstAccessMask(vk::AccessFlagBits::eTransferRead);
     }
 
-    if (newImageLayout == vk::ImageLayout::eTransferDstOptimal) {
+    if (new_image_layout == vk::ImageLayout::eTransferDstOptimal) {
         /* Make sure anything that was copying from this image has completed */
-        imageMemoryBarrier.dstAccessMask(vk::AccessFlagBits::eTransferWrite);
+        image_memory_barrier.dstAccessMask(vk::AccessFlagBits::eTransferWrite);
     }
 
-    if (newImageLayout == vk::ImageLayout::eColorAttachmentOptimal) {
-        imageMemoryBarrier.dstAccessMask(
+    if (new_image_layout == vk::ImageLayout::eColorAttachmentOptimal) {
+        image_memory_barrier.dstAccessMask(
             vk::AccessFlagBits::eColorAttachmentWrite);
     }
 
-    if (newImageLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal) {
-        imageMemoryBarrier.dstAccessMask(
+    if (new_image_layout == vk::ImageLayout::eDepthStencilAttachmentOptimal) {
+        image_memory_barrier.dstAccessMask(
             vk::AccessFlagBits::eDepthStencilAttachmentWrite);
     }
 
-    if (newImageLayout == vk::ImageLayout::eShaderReadOnlyOptimal) {
+    if (new_image_layout == vk::ImageLayout::eShaderReadOnlyOptimal) {
         /* Make sure any Copy or CPU writes to image are flushed */
-        imageMemoryBarrier.dstAccessMask(vk::AccessFlagBits::eShaderRead |
+        image_memory_barrier.dstAccessMask(vk::AccessFlagBits::eShaderRead |
             vk::AccessFlagBits::eInputAttachmentRead);
     }
 
-    vk::PipelineStageFlags srcStages = vk::PipelineStageFlagBits::eTopOfPipe;
-    vk::PipelineStageFlags destStages = vk::PipelineStageFlagBits::eTopOfPipe;
+    vk::PipelineStageFlags src_stages = vk::PipelineStageFlagBits::eTopOfPipe;
+    vk::PipelineStageFlags dest_stages = vk::PipelineStageFlagBits::eTopOfPipe;
 
-    vkSetupCmd_.pipelineBarrier(srcStages, destStages,
-      vk::DependencyFlags(), 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
+    vk_setup_cmd_.pipelineBarrier(src_stages, dest_stages,
+      vk::DependencyFlags(), 0, nullptr, 0, nullptr, 1, &image_memory_barrier);
 }
 
 
@@ -93,22 +194,22 @@ void Scene::SetImageLayout(const vk::Image& image,
 /******************************************************
 *                      CreateInstance                 *
 *******************************************************/
-vk::Instance Scene::CreateInstance(VulkanApplication& app) {
+vk::Instance VulkanScene::CreateInstance(VulkanApplication& app) {
   /* Look for instance validation layers */
-  uint32_t allInstanceLayerCount = 0;
-  vk::chk(vk::enumerateInstanceLayerProperties(&allInstanceLayerCount, nullptr));
+  uint32_t all_instance_layer_count = 0;
+  vk::chk(vk::enumerateInstanceLayerProperties(&all_instance_layer_count, nullptr));
 
-  if (allInstanceLayerCount > 0) {
-    std::unique_ptr<vk::LayerProperties> instanceLayers{
-        new vk::LayerProperties[allInstanceLayerCount]};
-    vk::chk(vk::enumerateInstanceLayerProperties(&allInstanceLayerCount,
-                                                 instanceLayers.get()));
+  if (all_instance_layer_count > 0) {
+    std::unique_ptr<vk::LayerProperties> instance_layers{
+        new vk::LayerProperties[all_instance_layer_count]};
+    vk::chk(vk::enumerateInstanceLayerProperties(&all_instance_layer_count,
+                                                 instance_layers.get()));
 
 #if VK_VALIDATE
       CheckForMissingLayers(app.instance_validation_layers.size(),
                             app.instance_validation_layers.data(),
-                            allInstanceLayerCount,
-                            instanceLayers.get());
+                            all_instance_layer_count,
+                            instance_layers.get());
 #endif
   }
 
@@ -166,20 +267,20 @@ vk::Instance Scene::CreateInstance(VulkanApplication& app) {
 /******************************************************
 *                   CreatePhysicalDevice              *
 *******************************************************/
-vk::PhysicalDevice Scene::CreatePhysicalDevice(vk::Instance& instance,
-                                              const VulkanApplication& app) {
+vk::PhysicalDevice VulkanScene::CreatePhysicalDevice(vk::Instance& instance,
+                                                     const VulkanApplication& app) {
   /* Make initial call to query gpu_count, then second call for gpu info*/
   uint32_t gpu_count;
   vk::chk(instance.enumeratePhysicalDevices(&gpu_count, nullptr));
 
-  vk::PhysicalDevice gpuToUse;
+  vk::PhysicalDevice gpu_to_use;
   if (gpu_count > 0) {
       std::unique_ptr<vk::PhysicalDevice> physical_devices{
           new vk::PhysicalDevice[gpu_count]};
       vk::chk(instance.enumeratePhysicalDevices(&gpu_count, physical_devices.get()));
 
       /* TODO */
-      gpuToUse = physical_devices.get()[0];
+      gpu_to_use = physical_devices.get()[0];
   } else {
       throw std::runtime_error("vk::enumeratePhysicalDevices reported zero accessible devices."
                                "\n\nDo you have a compatible Vulkan installable client"
@@ -188,12 +289,12 @@ vk::PhysicalDevice Scene::CreatePhysicalDevice(vk::Instance& instance,
 
   /* Look for validation layers */
   uint32_t device_layer_count = 0;
-  vk::chk(gpuToUse.enumerateDeviceLayerProperties(&device_layer_count, nullptr));
+  vk::chk(gpu_to_use.enumerateDeviceLayerProperties(&device_layer_count, nullptr));
 
   if (device_layer_count > 0) {
     std::unique_ptr<vk::LayerProperties> device_layers{
         new vk::LayerProperties[device_layer_count]};
-    vk::chk(gpuToUse.enumerateDeviceLayerProperties(&device_layer_count,
+    vk::chk(gpu_to_use.enumerateDeviceLayerProperties(&device_layer_count,
                                                     device_layers.get()));
 
 #if VK_VALIDATE
@@ -204,7 +305,7 @@ vk::PhysicalDevice Scene::CreatePhysicalDevice(vk::Instance& instance,
 #endif
   }
 
-  return gpuToUse;
+  return gpu_to_use;
 }
 
 
@@ -212,8 +313,8 @@ vk::PhysicalDevice Scene::CreatePhysicalDevice(vk::Instance& instance,
 /******************************************************
 *                   CreateSurface                     *
 *******************************************************/
-VkSurfaceKHR Scene::CreateSurface(const vk::Instance& instance,
-                                  GLFWwindow* window) {
+VkSurfaceKHR VulkanScene::CreateSurface(const vk::Instance& instance,
+                                        GLFWwindow* window) {
 
   VkSurfaceKHR surface;
 
@@ -227,61 +328,61 @@ VkSurfaceKHR Scene::CreateSurface(const vk::Instance& instance,
 /******************************************************
 *             SelectQraphicsQueueNodeIndex            *
 *******************************************************/
-uint32_t Scene::SelectQraphicsQueueNodeIndex(const vk::PhysicalDevice& gpu,
-                                             const VkSurfaceKHR& surface,
-                                             const VulkanApplication& app) {
+uint32_t VulkanScene::SelectQraphicsQueueNodeIndex(const vk::PhysicalDevice& gpu,
+                                                   const VkSurfaceKHR& surface,
+                                                   const VulkanApplication& app) {
   // Get queue count and properties
-  uint32_t queueCount = 0;
-  gpu.getQueueFamilyProperties(&queueCount, nullptr);
+  uint32_t queue_count = 0;
+  gpu.getQueueFamilyProperties(&queue_count, nullptr);
 
   std::vector<vk::QueueFamilyProperties> queue_props;
-  queue_props.resize(queueCount);
-  gpu.getQueueFamilyProperties(&queueCount, queue_props.data());
-  assert(1 <= queueCount);
-  queue_props.resize(queueCount);
+  queue_props.resize(queue_count);
+  gpu.getQueueFamilyProperties(&queue_count, queue_props.data());
+  assert(1 <= queue_count);
+  queue_props.resize(queue_count);
 
   // Graphics queue and MemMgr queue can be separate.
   // TODO: Add support for separate queues, including synchronization,
   //       and appropriate tracking for QueueSubmit
 
   // Iterate over each queue to learn whether it supports presenting:
-  std::unique_ptr<vk::Bool32> supportsPresent{new vk::Bool32[queueCount]};
-  for (uint32_t i = 0; i < queueCount; i++) {
+  std::unique_ptr<vk::Bool32> supports_present{new vk::Bool32[queue_count]};
+  for (uint32_t i = 0; i < queue_count; i++) {
     app.entry_points.GetPhysicalDeviceSurfaceSupportKHR(
-        gpu, i, surface, &supportsPresent.get()[i]);
+        gpu, i, surface, &supports_present.get()[i]);
   }
 
   // Search for a graphics and a present queue in the array of queue
   // families, try to find one that supports both
-  uint32_t graphicsQueueNodeIndex = UINT32_MAX;
-  uint32_t presentQueueNodeIndex = UINT32_MAX;
-  for (uint32_t i = 0; i < queueCount; i++) {
+  uint32_t graphics_queue_node_index = UINT32_MAX;
+  uint32_t present_queue_node_index = UINT32_MAX;
+  for (uint32_t i = 0; i < queue_count; i++) {
     if ((queue_props[i].queueFlags() & vk::QueueFlagBits::eGraphics) != 0) {
-      if (graphicsQueueNodeIndex == UINT32_MAX) {
-        graphicsQueueNodeIndex = i;
+      if (graphics_queue_node_index == UINT32_MAX) {
+        graphics_queue_node_index = i;
       }
 
-      if (supportsPresent.get()[i]) {
-        graphicsQueueNodeIndex = i;
-        presentQueueNodeIndex = i;
+      if (supports_present.get()[i]) {
+        graphics_queue_node_index = i;
+        present_queue_node_index = i;
         break;
       }
     }
   }
 
-  if (presentQueueNodeIndex == UINT32_MAX) {
+  if (present_queue_node_index == UINT32_MAX) {
     // If didn't find a queue that supports both graphics and present, then
     // find a separate present queue.
-    for (uint32_t i = 0; i < queueCount; ++i) {
-      if (supportsPresent.get()[i]) {
-        presentQueueNodeIndex = i;
+    for (uint32_t i = 0; i < queue_count; ++i) {
+      if (supports_present.get()[i]) {
+        present_queue_node_index = i;
         break;
       }
     }
   }
 
   // Generate error if could not find both a graphics and a present queue
-  if (graphicsQueueNodeIndex == UINT32_MAX || presentQueueNodeIndex == UINT32_MAX) {
+  if (graphics_queue_node_index == UINT32_MAX || present_queue_node_index == UINT32_MAX) {
     throw std::runtime_error("Could not find a graphics and a present queue");
   }
 
@@ -290,11 +391,11 @@ uint32_t Scene::SelectQraphicsQueueNodeIndex(const vk::PhysicalDevice& gpu,
   // NOTE: While it is possible for an application to use a separate graphics
   //       and a present queues, this demo program assumes it is only using
   //       one:
-  if (graphicsQueueNodeIndex != presentQueueNodeIndex) {
+  if (graphics_queue_node_index != present_queue_node_index) {
     throw std::runtime_error("Could not find a common graphics and a present queue");
   }
 
-  return graphicsQueueNodeIndex;
+  return graphics_queue_node_index;
 }
 
 
@@ -312,19 +413,19 @@ uint32_t Scene::SelectQraphicsQueueNodeIndex(const vk::PhysicalDevice& gpu,
 /******************************************************
 *                   CreateDevice                      *
 *******************************************************/
-vk::Device Scene::CreateDevice(const vk::PhysicalDevice& gpu,
-                               uint32_t graphicsQueueNodeIndex,
-                               VulkanApplication& app) {
+vk::Device VulkanScene::CreateDevice(const vk::PhysicalDevice& gpu,
+                                     uint32_t graphics_queue_node_index,
+                                     VulkanApplication& app) {
   float queue_priorities[1] = {0.0};
   const vk::DeviceQueueCreateInfo queue = vk::DeviceQueueCreateInfo()
-      .queueFamilyIndex(graphicsQueueNodeIndex)
+      .queueFamilyIndex(graphics_queue_node_index)
       .queueCount(1)
       .pQueuePriorities(queue_priorities);
 
   vk::PhysicalDeviceFeatures features = vk::PhysicalDeviceFeatures()
       .fillModeNonSolid(true);
 
-  vk::DeviceCreateInfo deviceCreateInfo = vk::DeviceCreateInfo()
+  vk::DeviceCreateInfo device_create_info = vk::DeviceCreateInfo()
       .queueCreateInfoCount(1)
       .pQueueCreateInfos(&queue)
       .enabledLayerCount(app.device_validation_layers.size())
@@ -334,7 +435,7 @@ vk::Device Scene::CreateDevice(const vk::PhysicalDevice& gpu,
       .pEnabledFeatures(&features);
 
   vk::Device device;
-  vk::chk(gpu.createDevice(&deviceCreateInfo, nullptr, &device));
+  vk::chk(gpu.createDevice(&device_create_info, nullptr, &device));
 
   GET_DEVICE_PROC_ADDR(device, app, CreateSwapchainKHR);
   GET_DEVICE_PROC_ADDR(device, app, DestroySwapchainKHR);
@@ -349,10 +450,10 @@ vk::Device Scene::CreateDevice(const vk::PhysicalDevice& gpu,
 /******************************************************
 *                       GetQueue                      *
 *******************************************************/
-vk::Queue Scene::GetQueue(const vk::Device& device,
-                          uint32_t graphicsQueueNodeIndex) {
+vk::Queue VulkanScene::GetQueue(const vk::Device& device,
+                                uint32_t graphics_queue_node_index) {
   vk::Queue queue;
-  device.getQueue(graphicsQueueNodeIndex, 0, &queue);
+  device.getQueue(graphics_queue_node_index, 0, &queue);
   return queue;
 }
 
@@ -360,51 +461,51 @@ vk::Queue Scene::GetQueue(const vk::Device& device,
 /******************************************************
 *                  GetSurfaceProperties               *
 *******************************************************/
-void Scene::GetSurfaceProperties(const vk::PhysicalDevice& gpu,
-                                 const VkSurfaceKHR& surface,
-                                 const VulkanApplication& app,
-                                 vk::Format& format,
-                                 vk::ColorSpaceKHR& colorSpace,
-                                 vk::PhysicalDeviceMemoryProperties& memoryProperties) {
+void VulkanScene::GetSurfaceProperties(const vk::PhysicalDevice& gpu,
+                                       const VkSurfaceKHR& surface,
+                                       const VulkanApplication& app,
+                                       vk::Format& format,
+                                       vk::ColorSpaceKHR& color_space,
+                                       vk::PhysicalDeviceMemoryProperties& memory_properties) {
 
     // Get the list of vk::Format's that are supported:
-    uint32_t formatCount;
+    uint32_t format_count;
     VkChk(app.entry_points.GetPhysicalDeviceSurfaceFormatsKHR(
-          gpu, surface, &formatCount, nullptr));
+          gpu, surface, &format_count, nullptr));
 
-    std::unique_ptr<VkSurfaceFormatKHR> surfFormats{new VkSurfaceFormatKHR[formatCount]};
+    std::unique_ptr<VkSurfaceFormatKHR> surf_formats{new VkSurfaceFormatKHR[format_count]};
     VkChk(app.entry_points.GetPhysicalDeviceSurfaceFormatsKHR(
-        gpu, surface, &formatCount, surfFormats.get()));
+        gpu, surface, &format_count, surf_formats.get()));
 
     // If the format list includes just one entry of VK_FORMAT_UNDEFINED,
     // the surface has no preferred format.  Otherwise, at least one
     // supported format will be returned.
-    if (formatCount == 1 && surfFormats.get()[0].format == VK_FORMAT_UNDEFINED) {
+    if (format_count == 1 && surf_formats.get()[0].format == VK_FORMAT_UNDEFINED) {
         format = vk::Format::eB8G8R8A8Unorm;
     } else {
-        assert(formatCount >= 1);
-        format = static_cast<vk::Format>(surfFormats.get()[0].format);
+        assert(format_count >= 1);
+        format = static_cast<vk::Format>(surf_formats.get()[0].format);
     }
-    colorSpace = static_cast<vk::ColorSpaceKHR>(surfFormats.get()[0].colorSpace);
+    color_space = static_cast<vk::ColorSpaceKHR>(surf_formats.get()[0].colorSpace);
 
     // Get Memory information and properties
-    gpu.getMemoryProperties(&memoryProperties);
+    gpu.getMemoryProperties(&memory_properties);
 }
 
 
 /******************************************************
 *                  GetSurfaceProperties               *
 *******************************************************/
-Scene::DepthBuffer Scene::CreateDepthBuffer(GLFWwindow* window,
-                                            const vk::Device& vkDevice,
-                                            Scene& scene) {
+VulkanScene::DepthBuffer VulkanScene::CreateDepthBuffer(GLFWwindow* window,
+                                                        const vk::Device& vk_device,
+                                                        VulkanScene& scene) {
   DepthBuffer depth;
 
   const vk::Format depth_format = vk::Format::eD16Unorm;
   const vk::ImageCreateInfo image = vk::ImageCreateInfo()
       .imageType(vk::ImageType::e2D)
       .format(depth_format)
-      .extent(vk::Extent3D(scene.framebufferSize().x, scene.framebufferSize().y, 1))
+      .extent(vk::Extent3D(scene.framebuffer_size().x, scene.framebuffer_size().y, 1))
       .mipLevels(1)
       .arrayLayers(1)
       .samples(vk::SampleCountFlagBits::e1)
@@ -428,23 +529,23 @@ Scene::DepthBuffer Scene::CreateDepthBuffer(GLFWwindow* window,
   depth.format = depth_format;
 
   /* create image */
-  vk::chk(vkDevice.createImage(&image, nullptr, &depth.image));
+  vk::chk(vk_device.createImage(&image, nullptr, &depth.image));
 
   /* get memory requirements for this object */
-  vkDevice.getImageMemoryRequirements(depth.image, &mem_reqs);
+  vk_device.getImageMemoryRequirements(depth.image, &mem_reqs);
 
   /* select memory size and type */
   mem_alloc.allocationSize(mem_reqs.size());
-  MemoryTypeFromProperties(scene.vkGpuMemoryProperties(),
+  MemoryTypeFromProperties(scene.vk_gpu_memory_properties(),
                            mem_reqs.memoryTypeBits(),
                            vk::MemoryPropertyFlags(), /* No requirements */
                            mem_alloc);
 
   /* allocate memory */
-  vk::chk(vkDevice.allocateMemory(&mem_alloc, nullptr, &depth.mem));
+  vk::chk(vk_device.allocateMemory(&mem_alloc, nullptr, &depth.mem));
 
   /* bind memory */
-  vk::chk(vkDevice.bindImageMemory(depth.image, depth.mem, 0));
+  vk::chk(vk_device.bindImageMemory(depth.image, depth.mem, 0));
 
   scene.SetImageLayout(depth.image, vk::ImageAspectFlagBits::eDepth,
                        vk::ImageLayout::eUndefined,
@@ -453,134 +554,134 @@ Scene::DepthBuffer Scene::CreateDepthBuffer(GLFWwindow* window,
 
   /* create image view */
   view.image(depth.image);
-  vk::chk(vkDevice.createImageView(&view, nullptr, &depth.view));
+  vk::chk(vk_device.createImageView(&view, nullptr, &depth.view));
 
   return depth;
 }
 
 
-void Scene::FlushInitCommand() {
-  if (vkSetupCmd_ == VK_NULL_HANDLE)
+void VulkanScene::FlushInitCommand() {
+  if (vk_setup_cmd_ == VK_NULL_HANDLE)
     return;
 
-  vk::chk(vkSetupCmd_.end());
+  vk::chk(vk_setup_cmd_.end());
 
-  const vk::CommandBuffer commandBuffers[] = {vkSetupCmd_};
-  vk::Fence nullFence = {VK_NULL_HANDLE};
+  const vk::CommandBuffer commandBuffers[] = {vk_setup_cmd_};
+  vk::Fence null_fence = {VK_NULL_HANDLE};
   vk::SubmitInfo submitInfo = vk::SubmitInfo()
                                .commandBufferCount(1)
                                .pCommandBuffers(commandBuffers);
 
-  vk::chk(vkQueue_.submit(1, &submitInfo, nullFence));
-  vk::chk(vkQueue_.waitIdle());
+  vk::chk(vk_queue_.submit(1, &submitInfo, null_fence));
+  vk::chk(vk_queue_.waitIdle());
 
-  vkDevice_.freeCommandBuffers(vkCmdPool_, 1, commandBuffers);
-  vkSetupCmd_ = VK_NULL_HANDLE;
+  vk_device_.freeCommandBuffers(vk_cmd_pool_, 1, commandBuffers);
+  vk_setup_cmd_ = VK_NULL_HANDLE;
 }
 
 
-void Scene::PrepareBuffers() {
-  vk::SwapchainKHR oldSwapchain = vkSwapchain_;
+void VulkanScene::PrepareBuffers() {
+  vk::SwapchainKHR old_swapchain = vk_swapchain_;
 
   // Check the surface capabilities and formats
-  vk::SurfaceCapabilitiesKHR surfCapabilities;
-  VkSurfaceCapabilitiesKHR& vkSurfCapabilities =
+  vk::SurfaceCapabilitiesKHR surf_capabilities;
+  VkSurfaceCapabilitiesKHR& vk_surf_capabilities =
       const_cast<VkSurfaceCapabilitiesKHR&>(
-        static_cast<const VkSurfaceCapabilitiesKHR&>(surfCapabilities));
-  VkChk(vkApp_.entry_points.GetPhysicalDeviceSurfaceCapabilitiesKHR(
-      vkGpu_, vkSurface_, &vkSurfCapabilities));
+        static_cast<const VkSurfaceCapabilitiesKHR&>(surf_capabilities));
+  VkChk(vk_app_.entry_points.GetPhysicalDeviceSurfaceCapabilitiesKHR(
+      vk_gpu_, vk_surface_, &vk_surf_capabilities));
 
-  uint32_t presentModeCount;
-  VkChk(vkApp_.entry_points.GetPhysicalDeviceSurfacePresentModesKHR(
-      vkGpu_, vkSurface_, &presentModeCount, nullptr));
+  uint32_t present_mode_count;
+  VkChk(vk_app_.entry_points.GetPhysicalDeviceSurfacePresentModesKHR(
+      vk_gpu_, vk_surface_, &present_mode_count, nullptr));
 
   std::unique_ptr<VkPresentModeKHR> presentModes{
-    new VkPresentModeKHR[presentModeCount]};
+    new VkPresentModeKHR[present_mode_count]};
 
-  VkChk(vkApp_.entry_points.GetPhysicalDeviceSurfacePresentModesKHR(
-        vkGpu_, vkSurface_, &presentModeCount, presentModes.get()));
+  VkChk(vk_app_.entry_points.GetPhysicalDeviceSurfacePresentModesKHR(
+        vk_gpu_, vk_surface_, &present_mode_count, presentModes.get()));
 
-  vk::Extent2D swapchainExtent;
+  vk::Extent2D swapchain_extent;
   // width and height are either both -1, or both not -1.
-  if (surfCapabilities.currentExtent().width() == (uint32_t)-1) {
+  if (surf_capabilities.currentExtent().width() == (uint32_t)-1) {
       // If the surface size is undefined, the size is set to
       // the size of the images requested.
-      swapchainExtent.width(framebufferSize_.x);
-      swapchainExtent.height(framebufferSize_.y);
+      swapchain_extent.width(framebuffer_size_.x);
+      swapchain_extent.height(framebuffer_size_.y);
   } else {
       // If the surface size is defined, the swap chain size must match
-      swapchainExtent = surfCapabilities.currentExtent();
-      framebufferSize_.x = surfCapabilities.currentExtent().width();
-      framebufferSize_.y = surfCapabilities.currentExtent().height();
+      swapchain_extent = surf_capabilities.currentExtent();
+      framebuffer_size_.x = surf_capabilities.currentExtent().width();
+      framebuffer_size_.y = surf_capabilities.currentExtent().height();
   }
 
 #if VK_VSYNC
-  vk::PresentModeKHR swapchainPresentMode = vk::PresentModeKHR::eFifoKHR;
+  vk::PresentModeKHR swapchain_present_mode = vk::PresentModeKHR::eFifoKHR;
 #else
-  vk::PresentModeKHR swapchainPresentMode = vk::PresentModeKHR::eImmediateKHR;
+  vk::PresentModeKHR swapchain_present_mode = vk::PresentModeKHR::eImmediateKHR;
 #endif
 
   // Determine the number of vk::Image's to use in the swap chain (we desire to
   // own only 1 image at a time, besides the images being displayed and
   // queued for display):
-  uint32_t desiredNumberOfSwapchainImages = surfCapabilities.minImageCount() + 1;
-  if ((surfCapabilities.maxImageCount() > 0) &&
-      (desiredNumberOfSwapchainImages > surfCapabilities.maxImageCount())) {
+  uint32_t desired_number_of_swapchain_images = surf_capabilities.minImageCount() + 1;
+  if ((surf_capabilities.maxImageCount() > 0) &&
+      (desired_number_of_swapchain_images > surf_capabilities.maxImageCount())) {
       // Application must settle for fewer images than desired:
-      desiredNumberOfSwapchainImages = surfCapabilities.maxImageCount();
+      desired_number_of_swapchain_images = surf_capabilities.maxImageCount();
   }
 
-  vk::SurfaceTransformFlagBitsKHR preTransform;
-  if (surfCapabilities.supportedTransforms() & vk::SurfaceTransformFlagBitsKHR::eIdentity) {
-      preTransform = vk::SurfaceTransformFlagBitsKHR::eIdentity;
+  vk::SurfaceTransformFlagBitsKHR pre_transform;
+  if (surf_capabilities.supportedTransforms() & vk::SurfaceTransformFlagBitsKHR::eIdentity) {
+      pre_transform = vk::SurfaceTransformFlagBitsKHR::eIdentity;
   } else {
-      preTransform = surfCapabilities.currentTransform();
+      pre_transform = surf_capabilities.currentTransform();
   }
 
-  const vk::SwapchainCreateInfoKHR swapchainInfo = vk::SwapchainCreateInfoKHR()
-      .surface(vkSurface_)
-      .minImageCount(desiredNumberOfSwapchainImages)
-      .imageFormat(vkSurfaceFormat_)
-      .imageColorSpace(vkSurfaceColorSpace_)
-      .imageExtent(vk::Extent2D{swapchainExtent.width(), swapchainExtent.height()})
+  const vk::SwapchainCreateInfoKHR swapchain_info = vk::SwapchainCreateInfoKHR()
+      .surface(vk_surface_)
+      .minImageCount(desired_number_of_swapchain_images)
+      .imageFormat(vk_surface_format_)
+      .imageColorSpace(vk_surface_color_space_)
+      .imageExtent(vk::Extent2D{swapchain_extent.width(), swapchain_extent.height()})
       .imageUsage(vk::ImageUsageFlagBits::eColorAttachment)
-      .preTransform(preTransform)
+      .preTransform(pre_transform)
       .compositeAlpha(vk::CompositeAlphaFlagBitsKHR::eOpaque)
       .imageArrayLayers(1)
       .imageSharingMode(vk::SharingMode::eExclusive)
       .queueFamilyIndexCount(0)
       .pQueueFamilyIndices(nullptr)
-      .presentMode(swapchainPresentMode)
-      .oldSwapchain(oldSwapchain)
+      .presentMode(swapchain_present_mode)
+      .oldSwapchain(old_swapchain)
       .clipped(true);
 
-  const VkSwapchainCreateInfoKHR& vkSwapchainInfo = swapchainInfo;
-  VkSwapchainKHR vkSwapchain = vkSwapchain_;
-  VkChk(vkApp_.entry_points.CreateSwapchainKHR(
-      vkDevice_, &vkSwapchainInfo, nullptr, &vkSwapchain));
-  vkSwapchain_ = vkSwapchain;
+  const VkSwapchainCreateInfoKHR& vk_swapchain_info = swapchain_info;
+  VkSwapchainKHR vk_swapchain = vk_swapchain_;
+  VkChk(vk_app_.entry_points.CreateSwapchainKHR(
+      vk_device_, &vk_swapchain_info, nullptr, &vk_swapchain));
+  vk_swapchain_ = vk_swapchain;
 
   // If we just re-created an existing swapchain, we should destroy the old
   // swapchain at this point.
   // Note: destroying the swapchain also cleans up all its associated
   // presentable images once the platform is done with them.
-  if (oldSwapchain != VK_NULL_HANDLE) {
-      vkApp_.entry_points.DestroySwapchainKHR(vkDevice_, oldSwapchain, nullptr);
+  if (old_swapchain != VK_NULL_HANDLE) {
+      vk_app_.entry_points.DestroySwapchainKHR(vk_device_, old_swapchain, nullptr);
   }
 
-  VkChk(vkApp_.entry_points.GetSwapchainImagesKHR(
-       vkDevice_, vkSwapchain_, &vkSwapchainImageCount_, nullptr));
+  VkChk(vk_app_.entry_points.GetSwapchainImagesKHR(
+       vk_device_, vk_swapchain_, &vk_swapchain_image_count_, nullptr));
 
-  VkImage *swapchainImages = new VkImage[vkSwapchainImageCount_];
-  VkChk(vkApp_.entry_points.GetSwapchainImagesKHR(
-      vkDevice_, vkSwapchain_, &vkSwapchainImageCount_, swapchainImages));
+  VkImage *swapchainImages = new VkImage[vk_swapchain_image_count_];
+  VkChk(vk_app_.entry_points.GetSwapchainImagesKHR(
+      vk_device_, vk_swapchain_, &vk_swapchain_image_count_, swapchainImages));
 
-  vkBuffers_ = std::unique_ptr<SwapchainBuffers>(
-      new SwapchainBuffers[vkSwapchainImageCount_]);
+  vk_buffers_ = std::unique_ptr<SwapchainBuffers>(
+      new SwapchainBuffers[vk_swapchain_image_count_]);
 
-  for (uint32_t i = 0; i < vkSwapchainImageCount_; i++) {
+  for (uint32_t i = 0; i < vk_swapchain_image_count_; i++) {
       vk::ImageViewCreateInfo color_attachment_view = vk::ImageViewCreateInfo()
-          .format(vkSurfaceFormat_)
+          .format(vk_surface_format_)
           .subresourceRange(vk::ImageSubresourceRange()
             .aspectMask(vk::ImageAspectFlagBits::eColor)
             .baseMipLevel(0)
@@ -590,25 +691,25 @@ void Scene::PrepareBuffers() {
           )
           .viewType(vk::ImageViewType::e2D);
 
-      vkBuffers()[i].image = swapchainImages[i];
+      vk_buffers()[i].image = swapchainImages[i];
 
       // Render loop will expect image to have been used before and in
       // vk::ImageLayout::ePresentSrcKHR
       // layout and will change to COLOR_ATTACHMENT_OPTIMAL, so init the image
       // to that state
-      SetImageLayout(vkBuffers()[i].image,
+      SetImageLayout(vk_buffers()[i].image,
                      vk::ImageAspectFlagBits::eColor,
                      vk::ImageLayout::eUndefined,
                      vk::ImageLayout::ePresentSrcKHR,
                      vk::AccessFlags{});
 
-      color_attachment_view.image(vkBuffers()[i].image);
+      color_attachment_view.image(vk_buffers()[i].image);
 
-      vkDevice_.createImageView(&color_attachment_view, nullptr,
-                                &vkBuffers()[i].view);
+      vk_device_.createImageView(&color_attachment_view, nullptr,
+                                &vk_buffers()[i].view);
   }
 
-  vkCurrentBuffer_ = 0;
+  vk_current_buffer_ = 0;
 }
 
 
@@ -617,10 +718,10 @@ void Scene::PrepareBuffers() {
 /******************************************************
 *                  CheckForMissingLayers              *
 *******************************************************/
-void Scene::CheckForMissingLayers(uint32_t check_count,
-                                  const char* const* check_names,
-                                  uint32_t layer_count,
-                                  vk::LayerProperties* layers) {
+void VulkanScene::CheckForMissingLayers(uint32_t check_count,
+                                        const char* const* check_names,
+                                        uint32_t layer_count,
+                                        vk::LayerProperties* layers) {
   bool found_all = true;
   for (uint32_t i = 0; i < check_count; i++) {
     bool found = false;

@@ -43,7 +43,6 @@ float Sqr(float x) {
 }
 
 vec3 Spherify(vec3 p) {
-  // return p;
   return vec3(
     p.x * sqrt(1 - Sqr(p.y)/2 - Sqr(p.z)/2 + Sqr(p.y*p.z)/3),
     p.y * sqrt(1 - Sqr(p.z)/2 - Sqr(p.x)/2 + Sqr(p.z*p.x)/3),

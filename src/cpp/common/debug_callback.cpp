@@ -8,49 +8,49 @@
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallbackFunction(
   VkDebugReportFlagsEXT       flags,
-  VkDebugReportObjectTypeEXT  objectType,
+  VkDebugReportObjectTypeEXT  object_type,
   uint64_t                    object,
   size_t                      location,
-  int32_t                     messageCode,
-  const char*                 pLayerPrefix,
-  const char*                 pMessage,
-  void*                       pUserData)
+  int32_t                     message_code,
+  const char*                 layer_prefix,
+  const char*                 message,
+  void*                       user_data)
 {
   std::cerr << (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT ? "ERROR " : "WARNING ")
-            << "(layer = " << pLayerPrefix << ", code = " << messageCode << ") : " << pMessage << std::endl;
+            << "(layer = " << layer_prefix << ", code = " << message_code << ") : " << message << std::endl;
 
   return VK_FALSE;
 }
 
 DebugCallback::DebugCallback(const vk::Instance& instance) : instance_(instance) {
-  PFN_vkCreateDebugReportCallbackEXT createDebugReportCallback;
-  createDebugReportCallback = (PFN_vkCreateDebugReportCallbackEXT)
+  PFN_vkCreateDebugReportCallbackEXT create_debug_report_callback;
+  create_debug_report_callback = (PFN_vkCreateDebugReportCallbackEXT)
     instance.getProcAddr("vkCreateDebugReportCallbackEXT");
 
-  if (!createDebugReportCallback) {
+  if (!create_debug_report_callback) {
     throw std::runtime_error("GetProcAddr: Unable to find vkCreateDebugReportCallbackEXT");
   }
 
-  vk::DebugReportCallbackCreateInfoEXT dbgCreateInfo{
+  vk::DebugReportCallbackCreateInfoEXT dbg_create_info{
       vk::DebugReportFlagBitsEXT::eError |
       vk::DebugReportFlagBitsEXT::eWarning,
       DebugCallbackFunction, nullptr};
-  VkDebugReportCallbackCreateInfoEXT vkDbgCreateInfo = dbgCreateInfo;
+  VkDebugReportCallbackCreateInfoEXT vkDbgCreateInfo = dbg_create_info;
 
-  VkChk(createDebugReportCallback(instance, &vkDbgCreateInfo,
-                                  nullptr, &msgCallback_));
+  VkChk(create_debug_report_callback(instance, &vkDbgCreateInfo,
+                                     nullptr, &msg_callback_));
 }
 
 DebugCallback::~DebugCallback() {
-  PFN_vkDestroyDebugReportCallbackEXT destroyDebugReportCallback;
-  destroyDebugReportCallback = (PFN_vkDestroyDebugReportCallbackEXT)
+  PFN_vkDestroyDebugReportCallbackEXT destroy_debug_report_callback;
+  destroy_debug_report_callback = (PFN_vkDestroyDebugReportCallbackEXT)
     instance_.getProcAddr("vkDestroyDebugReportCallbackEXT");
 
-  if (!destroyDebugReportCallback) {
+  if (!destroy_debug_report_callback) {
     throw std::runtime_error("GetProcAddr: Unable to find vkDestroyDebugReportCallbackEXT");
   }
 
-  destroyDebugReportCallback(instance_, msgCallback_, nullptr);
+  destroy_debug_report_callback(instance_, msg_callback_, nullptr);
 }
 
 #endif

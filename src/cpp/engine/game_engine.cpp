@@ -65,8 +65,8 @@ glm::vec2 GameEngine::window_size() {
 
 void GameEngine::Run() {
   int width = 0, height = 0;
-  int lastWidth = 0, lastHeight = 0;
-  glfwGetWindowSize(window_, &lastWidth, &lastHeight);
+  int last_width = 0, last_height = 0;
+  glfwGetWindowSize(window_, &last_width, &last_height);
   while (!glfwWindowShouldClose(window_)) {
     if (new_scene_) {
       std::swap(scene_, new_scene_);
@@ -75,15 +75,15 @@ void GameEngine::Run() {
 
     if (scene_) {
       glfwPollEvents();
-      scene_->turn();
+      scene_->Turn();
     }
 
     // GLFW bug workaround (the screen resize callback is often not called)
     glfwGetWindowSize(window_, &width, &height);
-    if (width != lastWidth || height != lastHeight) {
+    if (width != last_width || height != last_height) {
       ScreenResizeCallback(window_, width, height);
-      lastWidth = width;
-      lastHeight = height;
+      last_width = width;
+      last_height = height;
     }
   }
 }
@@ -114,48 +114,48 @@ void GameEngine::KeyCallback(GLFWwindow* window, int key, int scancode,
     }
   }
 
-  GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
-  if (gameEngine && gameEngine->scene_) {
-    gameEngine->scene_->KeyActionAll(key, scancode, action, mods);
+  GameEngine* game_engine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
+  if (game_engine && game_engine->scene_) {
+    game_engine->scene_->KeyActionAll(key, scancode, action, mods);
   }
 }
 
 void GameEngine::CharCallback(GLFWwindow* window, unsigned codepoint) {
-  GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
-  if (gameEngine && gameEngine->scene_) {
-    gameEngine->scene_->CharTypedAll(codepoint);
+  GameEngine* game_engine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
+  if (game_engine && game_engine->scene_) {
+    game_engine->scene_->CharTypedAll(codepoint);
   }
 }
 
 void GameEngine::ScreenResizeCallback(GLFWwindow* window, int width, int height) {
-  GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
-  if (gameEngine && gameEngine->scene_) {
+  GameEngine* game_engine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
+  if (game_engine && game_engine->scene_) {
     std::cout << "Screen resized to " << width << "x" << height << "." << std::endl;
-    gameEngine->scene_->ScreenResizedCleanAll();
-    gameEngine->scene_->ScreenResizedAll(width, height);
+    game_engine->scene_->ScreenResizedCleanAll();
+    game_engine->scene_->ScreenResizedAll(width, height);
   }
 }
 
 void GameEngine::MouseScrolledCallback(GLFWwindow* window, double xoffset,
                                   double yoffset) {
-  GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
-  if (gameEngine && gameEngine->scene_) {
-    gameEngine->scene_->MouseScrolledAll(xoffset, yoffset);
+  GameEngine* game_engine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
+  if (game_engine && game_engine->scene_) {
+    game_engine->scene_->MouseScrolledAll(xoffset, yoffset);
   }
 }
 
 void GameEngine::MouseButtonPressed(GLFWwindow* window, int button,
                                int action, int mods) {
-  GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
-  if (gameEngine && gameEngine->scene_) {
-    gameEngine->scene_->MouseButtonPressedAll(button, action, mods);
+  GameEngine* game_engine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
+  if (game_engine && game_engine->scene_) {
+    game_engine->scene_->MouseButtonPressedAll(button, action, mods);
   }
 }
 
 void GameEngine::MouseMoved(GLFWwindow* window, double xpos, double ypos) {
-  GameEngine* gameEngine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
-  if (gameEngine && gameEngine->scene_) {
-    gameEngine->scene_->MouseMovedAll(xpos, ypos);
+  GameEngine* game_engine = reinterpret_cast<GameEngine*>(glfwGetWindowUserPointer(window));
+  if (game_engine && game_engine->scene_) {
+    game_engine->scene_->MouseMovedAll(xpos, ypos);
   }
 }
 

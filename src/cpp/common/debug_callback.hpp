@@ -14,7 +14,7 @@ public:
 
 private:
   const vk::Instance& instance_;
-  VkDebugReportCallbackEXT msgCallback_ = nullptr;
+  VkDebugReportCallbackEXT msg_callback_ = nullptr;
 };
 #endif
 

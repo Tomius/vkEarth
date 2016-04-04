@@ -11,19 +11,19 @@ QuadGridMesh::QuadGridMesh(int dimension) : mesh_(dimension/2) {
 void QuadGridMesh::AddToRenderList(float offset_x, float offset_y,
                                    int level, int face,
                                    bool tl, bool tr, bool bl, bool br) {
-  glm::vec4 renderData(offset_x, offset_y, level, face);
+  glm::vec4 render_data(offset_x, offset_y, level, face);
   float dim4 = pow(2, level) * mesh_.dimension()/2; // our dimension / 4
   if (tl) {
-    mesh_.AddToRenderList(renderData + glm::vec4(-dim4, dim4, 0, 0));
+    mesh_.AddToRenderList(render_data + glm::vec4(-dim4, dim4, 0, 0));
   }
   if (tr) {
-    mesh_.AddToRenderList(renderData + glm::vec4(dim4, dim4, 0, 0));
+    mesh_.AddToRenderList(render_data + glm::vec4(dim4, dim4, 0, 0));
   }
   if (bl) {
-    mesh_.AddToRenderList(renderData + glm::vec4(-dim4, -dim4, 0, 0));
+    mesh_.AddToRenderList(render_data + glm::vec4(-dim4, -dim4, 0, 0));
   }
   if (br) {
-    mesh_.AddToRenderList(renderData + glm::vec4(dim4, -dim4, 0, 0));
+    mesh_.AddToRenderList(render_data + glm::vec4(dim4, -dim4, 0, 0));
   }
 }
 

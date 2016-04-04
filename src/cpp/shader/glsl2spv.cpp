@@ -110,22 +110,16 @@ static EShLanguage FindLanguage(const VkShaderStageFlagBits shader_type) {
   switch (shader_type) {
     case VK_SHADER_STAGE_VERTEX_BIT:
       return EShLangVertex;
-
     case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
       return EShLangTessControl;
-
     case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
       return EShLangTessEvaluation;
-
     case VK_SHADER_STAGE_GEOMETRY_BIT:
       return EShLangGeometry;
-
     case VK_SHADER_STAGE_FRAGMENT_BIT:
       return EShLangFragment;
-
     case VK_SHADER_STAGE_COMPUTE_BIT:
       return EShLangCompute;
-
     default:
       return EShLangVertex;
   }
@@ -142,7 +136,8 @@ template <typename T>
 static void PrintErrorLog(T& obj) {
   std::string infoLog = obj.getInfoLog();
   TrimRight(infoLog);
-  if (!infoLog.empty()) {
+  if (!infoLog.empty() && infoLog != "Warning, version 400 is not yet complete; "
+      "most version-specific features are present, but some are missing.") {
     std::cerr << infoLog << std::endl;
   }
 

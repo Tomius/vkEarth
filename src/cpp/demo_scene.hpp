@@ -6,7 +6,7 @@
 #include <vulkan/vk_cpp.h>
 #include <GLFW/glfw3.h>
 
-#include "engine/scene.hpp"
+#include "engine/vulkan_scene.hpp"
 #include "cdlod/cdlod_quad_tree.hpp"
 #include "common/vulkan_application.hpp"
 
@@ -31,7 +31,7 @@ struct UniformData {
   int terrain_max_lod_level;
 };
 
-class DemoScene : public engine::Scene {
+class DemoScene : public engine::VulkanScene {
 public:
   DemoScene(GLFWwindow *window);
   ~DemoScene();
@@ -49,7 +49,7 @@ private:
   struct {
     vk::Buffer buf;
     vk::DeviceMemory mem;
-    vk::DescriptorBufferInfo bufferInfo;
+    vk::DescriptorBufferInfo buffer_info;
   } uniform_data_;
 
   vk::PipelineVertexInputStateCreateInfo vertex_input_;
