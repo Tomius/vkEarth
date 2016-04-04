@@ -13,11 +13,14 @@ layout (std140, binding = 1) uniform bufferVals {
   vec3 cameraPos;
   float terrainSmallestGeometryLodDistance;
   float terrainSphereRadius;
+  float faceSize;
   int terrainMaxLoadLevel;
 } uniforms;
 
 // out variables
-layout (location = 0) out vec2 vTexCoord;
+layout (location = 0) flat out int vFace;
+layout (location = 1) out vec2 vTexCoord;
+
 out gl_PerVertex {
   vec4 gl_Position;
 };
@@ -110,10 +113,13 @@ vec3 ModelPos(vec2 m_pos) {
 }
 
 void main() {
-  vTexCoord = vec2(0);
-  vec3 worldPos = WorldPos(ModelPos(aPos));
+  vec3 modelPos = ModelPos(aPos);
+  vec3 worldPos = WorldPos(modelPos);
   gl_Position = uniforms.mvp * vec4(worldPos.xyz, 1);
 
   // GL->VK conventions
   gl_Position.y = -gl_Position.y;
+
+  vFace = terrainFace;
+  vTexCoord = modelPos.xz / uniforms.faceSize;
 }

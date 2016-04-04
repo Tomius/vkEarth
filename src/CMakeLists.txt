@@ -4,7 +4,7 @@ link_libraries(glfw)
 link_libraries(glslang OGLCompiler OSDependent SPIRV)
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DVK_DEBUG")
+set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DVK_DEBUG -g")
 
 if (BUILD_SHARED_LIBS)
     link_libraries("${MATH_LIBRARY}")

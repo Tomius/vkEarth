@@ -10,7 +10,7 @@
 #include "cdlod/cdlod_quad_tree.hpp"
 #include "common/vulkan_application.hpp"
 
-#define DEMO_TEXTURE_COUNT 1
+#define DEMO_TEXTURE_COUNT 6
 
 struct TextureObject {
   vk::Sampler sampler;
@@ -28,6 +28,7 @@ struct UniformData {
   glm::vec3 camera_pos;
   float terrain_smallest_geometry_lod_distance;
   float terrain_sphere_radius;
+  float face_size;
   int terrain_max_lod_level;
 };
 
@@ -76,8 +77,8 @@ private:
 
   void BuildDrawCmd();
   void Draw();
-  void PrepareTextureImage(const uint32_t *tex_colors,
-                           int32_t tex_width, int32_t tex_height,
+  void PrepareTextureImage(const unsigned char *tex_colors,
+                           int tex_width, int tex_height,
                            TextureObject *tex_obj, vk::ImageTiling tiling,
                            vk::ImageUsageFlags usage,
                            vk::MemoryPropertyFlags required_props,

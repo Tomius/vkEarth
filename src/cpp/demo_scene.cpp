@@ -172,8 +172,8 @@ void DemoScene::Draw() {
   vk_device().destroySemaphore(present_complete_semaphore, nullptr);
 }
 
-void DemoScene::PrepareTextureImage(const uint32_t *tex_colors,
-                                    int32_t tex_width, int32_t tex_height,
+void DemoScene::PrepareTextureImage(const unsigned char *tex_colors,
+                                    int tex_width, int tex_height,
                                     TextureObject *tex_obj, vk::ImageTiling tiling,
                                     vk::ImageUsageFlags usage,
                                     vk::MemoryPropertyFlags required_props,
@@ -221,10 +221,15 @@ void DemoScene::PrepareTextureImage(const uint32_t *tex_colors,
       vk::chk(vk_device().mapMemory(tex_obj->mem, 0, mem_alloc.allocationSize(),
                                    vk::MemoryMapFlags{}, &data));
 
-      for (int32_t y = 0; y < tex_height; y++) {
-          uint32_t *row = (uint32_t *)((char *)data + layout.rowPitch() * y);
-          for (int32_t x = 0; x < tex_width; x++)
-              row[x] = tex_colors[(x & 1) ^ (y & 1)];
+      for (int y = 0; y < tex_height; y++) {
+          char *row = ((char *)data + layout.rowPitch() * y);
+          for (int x = 0; x < tex_width; x++) {
+            for (int i = 0; i < 4; ++i) {
+              // todo
+              row[x*8 + 2*i] = tex_colors[(y*tex_width+x)*8 + 2*i+1];
+              row[x*8 + 2*i+1] = tex_colors[(y*tex_width+x)*8 + 2*i];
+            }
+          }
       }
 
       vk_device().unmapMemory(tex_obj->mem);
@@ -239,113 +244,119 @@ void DemoScene::PrepareTextureImage(const uint32_t *tex_colors,
 }
 
 void DemoScene::PrepareTextures() {
+  vk::FormatProperties props;
+  const vk::Format tex_format = vk::Format::eR16G16B16A16Unorm;
+  vk_gpu().getFormatProperties(tex_format, &props);
+
+  for (int i = 0; i < DEMO_TEXTURE_COUNT; i++) {
     std::vector<unsigned char> image; //the raw pixels
     unsigned width, height;
-    unsigned error = lodepng::decode(image, width, height, "src/resources/gmted2010/0.png", LCT_RGBA, 16);
+    unsigned error = lodepng::decode(image, width, height,
+        "src/resources/gmted2010/" + std::to_string(i) + ".png", LCT_RGBA, 16);
     if (error) {
       std::cerr << "image decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
       std::terminate();
     }
 
-    vk::FormatProperties props;
-    const vk::Format tex_format = vk::Format::eR16G16B16A16Unorm;
-    vk_gpu().getFormatProperties(tex_format, &props);
+    if ((props.linearTilingFeatures() &
+         vk::FormatFeatureFlagBits::eSampledImage) &&
+         !kUseStagingBuffer) {
+      /* Device can texture using linear textures */
+      PrepareTextureImage(image.data(),
+                          width, height, &textures_[i],
+                          vk::ImageTiling::eLinear,
+                          vk::ImageUsageFlagBits::eSampled,
+                          vk::MemoryPropertyFlagBits::eHostVisible,
+                          tex_format);
+    } else if (props.optimalTilingFeatures() &
+               vk::FormatFeatureFlagBits::eSampledImage) {
+      /* Must use staging buffer to copy linear texture to optimized */
+      TextureObject staging_texture;
 
-    for (uint32_t i = 0; i < DEMO_TEXTURE_COUNT; i++) {
-        if ((props.linearTilingFeatures() &
-             vk::FormatFeatureFlagBits::eSampledImage) &&
-            !kUseStagingBuffer) {
-            /* Device can texture using linear textures */
-            PrepareTextureImage((uint32_t *)image.data(),
-                                width, height, &textures_[i],
-                                vk::ImageTiling::eLinear,
-                                vk::ImageUsageFlagBits::eSampled,
-                                vk::MemoryPropertyFlagBits::eHostVisible,
-                                tex_format);
-        } else if (props.optimalTilingFeatures() &
-                   vk::FormatFeatureFlagBits::eSampledImage) {
-            /* Must use staging buffer to copy linear texture to optimized */
-            TextureObject staging_texture;
+      PrepareTextureImage(image.data(),
+                           width, height, &staging_texture,
+                           vk::ImageTiling::eLinear,
+                           vk::ImageUsageFlagBits::eTransferSrc,
+                           vk::MemoryPropertyFlagBits::eHostVisible,
+                           tex_format);
 
-            PrepareTextureImage((uint32_t *)image.data(),
-                                 width, height, &staging_texture,
-                                 vk::ImageTiling::eLinear,
-                                 vk::ImageUsageFlagBits::eTransferSrc,
-                                 vk::MemoryPropertyFlagBits::eHostVisible,
-                                 tex_format);
+      PrepareTextureImage(image.data(),
+          width, height, &textures_[i],
+          vk::ImageTiling::eOptimal,
+          (vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled),
+          vk::MemoryPropertyFlagBits::eDeviceLocal,
+          tex_format);
 
-            PrepareTextureImage((uint32_t *)image.data(),
-                width, height, &textures_[i],
-                vk::ImageTiling::eOptimal,
-                (vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled),
-                vk::MemoryPropertyFlagBits::eDeviceLocal,
-                tex_format);
+      SetImageLayout(staging_texture.image,
+                     vk::ImageAspectFlagBits::eColor,
+                     staging_texture.imageLayout,
+                     vk::ImageLayout::eTransferSrcOptimal,
+                     vk::AccessFlagBits::eShaderRead);
 
-            SetImageLayout(staging_texture.image,
-                           vk::ImageAspectFlagBits::eColor,
-                           staging_texture.imageLayout,
-                           vk::ImageLayout::eTransferSrcOptimal,
-                           vk::AccessFlagBits::eShaderRead);
+      SetImageLayout(textures_[i].image,
+                     vk::ImageAspectFlagBits::eColor,
+                     textures_[i].imageLayout,
+                     vk::ImageLayout::eTransferDstOptimal,
+                     vk::AccessFlagBits::eShaderRead);
 
-            SetImageLayout(textures_[i].image,
-                           vk::ImageAspectFlagBits::eColor,
-                           textures_[i].imageLayout,
-                           vk::ImageLayout::eTransferDstOptimal,
-                           vk::AccessFlagBits::eShaderRead);
+      vk::ImageCopy copy_region = vk::ImageCopy()
+          .srcSubresource({vk::ImageAspectFlagBits::eColor, 0, 0, 1})
+          .dstSubresource({vk::ImageAspectFlagBits::eColor, 0, 0, 1})
+          .extent(vk::Extent3D(staging_texture.tex_width,
+                               staging_texture.tex_height, 1));
+      vk_setup_cmd().copyImage(staging_texture.image,
+          vk::ImageLayout::eTransferSrcOptimal, textures_[i].image,
+          vk::ImageLayout::eTransferDstOptimal, 1, &copy_region);
 
-            vk::ImageCopy copy_region = vk::ImageCopy()
-                .srcSubresource({vk::ImageAspectFlagBits::eColor, 0, 0, 1})
-                .dstSubresource({vk::ImageAspectFlagBits::eColor, 0, 0, 1})
-                .extent(vk::Extent3D(staging_texture.tex_width,
-                                     staging_texture.tex_height, 1));
-            vk_setup_cmd().copyImage(staging_texture.image,
-                vk::ImageLayout::eTransferSrcOptimal, textures_[i].image,
-                vk::ImageLayout::eTransferDstOptimal, 1, &copy_region);
+      SetImageLayout(textures_[i].image,
+                     vk::ImageAspectFlagBits::eColor,
+                     vk::ImageLayout::eTransferDstOptimal,
+                     textures_[i].imageLayout,
+                     vk::AccessFlagBits::eTransferWrite);
 
-            SetImageLayout(textures_[i].image,
-                           vk::ImageAspectFlagBits::eColor,
-                           vk::ImageLayout::eTransferDstOptimal,
-                           textures_[i].imageLayout,
-                           vk::AccessFlagBits::eTransferWrite);
+      FlushInitCommand();
 
-            FlushInitCommand();
-
-            vk_device().destroyImage(staging_texture.image, nullptr);
-            vk_device().freeMemory(staging_texture.mem, nullptr);
-        } else {
-            /* Can't support vk::Format::eB8G8R8A8Unorm !? */
-            assert(!"No support for B8G8R8A8_UNORM as texture image format");
-        }
-
-        const vk::SamplerCreateInfo sampler = vk::SamplerCreateInfo()
-            .magFilter(vk::Filter::eNearest)
-            .minFilter(vk::Filter::eNearest)
-            .mipmapMode(vk::SamplerMipmapMode::eNearest)
-            .addressModeU(vk::SamplerAddressMode::eRepeat)
-            .addressModeV(vk::SamplerAddressMode::eRepeat)
-            .addressModeW(vk::SamplerAddressMode::eRepeat)
-            .mipLodBias(0.0f)
-            .anisotropyEnable(VK_FALSE)
-            .maxAnisotropy(1)
-            .compareOp(vk::CompareOp::eNever)
-            .minLod(0.0f)
-            .maxLod(0.0f)
-            .borderColor(vk::BorderColor::eFloatOpaqueWhite)
-            .unnormalizedCoordinates(VK_FALSE);
-
-        vk::ImageViewCreateInfo view = vk::ImageViewCreateInfo()
-            .viewType(vk::ImageViewType::e2D)
-            .format(tex_format)
-            .subresourceRange({vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1});
-
-        /* create sampler */
-        vk::chk(vk_device().createSampler(&sampler, nullptr,
-                                         &textures_[i].sampler));
-
-        /* create image view */
-        view.image(textures_[i].image);
-        vk::chk(vk_device().createImageView(&view, nullptr, &textures_[i].view));
+      vk_device().destroyImage(staging_texture.image, nullptr);
+      vk_device().freeMemory(staging_texture.mem, nullptr);
+    } else {
+      /* Can't support vk::Format::eB8G8R8A8Unorm !? */
+      assert(!"No support for B8G8R8A8_UNORM as texture image format");
     }
+
+    const vk::SamplerCreateInfo sampler = vk::SamplerCreateInfo()
+        .magFilter(vk::Filter::eNearest)
+        .minFilter(vk::Filter::eNearest)
+        .mipmapMode(vk::SamplerMipmapMode::eNearest)
+        .addressModeU(vk::SamplerAddressMode::eClampToEdge)
+        .addressModeV(vk::SamplerAddressMode::eClampToEdge)
+        .addressModeW(vk::SamplerAddressMode::eClampToEdge)
+        .mipLodBias(0.0f)
+        .anisotropyEnable(VK_FALSE)
+        .maxAnisotropy(1)
+        .compareOp(vk::CompareOp::eNever)
+        .minLod(0.0f)
+        .maxLod(0.0f)
+        .borderColor(vk::BorderColor::eFloatOpaqueWhite)
+        .unnormalizedCoordinates(VK_FALSE);
+
+    vk::ImageViewCreateInfo view = vk::ImageViewCreateInfo()
+        .viewType(vk::ImageViewType::e2D)
+        .format(tex_format)
+        .subresourceRange(vk::ImageSubresourceRange{}
+            .aspectMask(vk::ImageAspectFlagBits::eColor)
+            .baseMipLevel(0)
+            .levelCount(1)
+            .baseArrayLayer(0)
+            .layerCount(1));
+
+    /* create sampler */
+    vk::chk(vk_device().createSampler(&sampler, nullptr,
+                                      &textures_[i].sampler));
+
+    /* create image view */
+    view.image(textures_[i].image);
+    vk::chk(vk_device().createImageView(&view, nullptr, &textures_[i].view));
+  }
 }
 
 void DemoScene::PrepareIndices() {
@@ -475,7 +486,7 @@ void DemoScene::PrepareDescriptorLayout() {
       .pBindings(layout_binding);
 
   vk::chk(vk_device().createDescriptorSetLayout(&descriptor_layout, nullptr,
-                                               &desc_layout_));
+                                                &desc_layout_));
 
   const vk::PipelineLayoutCreateInfo pipeline_layout_create_info =
     vk::PipelineLayoutCreateInfo()
@@ -544,7 +555,7 @@ void DemoScene::PrepareDescriptorPool() {
       .pPoolSizes(type_count);
 
   vk::chk(vk_device().createDescriptorPool(&descriptor_pool, nullptr,
-                                          &desc_pool_));
+                                           &desc_pool_));
 }
 
 void DemoScene::PrepareUniformBuffer() {
@@ -565,10 +576,10 @@ void DemoScene::PrepareUniformBuffer() {
                            alloc_info);
 
   vk::chk(vk_device().allocateMemory(&alloc_info, NULL,
-                                          &uniform_data_.mem));
+                                     &uniform_data_.mem));
 
   vk::chk(vk_device().bindBufferMemory(uniform_data_.buf,
-                                            uniform_data_.mem, 0));
+                                       uniform_data_.mem, 0));
 
   uniform_data_.buffer_info.buffer(uniform_data_.buf);
   uniform_data_.buffer_info.offset(0);
@@ -658,7 +669,7 @@ static vk::Pipeline PreparePipeline(
   pipeline_create_info.layout(pipelineLayout);
   ia.topology(vk::PrimitiveTopology::eTriangleList);
 
-  rs.polygonMode(vk::PolygonMode::eLine);
+  rs.polygonMode(vk::PolygonMode::eFill);
   rs.cullMode(vk::CullModeFlagBits::eNone);
   rs.frontFace(vk::FrontFace::eCounterClockwise);
   rs.depthClampEnable(VK_FALSE);
@@ -859,6 +870,7 @@ void DemoScene::Update() {
     uniform_data->camera_pos = scene()->camera()->transform().pos();
     uniform_data->terrain_smallest_geometry_lod_distance = Settings::kSmallestGeometryLodDistance;
     uniform_data->terrain_sphere_radius = Settings::kSphereRadius;
+    uniform_data->face_size = Settings::kFaceSize;
     uniform_data->terrain_max_lod_level = quad_trees_[0].max_node_level();
 
     vk_device().unmapMemory(uniform_data_.mem);
@@ -891,10 +903,10 @@ void DemoScene::Update() {
 
 void DemoScene::ScreenResizedClean() {
   Cleanup();
-  Scene::ScreenResizedClean();
+  VulkanScene::ScreenResizedClean();
 }
 
 void DemoScene::ScreenResized(size_t width, size_t height) {
-  Scene::ScreenResized(width, height);
+  VulkanScene::ScreenResized(width, height);
   Prepare();
 }
