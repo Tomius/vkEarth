@@ -67,7 +67,9 @@ void DemoScene::BuildDrawCmd() {
                               vk::DeviceSize{},
                               vk::IndexType::eUint16);
 
-  vk_draw_cmd().setLineWidth(2.0f);
+  if (Settings::kWireframe) {
+    vk_draw_cmd().setLineWidth(2.0f);
+  }
 
   vk_draw_cmd().drawIndexed(grid_mesh_.mesh_.index_count_,
                           grid_mesh_.mesh_.render_data_.size(), 0, 0, 0);
@@ -669,8 +671,13 @@ static vk::Pipeline PreparePipeline(
   pipeline_create_info.layout(pipelineLayout);
   ia.topology(vk::PrimitiveTopology::eTriangleList);
 
-  rs.polygonMode(vk::PolygonMode::eFill);
-  rs.cullMode(vk::CullModeFlagBits::eNone);
+  if (Settings::kWireframe) {
+    rs.polygonMode(vk::PolygonMode::eLine);
+    rs.cullMode(vk::CullModeFlagBits::eNone);
+  } else {
+    rs.polygonMode(vk::PolygonMode::eFill);
+    rs.cullMode(vk::CullModeFlagBits::eBack);
+  }
   rs.frontFace(vk::FrontFace::eCounterClockwise);
   rs.depthClampEnable(VK_FALSE);
   rs.rasterizerDiscardEnable(VK_FALSE);
@@ -695,9 +702,11 @@ static vk::Pipeline PreparePipeline(
       vk::DynamicState::eScissor;
   dynamic_state.dynamicStateCount(dynamic_state.dynamicStateCount() + 1);
 
-  dynamicStateEnables[dynamic_state.dynamicStateCount()] =
-      vk::DynamicState::eLineWidth;
-  dynamic_state.dynamicStateCount(dynamic_state.dynamicStateCount() + 1);
+  if (Settings::kWireframe) {
+    dynamicStateEnables[dynamic_state.dynamicStateCount()] =
+        vk::DynamicState::eLineWidth;
+    dynamic_state.dynamicStateCount(dynamic_state.dynamicStateCount() + 1);
+  }
 
   ds.depthTestEnable(VK_TRUE);
   ds.depthWriteEnable(VK_TRUE);

@@ -41,6 +41,8 @@ static constexpr long kGeomDiv = 0;
 static constexpr int kLevelOffset = 0;
 static constexpr double kSmallestGeometryLodDistance = 2*kNodeDimension;
 
+static constexpr bool kWireframe = false;
+
 }
 
 template<typename T, typename... Args>
