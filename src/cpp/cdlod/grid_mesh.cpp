@@ -37,11 +37,11 @@ GridMesh::GridMesh(uint8_t dimension) : dimension_(dimension) {
   assert(index_count_ == indices_.size());
 }
 
-void GridMesh::AddToRenderList(const glm::vec4& render_data) {
-  render_data_.push_back(render_data);
+void GridMesh::AddToRenderList(const PerInstanceAttributes& attribs) {
+  attribs_.push_back(attribs);
 }
 
 void GridMesh::ClearRenderList() {
-  render_data_.clear();
+  attribs_.clear();
 }
 

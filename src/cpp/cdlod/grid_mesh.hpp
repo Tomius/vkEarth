@@ -6,6 +6,7 @@
 #include <vector>
 #include <cstdint>
 #include "common/glm.hpp"
+#include "cdlod/texture_info.hpp"
 
 // A two-dimensional vector of unsigned short values
 struct svec2 {
@@ -32,15 +33,15 @@ class GridMesh {
   int index_count_, dimension_;
   std::vector<svec2> positions_;
   std::vector<uint16_t> indices_;
-  std::vector<glm::vec4> render_data_; // xy: offset, z: level, w: face
+  std::vector<PerInstanceAttributes> attribs_;
 
   GridMesh(uint8_t dimension);
 
-  void AddToRenderList(const glm::vec4& renderData);
+  void AddToRenderList(const PerInstanceAttributes& attribs);
   void ClearRenderList();
 
   int dimension() const {return dimension_;}
-  size_t node_count() const { return render_data_.size(); }
+  size_t node_count() const { return attribs_.size(); }
 };
 
 #endif // CDLOD_GRID_MESH_H_

@@ -10,6 +10,7 @@ CdlodQuadTreeNode::CdlodQuadTreeNode(double x, double z, CubeFace face,
     , bbox_{glm::vec3{x - size()/2, 0, z - size()/2},
             glm::vec3{x + size()/2, 0, z + size()/2},
             face, Settings::kFaceSize}
+    , parent_{parent}
 { }
 
 void CdlodQuadTreeNode::InitChild(int i) {
@@ -38,12 +39,14 @@ void CdlodQuadTreeNode::SelectNodes(const glm::vec3& cam_pos,
   // texture lod difference of neighbour nodes can cause geometry cracks)
   // if (!bbox_.CollidesWithFrustum(frustum)) { return; }
 
+  StreamedTextureInfo texture_info;
+
   // If we can cover the whole area or if we are a leaf
   Sphere sphere{cam_pos, Settings::kSmallestGeometryLodDistance * scale()};
   if (!bbox_.CollidesWithSphere(sphere) ||
       level_ <= Settings::kLevelOffset - Settings::kGeomDiv) {
     if (bbox_.CollidesWithFrustum(frustum)) {
-      grid_mesh.AddToRenderList(x_, z_, level_, int(face_));
+      grid_mesh.AddToRenderList(x_, z_, level_, int(face_), texture_info);
     }
   } else {
     bool cc[4]{}; // children collision
@@ -61,7 +64,7 @@ void CdlodQuadTreeNode::SelectNodes(const glm::vec3& cam_pos,
 
     if (bbox_.CollidesWithFrustum(frustum)) {
       // Render what the children didn't do
-      grid_mesh.AddToRenderList(x_, z_, level_, int(face_),
+      grid_mesh.AddToRenderList(x_, z_, level_, int(face_), texture_info,
                                 !cc[0], !cc[1], !cc[2], !cc[3]);
     }
   }

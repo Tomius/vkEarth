@@ -60,19 +60,19 @@ void DemoScene::BuildDrawCmd() {
 
   vk::DeviceSize offsets[1] = {0};
   vk_draw_cmd().bindVertexBuffers(VERTEX_BUFFER_BIND_ID, 1,
-                                &vertex_attribs_.buf, offsets);
+                                  &vertex_attribs_.buf, offsets);
   vk_draw_cmd().bindVertexBuffers(INSTANCE_BUFFER_BIND_ID, 1,
-                                &instance_attribs_.buf, offsets);
+                                  &instance_attribs_.buf, offsets);
   vk_draw_cmd().bindIndexBuffer(indices_.buf,
-                              vk::DeviceSize{},
-                              vk::IndexType::eUint16);
+                                vk::DeviceSize{},
+                                vk::IndexType::eUint16);
 
   if (Settings::kWireframe) {
     vk_draw_cmd().setLineWidth(2.0f);
   }
 
   vk_draw_cmd().drawIndexed(grid_mesh_.mesh_.index_count_,
-                          grid_mesh_.mesh_.render_data_.size(), 0, 0, 0);
+                            grid_mesh_.mesh_.attribs_.size(), 0, 0, 0);
   vk_draw_cmd().endRenderPass();
 
   vk::ImageMemoryBarrier pre_present_barrier = vk::ImageMemoryBarrier()
@@ -86,9 +86,9 @@ void DemoScene::BuildDrawCmd() {
 
   pre_present_barrier.image(vk_buffers()[vk_current_buffer()].image);
   vk_draw_cmd().pipelineBarrier(vk::PipelineStageFlagBits::eAllCommands,
-                              vk::PipelineStageFlagBits::eBottomOfPipe,
-                              vk::DependencyFlags(), 0, nullptr, 0,
-                              nullptr, 1, &pre_present_barrier);
+                                vk::PipelineStageFlagBits::eBottomOfPipe,
+                                vk::DependencyFlags(), 0, nullptr, 0,
+                                nullptr, 1, &pre_present_barrier);
 
   vk::chk(vk_draw_cmd().end());
 }
@@ -427,7 +427,7 @@ void DemoScene::PrepareVertices() {
 
   { // instanceAttribs
     const vk::BufferCreateInfo buf_info = vk::BufferCreateInfo()
-      .size(sizeof(glm::vec4) * Settings::kMaxInstanceCount)
+      .size(sizeof(PerInstanceAttributes) * Settings::kMaxInstanceCount)
       .usage(vk::BufferUsageFlagBits::eVertexBuffer);
 
     vk::chk(vk_device().createBuffer(&buf_info, nullptr, &instance_attribs_.buf));
@@ -459,7 +459,7 @@ void DemoScene::PrepareVertices() {
   vertex_input_attribs_[0].offset(0);
 
   vertex_input_bindings_[1].binding(INSTANCE_BUFFER_BIND_ID);
-  vertex_input_bindings_[1].stride(sizeof(glm::vec4));
+  vertex_input_bindings_[1].stride(sizeof(PerInstanceAttributes));
   vertex_input_bindings_[1].inputRate(vk::VertexInputRate::eInstance);
 
   vertex_input_attribs_[1].binding(INSTANCE_BUFFER_BIND_ID);
@@ -894,19 +894,19 @@ void DemoScene::Update() {
     quad_tree.SelectNodes(*scene()->camera(), grid_mesh_);
   }
 
-  if (grid_mesh_.mesh_.render_data_.size() > Settings::kMaxInstanceCount) {
-    std::cerr << "Number of instances used: " << grid_mesh_.mesh_.render_data_.size() << std::endl;
+  if (grid_mesh_.mesh_.attribs_.size() > Settings::kMaxInstanceCount) {
+    std::cerr << "Number of instances used: " << grid_mesh_.mesh_.attribs_.size() << std::endl;
     std::terminate();
   }
 
   {
-    glm::vec4 *render_data_;
+    PerInstanceAttributes *attribs_;
     vk::chk(vk_device().mapMemory(instance_attribs_.mem, 0,
-                                 Settings::kMaxInstanceCount * sizeof(glm::vec4),
-                                 vk::MemoryMapFlags{}, (void **)&render_data_));
+                                 Settings::kMaxInstanceCount * sizeof(PerInstanceAttributes),
+                                 vk::MemoryMapFlags{}, (void **)&attribs_));
 
-    for (int i = 0; i < grid_mesh_.mesh_.render_data_.size(); ++i) {
-      render_data_[i] = grid_mesh_.mesh_.render_data_[i];
+    for (int i = 0; i < grid_mesh_.mesh_.attribs_.size(); ++i) {
+      attribs_[i] = grid_mesh_.mesh_.attribs_[i];
     }
 
     vk_device().unmapMemory(instance_attribs_.mem);

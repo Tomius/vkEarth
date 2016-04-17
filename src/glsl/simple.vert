@@ -8,6 +8,25 @@
 layout (location = 0) in ivec2 aPos;
 layout (location = 1) in vec4 aRenderData;
 
+layout (location = 2) in uint aCurrentGeometryTextureId;
+layout (location = 3) in vec3 aCurrentGeometryTexturePosAndSize;
+
+layout (location = 4) in uint aNextGeometryTextureId;
+layout (location = 5) in vec3 aNextGeometryTexturePosAndSize;
+
+layout (location = 6) in uint aCurrentNormalTextureId;
+layout (location = 7) in vec3 aCurrentNormalTexturePosAndSize;
+
+layout (location = 8) in uint aNextNormalTextureId;
+layout (location = 9) in vec3 aNextNormalTexturePosAndSize;
+
+layout (location = 10) in uint aCurrentDiffuseTextureId;
+layout (location = 11) in vec3 aCurrentDiffuseTexturePosAndSize;
+
+layout (location = 12) in uint aNextDiffuseTextureId;
+layout (location = 13) in vec3 aNextDiffuseTexturePosAndSize;
+
+
 layout (std140, binding = 1) uniform bufferVals {
   mat4 mvp;
   vec3 cameraPos;
@@ -23,6 +42,7 @@ uniform sampler2D heightmap[6];
 // out variables
 layout (location = 0) flat out int vFace;
 layout (location = 1) out vec2 vTexCoord;
+
 
 out gl_PerVertex {
   vec4 gl_Position;

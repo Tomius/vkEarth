@@ -17,9 +17,11 @@ class QuadGridMesh {
 
   // Adds a subquad to the render list. tl = top left, br = bottom right
   void AddToRenderList(float offset_x, float offset_y, int level, int face,
+                       const StreamedTextureInfo& texture_info,
                        bool tl, bool tr, bool bl, bool br);
   // Adds all four subquads
-  void AddToRenderList(float offset_x, float offset_y, int level, int face);
+  void AddToRenderList(float offset_x, float offset_y, int level, int face,
+                       const StreamedTextureInfo& texture_info);
   void ClearRenderList();
   // void render();
   size_t node_count() const;
