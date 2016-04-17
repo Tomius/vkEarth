@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef ENGINE_GAME_OBJECT_H_
-#define ENGINE_GAME_OBJECT_H_
+#ifndef ENGINE_GAME_OBJECT_HPP_
+#define ENGINE_GAME_OBJECT_HPP_
 
 #include <set>
 #include <memory>

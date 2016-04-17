@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef COLLISION_SPHERE_H_
-#define COLLISION_SPHERE_H_
+#ifndef COLLISION_SPHERE_HPP_
+#define COLLISION_SPHERE_HPP_
 
 #include "common/glm.hpp"
 #include "collision/frustum.hpp"

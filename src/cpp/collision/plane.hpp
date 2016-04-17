@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef COLLISION_PLANE_H_
-#define COLLISION_PLANE_H_
+#ifndef COLLISION_PLANE_HPP_
+#define COLLISION_PLANE_HPP_
 
 #include <cassert>
 #include "common/glm.hpp"

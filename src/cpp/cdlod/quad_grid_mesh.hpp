@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef CDLOD_QUAD_GRID_MESH_H_
-#define CDLOD_QUAD_GRID_MESH_H_
+#ifndef CDLOD_QUAD_GRID_MESH_HPP_
+#define CDLOD_QUAD_GRID_MESH_HPP_
 
 #include "common/settings.hpp"
 #include "cdlod/grid_mesh.hpp"

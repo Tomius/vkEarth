@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef ENGINE_VULKAN_SCENE_H_
-#define ENGINE_VULKAN_SCENE_H_
+#ifndef ENGINE_VULKAN_SCENE_HPP_
+#define ENGINE_VULKAN_SCENE_HPP_
 
 #include <vulkan/vk_cpp.h>
 

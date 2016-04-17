@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef VULKAN_COMMON_H_
-#define VULKAN_COMMON_H_
+#ifndef VULKAN_COMMON_HPP_
+#define VULKAN_COMMON_HPP_
 
 #include <string>
 #include <vector>

@@ -1,11 +1,12 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef CDLOD_QUAD_TREE_NODE_H_
-#define CDLOD_QUAD_TREE_NODE_H_
+#ifndef CDLOD_QUAD_TREE_NODE_HPP_
+#define CDLOD_QUAD_TREE_NODE_HPP_
 
 #include <memory>
 #include "cdlod/quad_grid_mesh.hpp"
 #include "collision/spherized_aabb.hpp"
+#include "common/thread_pool.hpp"
 
 class CdlodQuadTreeNode {
  public:
@@ -15,7 +16,14 @@ class CdlodQuadTreeNode {
   void Age();
   void SelectNodes(const glm::vec3& cam_pos,
                    const Frustum& frustum,
-                   QuadGridMesh& grid_mesh);
+                   QuadGridMesh& grid_mesh,
+                   ThreadPool& thread_pool);
+
+  void SelectTexture(const glm::vec3& cam_pos,
+                     const Frustum& frustum,
+                     ThreadPool& thread_pool,
+                     StreamedTextureInfo& texinfo,
+                     int recursion_level = 0);
 
  private:
   double x_, z_;
@@ -35,6 +43,20 @@ class CdlodQuadTreeNode {
   double size() { return Settings::kNodeDimension * scale(); }
   bool CollidesWithSphere(const Sphere& sphere) const;
   void InitChild(int i);
+
+  std::string GetHeightMapPath() const;
+  std::string GetDiffuseMapPath() const;
+
+  int ElevationTextureLevel() const;
+  int DiffuseTextureLevel() const;
+
+  bool HasElevationTexture() const;
+  bool HasDiffuseTexture() const;
+
+  void LoadTexture(bool synchronous_load);
+  void Upload();
+  void CalculateMinMax();
+  void RefreshMinMax();
 };
 
 #endif

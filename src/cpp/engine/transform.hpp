@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef ENGINE_TRANSFORM_H_
-#define ENGINE_TRANSFORM_H_
+#ifndef ENGINE_TRANSFORM_HPP_
+#define ENGINE_TRANSFORM_HPP_
 
 #include <cmath>
 #include <vector>

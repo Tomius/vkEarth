@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef COLLISION_FRUSTUM_H_
-#define COLLISION_FRUSTUM_H_
+#ifndef COLLISION_FRUSTUM_HPP_
+#define COLLISION_FRUSTUM_HPP_
 
 #include "plane.hpp"
 

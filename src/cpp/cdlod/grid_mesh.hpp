@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef CDLOD_GRID_MESH_H_
-#define CDLOD_GRID_MESH_H_
+#ifndef CDLOD_GRID_MESH_HPP_
+#define CDLOD_GRID_MESH_HPP_
 
 #include <vector>
 #include <cstdint>
@@ -44,4 +44,4 @@ class GridMesh {
   size_t node_count() const { return attribs_.size(); }
 };
 
-#endif // CDLOD_GRID_MESH_H_
+#endif // CDLOD_GRID_MESH_HPP_

@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef ENGINE_GAME_OBJECT_INL_H_
-#define ENGINE_GAME_OBJECT_INL_H_
+#ifndef ENGINE_GAME_OBJECT_INL_HPP_
+#define ENGINE_GAME_OBJECT_INL_HPP_
 
 #include <iostream>
 #include "engine/game_object.hpp"

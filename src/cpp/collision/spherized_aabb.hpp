@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef COLLISION_SPHERIZED_AABB_H_
-#define COLLISION_SPHERIZED_AABB_H_
+#ifndef COLLISION_SPHERIZED_AABB_HPP_
+#define COLLISION_SPHERIZED_AABB_HPP_
 
 #include "collision/sphere.hpp"
 #include "collision/cube2sphere.hpp"

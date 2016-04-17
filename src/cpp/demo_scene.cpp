@@ -10,6 +10,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <cstddef>
 
 #include <vulkan/vk_cpp.h>
 #include <GLFW/glfw3.h>
@@ -446,26 +447,98 @@ void DemoScene::PrepareVertices() {
 
   vertex_input_.vertexBindingDescriptionCount(2);
   vertex_input_.pVertexBindingDescriptions(vertex_input_bindings_);
-  vertex_input_.vertexAttributeDescriptionCount(2);
+  vertex_input_.vertexAttributeDescriptionCount(3);
   vertex_input_.pVertexAttributeDescriptions(vertex_input_attribs_);
 
   vertex_input_bindings_[0].binding(VERTEX_BUFFER_BIND_ID);
   vertex_input_bindings_[0].stride(sizeof(svec2));
   vertex_input_bindings_[0].inputRate(vk::VertexInputRate::eVertex);
 
+  vertex_input_bindings_[1].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_bindings_[1].stride(sizeof(PerInstanceAttributes));
+  vertex_input_bindings_[1].inputRate(vk::VertexInputRate::eInstance);
+
   vertex_input_attribs_[0].binding(VERTEX_BUFFER_BIND_ID);
   vertex_input_attribs_[0].location(0);
   vertex_input_attribs_[0].format(vk::Format::eR16G16Sint);
   vertex_input_attribs_[0].offset(0);
 
-  vertex_input_bindings_[1].binding(INSTANCE_BUFFER_BIND_ID);
-  vertex_input_bindings_[1].stride(sizeof(PerInstanceAttributes));
-  vertex_input_bindings_[1].inputRate(vk::VertexInputRate::eInstance);
-
   vertex_input_attribs_[1].binding(INSTANCE_BUFFER_BIND_ID);
   vertex_input_attribs_[1].location(1);
   vertex_input_attribs_[1].format(vk::Format::eR32G32B32A32Sfloat);
-  vertex_input_attribs_[1].offset(0);
+  vertex_input_attribs_[1].offset(offsetof(PerInstanceAttributes, render_data));
+
+  vertex_input_attribs_[2].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_attribs_[2].location(2);
+  vertex_input_attribs_[2].format(vk::Format::eR32Uint);
+  vertex_input_attribs_[2].offset(offsetof(PerInstanceAttributes,
+                                           texture_info.geometry_current.id));
+
+  vertex_input_attribs_[3].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_attribs_[3].location(3);
+  vertex_input_attribs_[3].format(vk::Format::eR32G32B32Sfloat);
+  vertex_input_attribs_[3].offset(offsetof(PerInstanceAttributes,
+                                           texture_info.geometry_current.position));
+
+  vertex_input_attribs_[4].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_attribs_[4].location(4);
+  vertex_input_attribs_[4].format(vk::Format::eR32Uint);
+  vertex_input_attribs_[4].offset(offsetof(PerInstanceAttributes,
+                                           texture_info.geometry_next.id));
+
+  vertex_input_attribs_[5].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_attribs_[5].location(5);
+  vertex_input_attribs_[5].format(vk::Format::eR32G32B32Sfloat);
+  vertex_input_attribs_[5].offset(offsetof(PerInstanceAttributes,
+                                           texture_info.geometry_next.position));
+
+  vertex_input_attribs_[6].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_attribs_[6].location(6);
+  vertex_input_attribs_[6].format(vk::Format::eR32Uint);
+  vertex_input_attribs_[6].offset(offsetof(PerInstanceAttributes,
+                                           texture_info.normal_current.id));
+
+  vertex_input_attribs_[7].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_attribs_[7].location(7);
+  vertex_input_attribs_[7].format(vk::Format::eR32G32B32Sfloat);
+  vertex_input_attribs_[7].offset(offsetof(PerInstanceAttributes,
+                                           texture_info.normal_current.position));
+
+  vertex_input_attribs_[8].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_attribs_[8].location(8);
+  vertex_input_attribs_[8].format(vk::Format::eR32Uint);
+  vertex_input_attribs_[8].offset(offsetof(PerInstanceAttributes,
+                                           texture_info.normal_next.id));
+
+  vertex_input_attribs_[9].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_attribs_[9].location(9);
+  vertex_input_attribs_[9].format(vk::Format::eR32G32B32Sfloat);
+  vertex_input_attribs_[9].offset(offsetof(PerInstanceAttributes,
+                                           texture_info.normal_next.position));
+
+  vertex_input_attribs_[10].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_attribs_[10].location(10);
+  vertex_input_attribs_[10].format(vk::Format::eR32Uint);
+  vertex_input_attribs_[10].offset(offsetof(PerInstanceAttributes,
+                                            texture_info.diffuse_current.id));
+
+  vertex_input_attribs_[11].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_attribs_[11].location(11);
+  vertex_input_attribs_[11].format(vk::Format::eR32G32B32Sfloat);
+  vertex_input_attribs_[11].offset(offsetof(PerInstanceAttributes,
+                                            texture_info.diffuse_current.position));
+
+  vertex_input_attribs_[12].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_attribs_[12].location(12);
+  vertex_input_attribs_[12].format(vk::Format::eR32Uint);
+  vertex_input_attribs_[12].offset(offsetof(PerInstanceAttributes,
+                                            texture_info.diffuse_next.id));
+
+  vertex_input_attribs_[13].binding(INSTANCE_BUFFER_BIND_ID);
+  vertex_input_attribs_[13].location(13);
+  vertex_input_attribs_[13].format(vk::Format::eR32G32B32Sfloat);
+  vertex_input_attribs_[13].offset(offsetof(PerInstanceAttributes,
+                                            texture_info.diffuse_next.position));
 }
 
 void DemoScene::PrepareDescriptorLayout() {
@@ -848,7 +921,8 @@ DemoScene::DemoScene(GLFWwindow *window)
         {Settings::kFaceSize, CubeFace::kNegY},
         {Settings::kFaceSize, CubeFace::kPosZ},
         {Settings::kFaceSize, CubeFace::kNegZ},
-      } {
+      }
+    , thread_pool_{std::max(std::thread::hardware_concurrency(), 2u) - 1} {
   Prepare();
   set_camera(AddComponent<engine::FreeFlyCamera>(
       glm::radians(60.0), 10, 1000000, glm::dvec3{-54483.2, 38919.9, 13576.9},
@@ -889,9 +963,10 @@ void DemoScene::Update() {
   }
 
   // update instances to draw
+  thread_pool_.Clear();
   grid_mesh_.ClearRenderList();
   for (CdlodQuadTree& quad_tree : quad_trees_) {
-    quad_tree.SelectNodes(*scene()->camera(), grid_mesh_);
+    quad_tree.SelectNodes(*scene()->camera(), grid_mesh_, thread_pool_);
   }
 
   if (grid_mesh_.mesh_.attribs_.size() > Settings::kMaxInstanceCount) {

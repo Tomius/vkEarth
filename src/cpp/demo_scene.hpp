@@ -9,6 +9,7 @@
 #include "engine/vulkan_scene.hpp"
 #include "cdlod/cdlod_quad_tree.hpp"
 #include "common/vulkan_application.hpp"
+#include "common/thread_pool.hpp"
 
 #define DEMO_TEXTURE_COUNT 6
 
@@ -56,7 +57,7 @@ private:
 
   vk::PipelineVertexInputStateCreateInfo vertex_input_;
   vk::VertexInputBindingDescription vertex_input_bindings_[2];
-  vk::VertexInputAttributeDescription vertex_input_attribs_[2];
+  vk::VertexInputAttributeDescription vertex_input_attribs_[14];
 
   struct {
     vk::Buffer buf;
@@ -75,6 +76,7 @@ private:
 
   QuadGridMesh grid_mesh_{Settings::kNodeDimension};
   CdlodQuadTree quad_trees_[6];
+  ThreadPool thread_pool_;
 
   void BuildDrawCmd();
   void Draw();

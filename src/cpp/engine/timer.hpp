@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef ENGINE_TIMER_H_
-#define ENGINE_TIMER_H_
+#ifndef ENGINE_TIMER_HPP_
+#define ENGINE_TIMER_HPP_
 
 #include <GLFW/glfw3.h>
 

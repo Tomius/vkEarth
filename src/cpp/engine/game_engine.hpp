@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef ENGINE_GAME_ENGINE_H_
-#define ENGINE_GAME_ENGINE_H_
+#ifndef ENGINE_GAME_ENGINE_HPP_
+#define ENGINE_GAME_ENGINE_HPP_
 
 #include <typeinfo>
 #include "engine/scene.hpp"

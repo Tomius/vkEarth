@@ -20,8 +20,20 @@ static constexpr double kEpsilon = 1e-5;
 
 static constexpr int kMaxInstanceCount = 32*1024; // TODO
 
-static constexpr int kNodeDimensionExp = 4;
+static constexpr int kNodeDimensionExp = 5;
 static constexpr int kNodeDimension = 1 << kNodeDimensionExp;
+
+static constexpr int kTextureDimensionExp = 8;
+static constexpr int kTextureDimension = 1 << kTextureDimensionExp;
+
+static constexpr int kTexDimOffset = kTextureDimensionExp - kNodeDimensionExp;
+
+static constexpr int kElevationTexBorderSize = 3;
+static constexpr int kElevationTexSizeWithBorders =
+    kTextureDimension + 2*kElevationTexBorderSize;
+static constexpr int kDiffuseTexBorderSize = 2;
+static constexpr int kDiffuseTexSizeWithBorders =
+    kTextureDimension + 2*kDiffuseTexBorderSize;
 
 // The resolution of the heightmap
 static constexpr long kFaceSize = 65536;
@@ -39,9 +51,22 @@ static constexpr double kMaxHeight = kScaleOfRealisticHeight * kMtEverestHeight;
 static constexpr long kGeomDiv = 0;
 
 static constexpr int kLevelOffset = 0;
+static constexpr int kDiffuseToElevationLevelOffset = 1;
+static constexpr int kNormalToGeometryLevelOffset = 2;
+
 static constexpr double kSmallestGeometryLodDistance = 2*kNodeDimension;
+static constexpr double kSmallestTextureLodDistance =
+    kSmallestGeometryLodDistance * (1 << kNormalToGeometryLevelOffset);
 
 static constexpr bool kWireframe = false;
+
+static_assert(3 <= kNodeDimensionExp && kNodeDimensionExp <= 8, "");
+static_assert(kNodeDimension <= kSmallestGeometryLodDistance, "");
+static_assert(0 <= kNormalToGeometryLevelOffset, "");
+static_assert(kNodeDimensionExp + kNormalToGeometryLevelOffset <= kTextureDimensionExp, "");
+static_assert(kTextureDimension <= kSmallestTextureLodDistance, "");
+static_assert(kSmallestGeometryLodDistance <= kSmallestTextureLodDistance, "");
+static_assert(kGeomDiv < kNodeDimensionExp, "");
 
 }
 

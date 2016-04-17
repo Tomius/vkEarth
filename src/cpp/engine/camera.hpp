@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tamas Csala
 
-#ifndef ENGINE_CAMERA_H_
-#define ENGINE_CAMERA_H_
+#ifndef ENGINE_CAMERA_HPP_
+#define ENGINE_CAMERA_HPP_
 
 #include <cmath>
 
@@ -137,4 +137,4 @@ class ThirdPersonalCamera : public Camera {
 
 }  // namespace engine
 
-#endif  // ENGINE_CAMERA_H_
+#endif  // ENGINE_CAMERA_HPP_
