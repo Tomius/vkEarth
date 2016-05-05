@@ -1,6 +1,6 @@
 // Copyright (c) 2016, Tamas Csala
 
-#include <vulkan/vk_cpp.h>
+#include <vulkan/vk_cpp.hpp>
 #include <GLFW/glfw3.h>
 
 #include "engine/game_engine.hpp"

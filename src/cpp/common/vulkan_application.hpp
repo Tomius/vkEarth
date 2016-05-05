@@ -5,7 +5,7 @@
 
 #include <string>
 #include <vector>
-#include <vulkan/vk_cpp.h>
+#include <vulkan/vk_cpp.hpp>
 
 #include "common/settings.hpp"
 
@@ -15,19 +15,18 @@ struct VulkanApplication {
       .applicationVersion(0)
       .pEngineName("vkEarth")
       .engineVersion(0)
-      .apiVersion(VK_MAKE_VERSION(1, 0, 5));
+      .apiVersion(VK_MAKE_VERSION(1, 0, 11));
 
   std::vector<const char*> instance_validation_layers{
 #if VK_VALIDATE
-    "VK_LAYER_GOOGLE_threading",
-    "VK_LAYER_LUNARG_param_checker",
-    "VK_LAYER_LUNARG_device_limits",
-    "VK_LAYER_LUNARG_object_tracker",
-    "VK_LAYER_LUNARG_image",
+    //"VK_LAYER_LUNARG_param_checker",
+    //"VK_LAYER_LUNARG_device_limits",
+    //"VK_LAYER_LUNARG_object_tracker",
+    /*"VK_LAYER_LUNARG_image",
     "VK_LAYER_LUNARG_mem_tracker",
     "VK_LAYER_LUNARG_draw_state",
-    "VK_LAYER_LUNARG_swapchain",
-    "VK_LAYER_GOOGLE_unique_objects"
+    "VK_LAYER_LUNARG_swapchain",*/
+    //"VK_LAYER_GOOGLE_unique_objects"
 #endif
   };
 
@@ -38,8 +37,7 @@ struct VulkanApplication {
   };
 
   std::vector<const char*> device_validation_layers{
-#if VK_VALIDATE
-    "VK_LAYER_GOOGLE_threading",
+/*#if VK_VALIDATE
     "VK_LAYER_LUNARG_param_checker",
     "VK_LAYER_LUNARG_device_limits",
     "VK_LAYER_LUNARG_object_tracker",
@@ -48,7 +46,7 @@ struct VulkanApplication {
     "VK_LAYER_LUNARG_draw_state",
     "VK_LAYER_LUNARG_swapchain",
     "VK_LAYER_GOOGLE_unique_objects"
-#endif
+#endif*/
   };
 
   std::vector<const char*> device_extension_names{

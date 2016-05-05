@@ -14,8 +14,10 @@ class CdlodQuadTree {
 
  public:
   CdlodQuadTree(size_t kFaceSize, CubeFace face);
-  void SelectNodes(const engine::Camera& cam, QuadGridMesh& mesh,
-                   ThreadPool& thread_pool);
+  void SelectNodes(const engine::Camera& cam,
+                   QuadGridMesh& mesh,
+                   ThreadPool& thread_pool,
+                   TextureHandler& texture_handler);
   size_t max_node_level() const { return max_node_level_; }
 };
 

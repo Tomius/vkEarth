@@ -4,7 +4,7 @@
 #define ERROR_CHECKING_HPP_
 
 #include <stdexcept>
-#include <vulkan/vk_cpp.h>
+#include <vulkan/vk_cpp.hpp>
 
 struct VulkanError : public std::runtime_error {
   VkResult result;

@@ -10,9 +10,9 @@
 CdlodQuadTreeNode::CdlodQuadTreeNode(double x, double z, CubeFace face,
                                      int level, CdlodQuadTreeNode* parent)
     : x_(x), z_(z), face_(face), level_(level)
-    // , bbox_{glm::vec3{x - size()/2, 0, z - size()/2},
-    //         glm::vec3{x + size()/2, 0, z + size()/2},
-    //         face, Settings::kFaceSize}
+    , bbox_{glm::vec3{x - size()/2, 0, z - size()/2},
+            glm::vec3{x + size()/2, 0, z + size()/2},
+            face, Settings::kFaceSize}
     , parent_{parent}
 {
   CalculateMinMax();
@@ -39,11 +39,12 @@ void CdlodQuadTreeNode::InitChild(int i) {
 void CdlodQuadTreeNode::SelectNodes(const glm::vec3& cam_pos,
                                     const Frustum& frustum,
                                     QuadGridMesh& grid_mesh,
-                                    ThreadPool& thread_pool) {
+                                    ThreadPool& thread_pool,
+                                    TextureHandler& texture_handler) {
   last_used_ = 0;
 
   StreamedTextureInfo texinfo;
-  SelectTexture(cam_pos, frustum, thread_pool, texinfo);
+  SelectTexture(cam_pos, frustum, thread_pool, texinfo, texture_handler);
 
   // textures should be loaded, even if it is outside the frustum (otherwise the
   // texture lod difference of neighbour nodes can cause geometry cracks)
@@ -66,7 +67,8 @@ void CdlodQuadTreeNode::SelectNodes(const glm::vec3& cam_pos,
       cc[i] = children_[i]->CollidesWithSphere(sphere);
       if (cc[i]) {
         // Ask child to render what we can't
-        children_[i]->SelectNodes(cam_pos, frustum, grid_mesh, thread_pool);
+        children_[i]->SelectNodes(cam_pos, frustum, grid_mesh,
+                                  thread_pool, texture_handler);
       }
     }
 
@@ -82,6 +84,7 @@ void CdlodQuadTreeNode::SelectTexture(const glm::vec3& cam_pos,
                                       const Frustum& frustum,
                                       ThreadPool& thread_pool,
                                       StreamedTextureInfo& texinfo,
+                                      TextureHandler& texture_handler,
                                       int recursion_level /*= 0*/) {
   bool need_geometry = (texinfo.geometry_current.size == 0);
   bool need_normal   = (texinfo.normal_current.size == 0);
@@ -95,7 +98,7 @@ void CdlodQuadTreeNode::SelectTexture(const glm::vec3& cam_pos,
   if (parent_ == nullptr) {
     if (!texture_.is_loaded_to_gpu) {
       LoadTexture(true);
-      Upload();
+      Upload(texture_handler);
     }
 
     if (need_geometry) {
@@ -123,7 +126,7 @@ void CdlodQuadTreeNode::SelectTexture(const glm::vec3& cam_pos,
 
   if (can_use_geometry || can_use_normal || can_use_diffuse) {
     if (!texture_.is_loaded_to_gpu && texture_.is_loaded_to_memory) {
-      Upload();
+      Upload(texture_handler);
     }
 
     if (texture_.is_loaded_to_gpu) {
@@ -155,19 +158,27 @@ void CdlodQuadTreeNode::SelectTexture(const glm::vec3& cam_pos,
   }
 
   parent_->SelectTexture(cam_pos, frustum, thread_pool,
-                         texinfo, recursion_level+1);
+                         texinfo, texture_handler, recursion_level+1);
 }
 
-void CdlodQuadTreeNode::Age() {
+void CdlodQuadTreeNode::Age(TextureHandler& texture_handler) {
   last_used_++;
 
   for (auto& child : children_) {
     if (child) {
       // unload child if its age would exceed the ttl
       if (child->last_used_ > kTimeToLiveInMemory) {
+        if (child->texture_.is_loaded_to_gpu) {
+          if (child->HasElevationTexture()) {
+            texture_handler.FreeTexture(child->texture_.elevation.id);
+          }
+          if (child->HasDiffuseTexture()) {
+            texture_handler.FreeTexture(child->texture_.diffuse.id);
+          }
+        }
         child.reset();
       } else {
-        child->Age();
+        child->Age(texture_handler);
       }
     }
   }
@@ -262,8 +273,8 @@ void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
         std::terminate();
       }
 
-      assert(width == Settings::kElevationTexSizeWithBorders);
-      assert(height == Settings::kElevationTexSizeWithBorders);
+      assert(width == Settings::kDiffuseTexSizeWithBorders);
+      assert(height == Settings::kDiffuseTexSizeWithBorders);
 
       size_t size_in_elements = data.size() / sizeof(texture_.diffuse_data[0]);
       texture_.diffuse_data.resize(size_in_elements);
@@ -276,16 +287,20 @@ void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
   texture_.load_mutex.unlock();
 }
 
-void CdlodQuadTreeNode::Upload() {
+void CdlodQuadTreeNode::Upload(TextureHandler& texture_handler) {
   LoadTexture(true);
   if (parent_ && !parent_->texture_.is_loaded_to_gpu) {
-    parent_->Upload();
+    parent_->Upload(texture_handler);
   }
 
   if (!texture_.is_loaded_to_gpu) {
     if (HasElevationTexture()) {
       RefreshMinMax();
-      // todo
+      texture_.elevation.id = texture_handler.GetFirstUnusedTextureIndex();
+      texture_handler.SetupTexture(texture_.elevation.id,
+                                   Settings::kElevationTexSizeWithBorders,
+                                   Settings::kElevationTexSizeWithBorders,
+                                   (const unsigned char*)texture_.elevation_data.data());
       double scale = static_cast<double>(Settings::kElevationTexSizeWithBorders)
                    / static_cast<double>(Settings::kTextureDimension);
       texture_.elevation.size = scale * size();
@@ -296,7 +311,11 @@ void CdlodQuadTreeNode::Upload() {
     }
 
     if (HasDiffuseTexture()) {
-      // todo
+      texture_.diffuse.id = texture_handler.GetFirstUnusedTextureIndex();
+      texture_handler.SetupTexture(texture_.diffuse.id,
+                                   Settings::kDiffuseTexSizeWithBorders,
+                                   Settings::kDiffuseTexSizeWithBorders,
+                                   (const unsigned char*)texture_.diffuse_data.data());
       double scale = static_cast<double>(Settings::kDiffuseTexSizeWithBorders)
                    / static_cast<double>(Settings::kTextureDimension);
       texture_.diffuse.size = scale * size();

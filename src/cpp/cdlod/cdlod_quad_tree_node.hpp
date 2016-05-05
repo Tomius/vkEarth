@@ -5,6 +5,7 @@
 
 #include <memory>
 #include "cdlod/quad_grid_mesh.hpp"
+#include "cdlod/texture_handler.hpp"
 #include "collision/spherized_aabb.hpp"
 #include "common/thread_pool.hpp"
 
@@ -13,16 +14,18 @@ class CdlodQuadTreeNode {
   CdlodQuadTreeNode(double x, double z, CubeFace face, int level,
                     CdlodQuadTreeNode* parent = nullptr);
 
-  void Age();
+  void Age(TextureHandler& texture_handler);
   void SelectNodes(const glm::vec3& cam_pos,
                    const Frustum& frustum,
                    QuadGridMesh& grid_mesh,
-                   ThreadPool& thread_pool);
+                   ThreadPool& thread_pool,
+                   TextureHandler& texture_handler);
 
   void SelectTexture(const glm::vec3& cam_pos,
                      const Frustum& frustum,
                      ThreadPool& thread_pool,
                      StreamedTextureInfo& texinfo,
+                     TextureHandler& texture_handler,
                      int recursion_level = 0);
 
  private:
@@ -54,7 +57,7 @@ class CdlodQuadTreeNode {
   bool HasDiffuseTexture() const;
 
   void LoadTexture(bool synchronous_load);
-  void Upload();
+  void Upload(TextureHandler& texture_handler);
   void CalculateMinMax();
   void RefreshMinMax();
 };

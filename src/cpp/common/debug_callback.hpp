@@ -3,7 +3,7 @@
 #ifndef COMMON_DEBUG_CALLBACK_HPP_
 #define COMMON_DEBUG_CALLBACK_HPP_
 
-#include <vulkan/vk_cpp.h>
+#include <vulkan/vk_cpp.hpp>
 #include "common/settings.hpp"
 
 #if VK_VALIDATE

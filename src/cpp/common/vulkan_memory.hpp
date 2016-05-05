@@ -3,7 +3,7 @@
 #ifndef VULKAN_MEMORY_HPP_
 #define VULKAN_MEMORY_HPP_
 
-#include <vulkan/vk_cpp.h>
+#include <vulkan/vk_cpp.hpp>
 
 inline void MemoryTypeFromProperties(const vk::PhysicalDeviceMemoryProperties& memory_properties,
                                      uint32_t typeBits,

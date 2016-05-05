@@ -19,6 +19,8 @@ namespace Settings {
 static constexpr double kEpsilon = 1e-5;
 
 static constexpr int kMaxInstanceCount = 32*1024; // TODO
+static constexpr int kMaxTextureCount = 2*1024; // TODO
+static constexpr int kMaxTextureCountTemp = 6; // TODO
 
 static constexpr int kNodeDimensionExp = 5;
 static constexpr int kNodeDimension = 1 << kNodeDimensionExp;

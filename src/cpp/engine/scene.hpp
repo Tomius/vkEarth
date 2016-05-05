@@ -5,7 +5,7 @@
 
 #include <vector>
 #include <memory>
-#include <vulkan/vk_cpp.h>
+#include <vulkan/vk_cpp.hpp>
 
 #include "engine/timer.hpp"
 #include "engine/camera.hpp"

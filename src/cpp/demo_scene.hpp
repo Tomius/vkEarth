@@ -3,15 +3,14 @@
 #ifndef DEMO_SCENE_HPP_
 #define DEMO_SCENE_HPP_
 
-#include <vulkan/vk_cpp.h>
+#include <vulkan/vk_cpp.hpp>
 #include <GLFW/glfw3.h>
 
 #include "engine/vulkan_scene.hpp"
 #include "cdlod/cdlod_quad_tree.hpp"
+#include "cdlod/texture_handler.hpp"
 #include "common/vulkan_application.hpp"
 #include "common/thread_pool.hpp"
-
-#define DEMO_TEXTURE_COUNT 6
 
 struct TextureObject {
   vk::Sampler sampler;
@@ -34,7 +33,7 @@ struct UniformData {
   int terrain_max_lod_level;
 };
 
-class DemoScene : public engine::VulkanScene {
+class DemoScene : public engine::VulkanScene, public TextureHandler {
 public:
   DemoScene(GLFWwindow *window);
   ~DemoScene();
@@ -47,7 +46,7 @@ public:
 private:
   bool kUseStagingBuffer = true;
 
-  struct TextureObject textures_[DEMO_TEXTURE_COUNT];
+  struct TextureObject textures_[Settings::kMaxTextureCount];
 
   struct {
     vk::Buffer buf;
@@ -97,6 +96,10 @@ private:
   void PrepareFramebuffers();
   void Prepare();
   void Cleanup();
+
+  void SetupTexture(size_t index, unsigned width, unsigned height,
+                    const unsigned char* data) override;
+  void FreeTexture(size_t index) override;
 };
 
 #endif // DEMO_SCENE_HPP_

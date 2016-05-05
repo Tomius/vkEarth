@@ -546,7 +546,7 @@ VulkanScene::DepthBuffer VulkanScene::CreateDepthBuffer(GLFWwindow* window,
   vk::chk(vk_device.allocateMemory(&mem_alloc, nullptr, &depth.mem));
 
   /* bind memory */
-  vk::chk(vk_device.bindImageMemory(depth.image, depth.mem, 0));
+  vk_device.bindImageMemory(depth.image, depth.mem, 0);
 
   scene.SetImageLayout(depth.image, vk::ImageAspectFlagBits::eDepth,
                        vk::ImageLayout::eUndefined,
@@ -565,7 +565,7 @@ void VulkanScene::FlushInitCommand() {
   if (vk_setup_cmd_ == VK_NULL_HANDLE)
     return;
 
-  vk::chk(vk_setup_cmd_.end());
+  vk_setup_cmd_.end();
 
   const vk::CommandBuffer commandBuffers[] = {vk_setup_cmd_};
   vk::Fence null_fence = {VK_NULL_HANDLE};
@@ -574,7 +574,7 @@ void VulkanScene::FlushInitCommand() {
                                .pCommandBuffers(commandBuffers);
 
   vk::chk(vk_queue_.submit(1, &submitInfo, null_fence));
-  vk::chk(vk_queue_.waitIdle());
+  vk_queue_.waitIdle();
 
   vk_device_.freeCommandBuffers(vk_cmd_pool_, 1, commandBuffers);
   vk_setup_cmd_ = VK_NULL_HANDLE;
@@ -617,9 +617,9 @@ void VulkanScene::PrepareBuffers() {
   }
 
 #if VK_VSYNC
-  vk::PresentModeKHR swapchain_present_mode = vk::PresentModeKHR::eFifoKHR;
+  vk::PresentModeKHR swapchain_present_mode = vk::PresentModeKHR::eFifo;
 #else
-  vk::PresentModeKHR swapchain_present_mode = vk::PresentModeKHR::eImmediateKHR;
+  vk::PresentModeKHR swapchain_present_mode = vk::PresentModeKHR::eImmediate;
 #endif
 
   // Determine the number of vk::Image's to use in the swap chain (we desire to

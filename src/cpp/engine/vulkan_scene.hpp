@@ -3,7 +3,7 @@
 #ifndef ENGINE_VULKAN_SCENE_HPP_
 #define ENGINE_VULKAN_SCENE_HPP_
 
-#include <vulkan/vk_cpp.h>
+#include <vulkan/vk_cpp.hpp>
 
 #include "engine/scene.hpp"
 

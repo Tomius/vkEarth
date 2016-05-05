@@ -12,7 +12,7 @@
 #include <memory>
 #include <cstddef>
 
-#include <vulkan/vk_cpp.h>
+#include <vulkan/vk_cpp.hpp>
 #include <GLFW/glfw3.h>
 #include <lodepng.h>
 
@@ -91,7 +91,7 @@ void DemoScene::BuildDrawCmd() {
                                 vk::DependencyFlags(), 0, nullptr, 0,
                                 nullptr, 1, &pre_present_barrier);
 
-  vk::chk(vk_draw_cmd().end());
+  vk_draw_cmd().end();
 }
 
 void DemoScene::Draw() {
@@ -170,7 +170,7 @@ void DemoScene::Draw() {
       assert(vkErr == VK_SUCCESS);
   }
 
-  vk::chk(vk_queue().waitIdle());
+  vk_queue().waitIdle();
 
   vk_device().destroySemaphore(present_complete_semaphore, nullptr);
 }
@@ -207,22 +207,20 @@ void DemoScene::PrepareTextureImage(const unsigned char *tex_colors,
                            mem_reqs.memoryTypeBits(),
                            required_props, mem_alloc);
 
-  /* allocate memory */
   vk::chk(vk_device().allocateMemory(&mem_alloc, nullptr, &tex_obj->mem));
 
-  /* bind memory */
-  vk::chk(vk_device().bindImageMemory(tex_obj->image, tex_obj->mem, 0));
+  vk_device().bindImageMemory(tex_obj->image, tex_obj->mem, 0);
 
   if (required_props & vk::MemoryPropertyFlagBits::eHostVisible) {
       const vk::ImageSubresource subres =
         vk::ImageSubresource().aspectMask(vk::ImageAspectFlagBits::eColor);
       vk::SubresourceLayout layout;
-      void *data;
 
       vk_device().getImageSubresourceLayout(tex_obj->image, &subres, &layout);
 
-      vk::chk(vk_device().mapMemory(tex_obj->mem, 0, mem_alloc.allocationSize(),
-                                   vk::MemoryMapFlags{}, &data));
+      void *data = vk_device().mapMemory(tex_obj->mem, 0,
+                                         mem_alloc.allocationSize(),
+                                         vk::MemoryMapFlags{});
 
       for (int y = 0; y < tex_height; y++) {
           char *row = ((char *)data + layout.rowPitch() * y);
@@ -247,11 +245,7 @@ void DemoScene::PrepareTextureImage(const unsigned char *tex_colors,
 }
 
 void DemoScene::PrepareTextures() {
-  vk::FormatProperties props;
-  const vk::Format tex_format = vk::Format::eR16G16B16A16Unorm;
-  vk_gpu().getFormatProperties(tex_format, &props);
-
-  for (int i = 0; i < DEMO_TEXTURE_COUNT; i++) {
+  for (int i = 0; i < Settings::kMaxTextureCountTemp; i++) {
     std::vector<unsigned char> image; //the raw pixels
     unsigned width, height;
     unsigned error = lodepng::decode(image, width, height,
@@ -261,105 +255,144 @@ void DemoScene::PrepareTextures() {
       std::terminate();
     }
 
-    if ((props.linearTilingFeatures() &
-         vk::FormatFeatureFlagBits::eSampledImage) &&
-         !kUseStagingBuffer) {
-      /* Device can texture using linear textures */
-      PrepareTextureImage(image.data(),
-                          width, height, &textures_[i],
-                          vk::ImageTiling::eLinear,
-                          vk::ImageUsageFlagBits::eSampled,
-                          vk::MemoryPropertyFlagBits::eHostVisible,
-                          tex_format);
-    } else if (props.optimalTilingFeatures() &
-               vk::FormatFeatureFlagBits::eSampledImage) {
-      /* Must use staging buffer to copy linear texture to optimized */
-      TextureObject staging_texture;
-
-      PrepareTextureImage(image.data(),
-                           width, height, &staging_texture,
-                           vk::ImageTiling::eLinear,
-                           vk::ImageUsageFlagBits::eTransferSrc,
-                           vk::MemoryPropertyFlagBits::eHostVisible,
-                           tex_format);
-
-      PrepareTextureImage(image.data(),
-          width, height, &textures_[i],
-          vk::ImageTiling::eOptimal,
-          (vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled),
-          vk::MemoryPropertyFlagBits::eDeviceLocal,
-          tex_format);
-
-      SetImageLayout(staging_texture.image,
-                     vk::ImageAspectFlagBits::eColor,
-                     staging_texture.imageLayout,
-                     vk::ImageLayout::eTransferSrcOptimal,
-                     vk::AccessFlagBits::eShaderRead);
-
-      SetImageLayout(textures_[i].image,
-                     vk::ImageAspectFlagBits::eColor,
-                     textures_[i].imageLayout,
-                     vk::ImageLayout::eTransferDstOptimal,
-                     vk::AccessFlagBits::eShaderRead);
-
-      vk::ImageCopy copy_region = vk::ImageCopy()
-          .srcSubresource({vk::ImageAspectFlagBits::eColor, 0, 0, 1})
-          .dstSubresource({vk::ImageAspectFlagBits::eColor, 0, 0, 1})
-          .extent(vk::Extent3D(staging_texture.tex_width,
-                               staging_texture.tex_height, 1));
-      vk_setup_cmd().copyImage(staging_texture.image,
-          vk::ImageLayout::eTransferSrcOptimal, textures_[i].image,
-          vk::ImageLayout::eTransferDstOptimal, 1, &copy_region);
-
-      SetImageLayout(textures_[i].image,
-                     vk::ImageAspectFlagBits::eColor,
-                     vk::ImageLayout::eTransferDstOptimal,
-                     textures_[i].imageLayout,
-                     vk::AccessFlagBits::eTransferWrite);
-
-      FlushInitCommand();
-
-      vk_device().destroyImage(staging_texture.image, nullptr);
-      vk_device().freeMemory(staging_texture.mem, nullptr);
-    } else {
-      /* Can't support vk::Format::eB8G8R8A8Unorm !? */
-      assert(!"No support for B8G8R8A8_UNORM as texture image format");
-    }
-
-    const vk::SamplerCreateInfo sampler = vk::SamplerCreateInfo()
-        .magFilter(vk::Filter::eNearest)
-        .minFilter(vk::Filter::eNearest)
-        .mipmapMode(vk::SamplerMipmapMode::eNearest)
-        .addressModeU(vk::SamplerAddressMode::eClampToEdge)
-        .addressModeV(vk::SamplerAddressMode::eClampToEdge)
-        .addressModeW(vk::SamplerAddressMode::eClampToEdge)
-        .mipLodBias(0.0f)
-        .anisotropyEnable(VK_FALSE)
-        .maxAnisotropy(1)
-        .compareOp(vk::CompareOp::eNever)
-        .minLod(0.0f)
-        .maxLod(0.0f)
-        .borderColor(vk::BorderColor::eFloatOpaqueWhite)
-        .unnormalizedCoordinates(VK_FALSE);
-
-    vk::ImageViewCreateInfo view = vk::ImageViewCreateInfo()
-        .viewType(vk::ImageViewType::e2D)
-        .format(tex_format)
-        .subresourceRange(vk::ImageSubresourceRange{}
-            .aspectMask(vk::ImageAspectFlagBits::eColor)
-            .baseMipLevel(0)
-            .levelCount(1)
-            .baseArrayLayer(0)
-            .layerCount(1));
-
-    /* create sampler */
-    vk::chk(vk_device().createSampler(&sampler, nullptr,
-                                      &textures_[i].sampler));
-
-    /* create image view */
-    view.image(textures_[i].image);
-    vk::chk(vk_device().createImageView(&view, nullptr, &textures_[i].view));
+    SetupTexture(i, width, height, image.data());
   }
+}
+
+void DemoScene::SetupTexture(size_t index, unsigned width, unsigned height,
+                             const unsigned char* pixels) {
+  int succesfully_removed = unused_indices_.erase(index);
+  assert(succesfully_removed);
+  if (used_index_count_ <= index) {
+    used_index_count_ = index + 1;
+  } else { // this was already used before, time to free it
+    vk_device().destroyImageView(textures_[index].view, nullptr);
+    vk_device().destroyImage(textures_[index].image, nullptr);
+    vk_device().freeMemory(textures_[index].mem, nullptr);
+    vk_device().destroySampler(textures_[index].sampler, nullptr);
+  }
+
+  vk::FormatProperties props;
+  const vk::Format tex_format = vk::Format::eR16G16B16A16Unorm;
+  vk_gpu().getFormatProperties(tex_format, &props);
+
+  if ((props.linearTilingFeatures() &
+       vk::FormatFeatureFlagBits::eSampledImage) &&
+       !kUseStagingBuffer) {
+    /* Device can texture using linear textures */
+    PrepareTextureImage(pixels,
+                        width, height, &textures_[index],
+                        vk::ImageTiling::eLinear,
+                        vk::ImageUsageFlagBits::eSampled,
+                        vk::MemoryPropertyFlagBits::eHostVisible,
+                        tex_format);
+  } else if (props.optimalTilingFeatures() &
+             vk::FormatFeatureFlagBits::eSampledImage) {
+    /* Must use staging buffer to copy linear texture to optimized */
+    TextureObject staging_texture;
+
+    PrepareTextureImage(pixels,
+                         width, height, &staging_texture,
+                         vk::ImageTiling::eLinear,
+                         vk::ImageUsageFlagBits::eTransferSrc,
+                         vk::MemoryPropertyFlagBits::eHostVisible,
+                         tex_format);
+
+    PrepareTextureImage(pixels,
+        width, height, &textures_[index],
+        vk::ImageTiling::eOptimal,
+        (vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled),
+        vk::MemoryPropertyFlagBits::eDeviceLocal,
+        tex_format);
+
+    SetImageLayout(staging_texture.image,
+                   vk::ImageAspectFlagBits::eColor,
+                   staging_texture.imageLayout,
+                   vk::ImageLayout::eTransferSrcOptimal,
+                   vk::AccessFlagBits::eShaderRead);
+
+    SetImageLayout(textures_[index].image,
+                   vk::ImageAspectFlagBits::eColor,
+                   textures_[index].imageLayout,
+                   vk::ImageLayout::eTransferDstOptimal,
+                   vk::AccessFlagBits::eShaderRead);
+
+    vk::ImageCopy copy_region = vk::ImageCopy()
+        .srcSubresource({vk::ImageAspectFlagBits::eColor, 0, 0, 1})
+        .dstSubresource({vk::ImageAspectFlagBits::eColor, 0, 0, 1})
+        .extent(vk::Extent3D(staging_texture.tex_width,
+                             staging_texture.tex_height, 1));
+    vk_setup_cmd().copyImage(staging_texture.image,
+        vk::ImageLayout::eTransferSrcOptimal, textures_[index].image,
+        vk::ImageLayout::eTransferDstOptimal, 1, &copy_region);
+
+    SetImageLayout(textures_[index].image,
+                   vk::ImageAspectFlagBits::eColor,
+                   vk::ImageLayout::eTransferDstOptimal,
+                   textures_[index].imageLayout,
+                   vk::AccessFlagBits::eTransferWrite);
+
+    FlushInitCommand();
+
+    vk_device().destroyImage(staging_texture.image, nullptr);
+    vk_device().freeMemory(staging_texture.mem, nullptr);
+  } else {
+    /* Can't support vk::Format::eB8G8R8A8Unorm !? */
+    assert(!"No support for B8G8R8A8_UNORM as texture image format");
+  }
+
+  const vk::SamplerCreateInfo sampler = vk::SamplerCreateInfo()
+      .magFilter(vk::Filter::eNearest)
+      .minFilter(vk::Filter::eNearest)
+      .mipmapMode(vk::SamplerMipmapMode::eNearest)
+      .addressModeU(vk::SamplerAddressMode::eClampToEdge)
+      .addressModeV(vk::SamplerAddressMode::eClampToEdge)
+      .addressModeW(vk::SamplerAddressMode::eClampToEdge)
+      .mipLodBias(0.0f)
+      .anisotropyEnable(VK_FALSE)
+      .maxAnisotropy(1)
+      .compareOp(vk::CompareOp::eNever)
+      .minLod(0.0f)
+      .maxLod(0.0f)
+      .borderColor(vk::BorderColor::eFloatOpaqueWhite)
+      .unnormalizedCoordinates(VK_FALSE);
+
+  vk::ImageViewCreateInfo view = vk::ImageViewCreateInfo()
+      .viewType(vk::ImageViewType::e2D)
+      .format(tex_format)
+      .subresourceRange(vk::ImageSubresourceRange{}
+          .aspectMask(vk::ImageAspectFlagBits::eColor)
+          .baseMipLevel(0)
+          .levelCount(1)
+          .baseArrayLayer(0)
+          .layerCount(1));
+
+  /* create sampler */
+  vk::chk(vk_device().createSampler(&sampler, nullptr,
+                                    &textures_[index].sampler));
+
+  /* create image view */
+  view.image(textures_[index].image);
+  vk::chk(vk_device().createImageView(&view, nullptr, &textures_[index].view));
+
+  /* Update the descriptor set info */
+  tex_descriptor_infos_[index].sampler(textures_[index].sampler);
+  tex_descriptor_infos_[index].imageView(textures_[index].view);
+  tex_descriptor_infos_[index].imageLayout(vk::ImageLayout::eGeneral);
+
+  vk::WriteDescriptorSet writes[1];
+
+  writes[0].dstBinding(0);
+  writes[0].dstSet(desc_set_);
+  writes[0].descriptorCount(used_index_count_);
+  writes[0].descriptorType(vk::DescriptorType::eCombinedImageSampler);
+  writes[0].pImageInfo(tex_descriptor_infos_);
+
+  vk_device().updateDescriptorSets(1, writes, 0, nullptr);
+}
+
+void DemoScene::FreeTexture(size_t index) {
+  unused_indices_.insert(index);
 }
 
 void DemoScene::PrepareIndices() {
@@ -370,7 +403,6 @@ void DemoScene::PrepareIndices() {
 
   vk::MemoryAllocateInfo mem_alloc;
   vk::MemoryRequirements mem_reqs;
-  void *data;
 
   vk::chk(vk_device().createBuffer(&buf_info, nullptr, &indices_.buf));
 
@@ -384,14 +416,14 @@ void DemoScene::PrepareIndices() {
 
   vk::chk(vk_device().allocateMemory(&mem_alloc, nullptr, &indices_.mem));
 
-  vk::chk(vk_device().mapMemory(indices_.mem, 0, mem_alloc.allocationSize(),
-                               vk::MemoryMapFlags{}, &data));
+  void *data = vk_device().mapMemory(indices_.mem, 0, mem_alloc.allocationSize(),
+                                     vk::MemoryMapFlags{});
 
   std::memcpy(data, indices.data(), sizeof(uint16_t) * indices.size());
 
   vk_device().unmapMemory(indices_.mem);
 
-  vk::chk(vk_device().bindBufferMemory(indices_.buf, indices_.mem, 0));
+  vk_device().bindBufferMemory(indices_.buf, indices_.mem, 0);
 }
 
 void DemoScene::PrepareVertices() {
@@ -414,11 +446,11 @@ void DemoScene::PrepareVertices() {
                              mem_alloc);
 
     vk::chk(vk_device().allocateMemory(&mem_alloc, nullptr, &vertex_attribs_.mem));
-    vk::chk(vk_device().bindBufferMemory(vertex_attribs_.buf, vertex_attribs_.mem, 0));
+    vk_device().bindBufferMemory(vertex_attribs_.buf, vertex_attribs_.mem, 0);
 
-    void *data;
-    vk::chk(vk_device().mapMemory(vertex_attribs_.mem, 0, mem_alloc.allocationSize(),
-                                 vk::MemoryMapFlags{}, &data));
+    void *data = vk_device().mapMemory(vertex_attribs_.mem, 0,
+                                       mem_alloc.allocationSize(),
+                                       vk::MemoryMapFlags{});
 
     std::memcpy(data, grid_mesh_.mesh_.positions_.data(),
                 sizeof(svec2) * grid_mesh_.mesh_.positions_.size());
@@ -442,7 +474,7 @@ void DemoScene::PrepareVertices() {
                              mem_alloc);
 
     vk::chk(vk_device().allocateMemory(&mem_alloc, nullptr, &instance_attribs_.mem));
-    vk::chk(vk_device().bindBufferMemory(instance_attribs_.buf, instance_attribs_.mem, 0));
+    vk_device().bindBufferMemory(instance_attribs_.buf, instance_attribs_.mem, 0);
   }
 
   vertex_input_.vertexBindingDescriptionCount(2);
@@ -546,7 +578,7 @@ void DemoScene::PrepareDescriptorLayout() {
     vk::DescriptorSetLayoutBinding()
       .binding(0)
       .descriptorType(vk::DescriptorType::eCombinedImageSampler)
-      .descriptorCount(DEMO_TEXTURE_COUNT)
+      .descriptorCount(Settings::kMaxTextureCount)
       .stageFlags(vk::ShaderStageFlagBits::eFragment | vk::ShaderStageFlagBits::eVertex),
     vk::DescriptorSetLayoutBinding()
       .binding(1)
@@ -617,7 +649,7 @@ void DemoScene::PrepareDescriptorPool() {
   const vk::DescriptorPoolSize type_count[] = {
     vk::DescriptorPoolSize()
       .type(vk::DescriptorType::eCombinedImageSampler)
-      .descriptorCount(DEMO_TEXTURE_COUNT),
+      .descriptorCount(Settings::kMaxTextureCount),
     vk::DescriptorPoolSize()
       .type(vk::DescriptorType::eUniformBuffer)
       .descriptorCount(1)
@@ -653,8 +685,7 @@ void DemoScene::PrepareUniformBuffer() {
   vk::chk(vk_device().allocateMemory(&alloc_info, NULL,
                                      &uniform_data_.mem));
 
-  vk::chk(vk_device().bindBufferMemory(uniform_data_.buf,
-                                       uniform_data_.mem, 0));
+  vk_device().bindBufferMemory(uniform_data_.buf, uniform_data_.mem, 0);
 
   uniform_data_.buffer_info.buffer(uniform_data_.buf);
   uniform_data_.buffer_info.offset(0);
@@ -662,9 +693,6 @@ void DemoScene::PrepareUniformBuffer() {
 }
 
 void DemoScene::PrepareDescriptorSet() {
-  vk::DescriptorImageInfo tex_descs[DEMO_TEXTURE_COUNT];
-  vk::WriteDescriptorSet writes[2];
-
   vk::DescriptorSetAllocateInfo alloc_info =
     vk::DescriptorSetAllocateInfo()
       .descriptorPool(desc_pool_)
@@ -672,25 +700,16 @@ void DemoScene::PrepareDescriptorSet() {
       .pSetLayouts(&desc_layout_);
   vk::chk(vk_device().allocateDescriptorSets(&alloc_info, &desc_set_));
 
-  for (uint32_t i = 0; i < DEMO_TEXTURE_COUNT; i++) {
-      tex_descs[i].sampler(textures_[i].sampler);
-      tex_descs[i].imageView(textures_[i].view);
-      tex_descs[i].imageLayout(vk::ImageLayout::eGeneral);
-  }
 
-  writes[0].dstBinding(0);
+  vk::WriteDescriptorSet writes[1];
+
+  writes[0].dstBinding(1);
   writes[0].dstSet(desc_set_);
-  writes[0].descriptorCount(DEMO_TEXTURE_COUNT);
-  writes[0].descriptorType(vk::DescriptorType::eCombinedImageSampler);
-  writes[0].pImageInfo(tex_descs);
+  writes[0].descriptorCount(1);
+  writes[0].descriptorType(vk::DescriptorType::eUniformBuffer);
+  writes[0].pBufferInfo(&uniform_data_.buffer_info);
 
-  writes[1].dstBinding(1);
-  writes[1].dstSet(desc_set_);
-  writes[1].descriptorCount(1);
-  writes[1].descriptorType(vk::DescriptorType::eUniformBuffer);
-  writes[1].pBufferInfo(&uniform_data_.buffer_info);
-
-  vk_device().updateDescriptorSets(2, writes, 0, nullptr);
+  vk_device().updateDescriptorSets(1, writes, 0, nullptr);
 }
 
 static vk::ShaderModule PrepareShaderModule(const vk::Device& device,
@@ -840,72 +859,75 @@ static vk::Pipeline PreparePipeline(
 }
 
 void DemoScene::PrepareFramebuffers() {
-    vk::ImageView attachments[2];
-    attachments[1] = vk_depth_buffer().view;
+  vk::ImageView attachments[2];
+  attachments[1] = vk_depth_buffer().view;
 
-    const vk::FramebufferCreateInfo fb_info =
-      vk::FramebufferCreateInfo()
-        .renderPass(render_pass_)
-        .attachmentCount(2)
-        .pAttachments(attachments)
-        .width(framebuffer_size().x)
-        .height(framebuffer_size().y)
-        .layers(1);
+  const vk::FramebufferCreateInfo fb_info =
+    vk::FramebufferCreateInfo()
+      .renderPass(render_pass_)
+      .attachmentCount(2)
+      .pAttachments(attachments)
+      .width(framebuffer_size().x)
+      .height(framebuffer_size().y)
+      .layers(1);
 
-    framebuffers_ = std::unique_ptr<vk::Framebuffer>{
-        new vk::Framebuffer[vk_swapchain_image_count()]};
+  framebuffers_ = std::unique_ptr<vk::Framebuffer>{
+      new vk::Framebuffer[vk_swapchain_image_count()]};
 
-    for (uint32_t i = 0; i < vk_swapchain_image_count(); i++) {
-        attachments[0] = vk_buffers()[i].view;
-        vk::chk(vk_device().createFramebuffer(&fb_info, nullptr,
-                                             &framebuffers_.get()[i]));
-    }
+  for (uint32_t i = 0; i < vk_swapchain_image_count(); i++) {
+    attachments[0] = vk_buffers()[i].view;
+    vk::chk(vk_device().createFramebuffer(&fb_info, nullptr,
+                                         &framebuffers_.get()[i]));
+  }
 }
 
 void DemoScene::Prepare() {
-    PrepareTextures();
-    PrepareVertices();
-    PrepareIndices();
+  PrepareVertices();
+  PrepareIndices();
 
-    PrepareDescriptorLayout();
-    PrepareUniformBuffer();
-    PrepareDescriptorPool();
-    PrepareDescriptorSet();
+  PrepareDescriptorLayout();
+  PrepareUniformBuffer();
+  PrepareDescriptorPool();
+  PrepareDescriptorSet();
 
-    PrepareRenderPass();
-    pipeline_ = PreparePipeline(vk_device(), vertex_input_,
-                                pipeline_layout_, render_pass_);
+  PrepareTextures();
 
-    PrepareFramebuffers();
+  PrepareRenderPass();
+  pipeline_ = PreparePipeline(vk_device(), vertex_input_,
+                              pipeline_layout_, render_pass_);
+
+  PrepareFramebuffers();
 }
 
 void DemoScene::Cleanup() {
-    for (uint32_t i = 0; i < vk_swapchain_image_count(); i++) {
-        vk_device().destroyFramebuffer(framebuffers_.get()[i], nullptr);
-    }
-    vk_device().destroyDescriptorPool(desc_pool_, nullptr);
+  for (uint32_t i = 0; i < vk_swapchain_image_count(); i++) {
+    vk_device().destroyFramebuffer(framebuffers_.get()[i], nullptr);
+  }
+  vk_device().destroyDescriptorPool(desc_pool_, nullptr);
 
-    vk_device().destroyPipeline(pipeline_, nullptr);
-    vk_device().destroyRenderPass(render_pass_, nullptr);
-    vk_device().destroyPipelineLayout(pipeline_layout_, nullptr);
-    vk_device().destroyDescriptorSetLayout(desc_layout_, nullptr);
+  vk_device().destroyPipeline(pipeline_, nullptr);
+  vk_device().destroyRenderPass(render_pass_, nullptr);
+  vk_device().destroyPipelineLayout(pipeline_layout_, nullptr);
+  vk_device().destroyDescriptorSetLayout(desc_layout_, nullptr);
 
-    vk_device().destroyBuffer(uniform_data_.buf, nullptr);
-    vk_device().freeMemory(uniform_data_.mem, nullptr);
+  vk_device().destroyBuffer(uniform_data_.buf, nullptr);
+  vk_device().freeMemory(uniform_data_.mem, nullptr);
 
-    vk_device().destroyBuffer(vertex_attribs_.buf, nullptr);
-    vk_device().freeMemory(vertex_attribs_.mem, nullptr);
-    vk_device().destroyBuffer(instance_attribs_.buf, nullptr);
-    vk_device().freeMemory(instance_attribs_.mem, nullptr);
-    vk_device().destroyBuffer(indices_.buf, nullptr);
-    vk_device().freeMemory(indices_.mem, nullptr);
+  vk_device().destroyBuffer(vertex_attribs_.buf, nullptr);
+  vk_device().freeMemory(vertex_attribs_.mem, nullptr);
+  vk_device().destroyBuffer(instance_attribs_.buf, nullptr);
+  vk_device().freeMemory(instance_attribs_.mem, nullptr);
+  vk_device().destroyBuffer(indices_.buf, nullptr);
+  vk_device().freeMemory(indices_.mem, nullptr);
 
-    for (uint32_t i = 0; i < DEMO_TEXTURE_COUNT; i++) {
-        vk_device().destroyImageView(textures_[i].view, nullptr);
-        vk_device().destroyImage(textures_[i].image, nullptr);
-        vk_device().freeMemory(textures_[i].mem, nullptr);
-        vk_device().destroySampler(textures_[i].sampler, nullptr);
-    }
+  for (uint32_t i = 0; i < used_index_count_; i++) {
+    FreeTexture(i);
+    vk_device().destroyImageView(textures_[i].view, nullptr);
+    vk_device().destroyImage(textures_[i].image, nullptr);
+    vk_device().freeMemory(textures_[i].mem, nullptr);
+    vk_device().destroySampler(textures_[i].sampler, nullptr);
+  }
+  used_index_count_ = 0;
 }
 
 #include <ctime>
@@ -947,9 +969,8 @@ void DemoScene::Update() {
     glm::mat4 mvp = scene()->camera()->projectionMatrix() *
                     scene()->camera()->cameraMatrix();
 
-    UniformData* uniform_data;
-    vk::chk(vk_device().mapMemory(uniform_data_.mem, 0, sizeof(mvp),
-                                 vk::MemoryMapFlags{}, (void **)&uniform_data));
+    UniformData* uniform_data = (UniformData*)
+        vk_device().mapMemory(uniform_data_.mem, 0, sizeof(mvp), vk::MemoryMapFlags{});
 
     uniform_data->mvp = mvp;
     uniform_data->camera_pos = scene()->camera()->transform().pos();
@@ -966,7 +987,7 @@ void DemoScene::Update() {
   thread_pool_.Clear();
   grid_mesh_.ClearRenderList();
   for (CdlodQuadTree& quad_tree : quad_trees_) {
-    quad_tree.SelectNodes(*scene()->camera(), grid_mesh_, thread_pool_);
+    quad_tree.SelectNodes(*scene()->camera(), grid_mesh_, thread_pool_, *this);
   }
 
   if (grid_mesh_.mesh_.attribs_.size() > Settings::kMaxInstanceCount) {
@@ -975,13 +996,13 @@ void DemoScene::Update() {
   }
 
   {
-    PerInstanceAttributes *attribs_;
-    vk::chk(vk_device().mapMemory(instance_attribs_.mem, 0,
-                                 Settings::kMaxInstanceCount * sizeof(PerInstanceAttributes),
-                                 vk::MemoryMapFlags{}, (void **)&attribs_));
+    PerInstanceAttributes *attribs = (PerInstanceAttributes*)
+      vk_device().mapMemory(instance_attribs_.mem, 0,
+                            Settings::kMaxInstanceCount * sizeof(PerInstanceAttributes),
+                            vk::MemoryMapFlags{});
 
     for (int i = 0; i < grid_mesh_.mesh_.attribs_.size(); ++i) {
-      attribs_[i] = grid_mesh_.mesh_.attribs_[i];
+      attribs[i] = grid_mesh_.mesh_.attribs_[i];
     }
 
     vk_device().unmapMemory(instance_attribs_.mem);
