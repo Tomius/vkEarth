@@ -38,6 +38,7 @@ GridMesh::GridMesh(uint8_t dimension) : dimension_(dimension) {
 }
 
 void GridMesh::AddToRenderList(const PerInstanceAttributes& attribs) {
+  // std::cout << attribs.texture_info.geometry_current.position.x << ", " << attribs.texture_info.geometry_current.position.x << " - " << attribs.texture_info.geometry_current.size << std::endl;
   attribs_.push_back(attribs);
 }
 

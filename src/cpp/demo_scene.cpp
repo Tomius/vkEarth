@@ -477,11 +477,6 @@ void DemoScene::PrepareVertices() {
     vk_device().bindBufferMemory(instance_attribs_.buf, instance_attribs_.mem, 0);
   }
 
-  vertex_input_.vertexBindingDescriptionCount(2);
-  vertex_input_.pVertexBindingDescriptions(vertex_input_bindings_);
-  vertex_input_.vertexAttributeDescriptionCount(3);
-  vertex_input_.pVertexAttributeDescriptions(vertex_input_attribs_);
-
   vertex_input_bindings_[0].binding(VERTEX_BUFFER_BIND_ID);
   vertex_input_bindings_[0].stride(sizeof(svec2));
   vertex_input_bindings_[0].inputRate(vk::VertexInputRate::eVertex);
@@ -571,6 +566,11 @@ void DemoScene::PrepareVertices() {
   vertex_input_attribs_[13].format(vk::Format::eR32G32B32Sfloat);
   vertex_input_attribs_[13].offset(offsetof(PerInstanceAttributes,
                                             texture_info.diffuse_next.position));
+
+  vertex_input_.vertexBindingDescriptionCount(2);
+  vertex_input_.pVertexBindingDescriptions(vertex_input_bindings_);
+  vertex_input_.vertexAttributeDescriptionCount(14);
+  vertex_input_.pVertexAttributeDescriptions(vertex_input_attribs_);
 }
 
 void DemoScene::PrepareDescriptorLayout() {
@@ -919,15 +919,6 @@ void DemoScene::Cleanup() {
   vk_device().freeMemory(instance_attribs_.mem, nullptr);
   vk_device().destroyBuffer(indices_.buf, nullptr);
   vk_device().freeMemory(indices_.mem, nullptr);
-
-  for (uint32_t i = 0; i < used_index_count_; i++) {
-    FreeTexture(i);
-    vk_device().destroyImageView(textures_[i].view, nullptr);
-    vk_device().destroyImage(textures_[i].image, nullptr);
-    vk_device().freeMemory(textures_[i].mem, nullptr);
-    vk_device().destroySampler(textures_[i].sampler, nullptr);
-  }
-  used_index_count_ = 0;
 }
 
 #include <ctime>
@@ -957,6 +948,15 @@ DemoScene::~DemoScene() {
   double elapsedSecs = double(endTime - startTime) / CLOCKS_PER_SEC;
   std::cout << "Average FPS: " << renderedFrames / elapsedSecs << std::endl;
   Cleanup();
+
+  for (uint32_t i = 0; i < used_index_count_; i++) {
+    FreeTexture(i);
+    vk_device().destroyImageView(textures_[i].view, nullptr);
+    vk_device().destroyImage(textures_[i].image, nullptr);
+    vk_device().freeMemory(textures_[i].mem, nullptr);
+    vk_device().destroySampler(textures_[i].sampler, nullptr);
+  }
+  used_index_count_ = 0;
 }
 
 void DemoScene::Render() {
@@ -979,6 +979,8 @@ void DemoScene::Update() {
     uniform_data->face_size = Settings::kFaceSize;
     uniform_data->height_scale = Settings::kMaxHeight;
     uniform_data->terrain_max_lod_level = quad_trees_[0].max_node_level();
+    uniform_data->terrain_level_offset = Settings::kLevelOffset;
+    uniform_data->elevation_texture_dimension_w_borders = Settings::kElevationTexSizeWithBorders;
 
     vk_device().unmapMemory(uniform_data_.mem);
   }

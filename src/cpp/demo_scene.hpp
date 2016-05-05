@@ -31,6 +31,8 @@ struct UniformData {
   float face_size;
   float height_scale;
   int terrain_max_lod_level;
+  int terrain_level_offset;
+  int elevation_texture_dimension_w_borders;
 };
 
 class DemoScene : public engine::VulkanScene, public TextureHandler {

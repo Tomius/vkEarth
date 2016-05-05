@@ -34,10 +34,12 @@ layout (std140, binding = 1) uniform bufferVals {
   float terrainSphereRadius;
   float faceSize;
   float heightScale;
-  int terrainMaxLoadLevel;
+  int terrainMaxLodLevel;
+  int terrainLevelOffset;
+  int elevationTextureDimensionWBorders;
 } uniforms;
 
-uniform sampler2D heightmap[6];
+uniform sampler2D heightmap[2048];
 
 // out variables
 layout (location = 0) flat out int vFace;
@@ -100,8 +102,40 @@ vec2 GetTexcoord(vec2 pos) {
   return (pos / uniforms.faceSize + vec2(3.0 / 262.0)) * vec2(256.0 / 262.0);
 }
 
-float GetHeight(vec2 pos) {
-  return texture(heightmap[terrainFace], GetTexcoord(pos)).r * uniforms.heightScale;
+
+vec2 Terrain_nodeLocal2Global(vec2 nodeCoord) {
+  return terrainOffset + terrainScale * nodeCoord;
+}
+
+float GetHeightFast(vec2 pos) {
+  uint texid = aCurrentGeometryTextureId;
+  vec3 texPosAndSize = aCurrentGeometryTexturePosAndSize;
+  vec2 samplePos = (pos - texPosAndSize.xy) / texPosAndSize.z;
+  samplePos += 0.5 / uniforms.elevationTextureDimensionWBorders;
+  float normalized_height = texture(heightmap[texid], samplePos).r;
+  return normalized_height * uniforms.heightScale;
+}
+
+float GetHeightInternal(vec2 pos, uint texid, vec3 texPosAndSize) {
+  vec2 samplePos = (pos - texPosAndSize.xy) / texPosAndSize.z;
+  samplePos += 0.5 / uniforms.elevationTextureDimensionWBorders;
+  float normalized_height = texture(heightmap[texid], samplePos).r;
+  return normalized_height * uniforms.heightScale;
+}
+
+float GetHeight(vec2 pos, float morph) {
+  float height0 =
+    GetHeightInternal(pos, aCurrentGeometryTextureId,
+                              aCurrentGeometryTexturePosAndSize);
+  if (morph == 0.0 || terrainLevel < uniforms.terrainLevelOffset) {
+    return height0;
+  }
+
+  float height1 =
+    GetHeightInternal(pos, aNextGeometryTextureId,
+                              aNextGeometryTexturePosAndSize);
+
+  return mix(height0, height1, morph);
 }
 
 vec2 MorphVertex(vec2 vertex, float morph) {
@@ -113,7 +147,7 @@ vec2 NodeLocal2Global(vec2 nodeCoord) {
 }
 
 float EstimateDistance(vec2 geomPos) {
-  float estHeight = GetHeight(geomPos);
+  float estHeight = GetHeightFast(geomPos);
   vec3 estPos = vec3(geomPos.x, estHeight, geomPos.y);
   vec3 estDiff = uniforms.cameraPos - WorldPos(estPos);
   return length(estDiff);
@@ -124,7 +158,7 @@ vec3 ModelPos(vec2 m_pos) {
   float dist = EstimateDistance(pos);
   float morph = 0;
 
-  if (terrainLevel < uniforms.terrainMaxLoadLevel) {
+  if (terrainLevel < uniforms.terrainMaxLodLevel) {
     float nextLevelSize = 2 * terrainScale * uniforms.terrainSmallestGeometryLodDistance;
     float maxDist = kMorphEnd * nextLevelSize;
     float startDist = kMorphStart * nextLevelSize;
@@ -134,7 +168,7 @@ vec3 ModelPos(vec2 m_pos) {
     pos = NodeLocal2Global(morphed_pos);
   }
 
-  float height = GetHeight(pos);
+  float height = GetHeight(pos, morph);
   return vec3(pos.x, height, pos.y);
 }
 

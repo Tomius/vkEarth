@@ -306,6 +306,7 @@ void CdlodQuadTreeNode::Upload(TextureHandler& texture_handler) {
       texture_.elevation.size = scale * size();
       texture_.elevation.position = glm::vec2(x_ - texture_.elevation.size/2,
                                               z_ - texture_.elevation.size/2);
+      // std::cout << texture_.elevation.position.x << ", " << texture_.elevation.position.x << " - " << texture_.elevation.size << std::endl;
 
       texture_.elevation_data.clear();
     }
