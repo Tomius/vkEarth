@@ -342,9 +342,9 @@ void DemoScene::SetupTexture(size_t index, unsigned width, unsigned height,
   }
 
   const vk::SamplerCreateInfo sampler = vk::SamplerCreateInfo()
-      .magFilter(vk::Filter::eNearest)
-      .minFilter(vk::Filter::eNearest)
-      .mipmapMode(vk::SamplerMipmapMode::eNearest)
+      .magFilter(vk::Filter::eLinear)
+      .minFilter(vk::Filter::eLinear)
+      .mipmapMode(vk::SamplerMipmapMode::eLinear)
       .addressModeU(vk::SamplerAddressMode::eClampToEdge)
       .addressModeV(vk::SamplerAddressMode::eClampToEdge)
       .addressModeW(vk::SamplerAddressMode::eClampToEdge)
@@ -584,7 +584,7 @@ void DemoScene::PrepareDescriptorLayout() {
       .binding(1)
       .descriptorType(vk::DescriptorType::eUniformBuffer)
       .descriptorCount(1)
-      .stageFlags(vk::ShaderStageFlagBits::eVertex)
+      .stageFlags(vk::ShaderStageFlagBits::eFragment | vk::ShaderStageFlagBits::eVertex)
   };
 
   const vk::DescriptorSetLayoutCreateInfo descriptor_layout =
@@ -966,13 +966,11 @@ void DemoScene::Render() {
 
 void DemoScene::Update() {
   {
-    glm::mat4 mvp = scene()->camera()->projectionMatrix() *
-                    scene()->camera()->cameraMatrix();
-
     UniformData* uniform_data = (UniformData*)
-        vk_device().mapMemory(uniform_data_.mem, 0, sizeof(mvp), vk::MemoryMapFlags{});
+        vk_device().mapMemory(uniform_data_.mem, 0, sizeof(UniformData), vk::MemoryMapFlags{});
 
-    uniform_data->mvp = mvp;
+    uniform_data->projectionMatrix = scene()->camera()->projectionMatrix();
+    uniform_data->cameraMatrix = scene()->camera()->cameraMatrix();
     uniform_data->camera_pos = scene()->camera()->transform().pos();
     uniform_data->terrain_smallest_geometry_lod_distance = Settings::kSmallestGeometryLodDistance;
     uniform_data->terrain_sphere_radius = Settings::kSphereRadius;
@@ -980,6 +978,8 @@ void DemoScene::Update() {
     uniform_data->height_scale = Settings::kMaxHeight;
     uniform_data->terrain_max_lod_level = quad_trees_[0].max_node_level();
     uniform_data->terrain_level_offset = Settings::kLevelOffset;
+    uniform_data->texture_dimension= Settings::kTextureDimension;
+    uniform_data->diffuse_texture_dimension_w_borders = Settings::kDiffuseTexSizeWithBorders;
     uniform_data->elevation_texture_dimension_w_borders = Settings::kElevationTexSizeWithBorders;
 
     vk_device().unmapMemory(uniform_data_.mem);

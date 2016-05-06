@@ -19,14 +19,14 @@ struct VulkanApplication {
 
   std::vector<const char*> instance_validation_layers{
 #if VK_VALIDATE
-    //"VK_LAYER_LUNARG_param_checker",
-    //"VK_LAYER_LUNARG_device_limits",
-    //"VK_LAYER_LUNARG_object_tracker",
-    /*"VK_LAYER_LUNARG_image",
+    /*"VK_LAYER_LUNARG_param_checker",
+    "VK_LAYER_LUNARG_device_limits",
+    "VK_LAYER_LUNARG_object_tracker",
+    "VK_LAYER_LUNARG_image",
     "VK_LAYER_LUNARG_mem_tracker",
     "VK_LAYER_LUNARG_draw_state",
-    "VK_LAYER_LUNARG_swapchain",*/
-    //"VK_LAYER_GOOGLE_unique_objects"
+    "VK_LAYER_LUNARG_swapchain",
+    "VK_LAYER_GOOGLE_unique_objects"*/
 #endif
   };
 
@@ -37,16 +37,16 @@ struct VulkanApplication {
   };
 
   std::vector<const char*> device_validation_layers{
-/*#if VK_VALIDATE
-    "VK_LAYER_LUNARG_param_checker",
+#if VK_VALIDATE
+    /*"VK_LAYER_LUNARG_param_checker",
     "VK_LAYER_LUNARG_device_limits",
     "VK_LAYER_LUNARG_object_tracker",
     "VK_LAYER_LUNARG_image",
     "VK_LAYER_LUNARG_mem_tracker",
     "VK_LAYER_LUNARG_draw_state",
     "VK_LAYER_LUNARG_swapchain",
-    "VK_LAYER_GOOGLE_unique_objects"
-#endif*/
+    "VK_LAYER_GOOGLE_unique_objects"*/
+#endif
   };
 
   std::vector<const char*> device_extension_names{

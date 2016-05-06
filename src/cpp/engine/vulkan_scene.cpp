@@ -143,7 +143,8 @@ void VulkanScene::SetImageLayout(const vk::Image& image,
         .newLayout(new_image_layout)
         .image(image)
         .srcAccessMask(src_access)
-        .subresourceRange({aspectMask, 0, 1, 0, 1});
+        /* todo mip levels */
+        .subresourceRange({aspectMask, 0, 10, 0, 1});
 
     if (new_image_layout == vk::ImageLayout::eTransferSrcOptimal) {
         /* Make sure anything that was copying from this image has completed */

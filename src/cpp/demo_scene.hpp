@@ -24,14 +24,22 @@ struct TextureObject {
 };
 
 struct UniformData {
-  glm::mat4 mvp;
+  glm::mat4 cameraMatrix;
+  glm::mat4 projectionMatrix;
+
   glm::vec3 camera_pos;
+  float depthCoef;
+
   float terrain_smallest_geometry_lod_distance;
   float terrain_sphere_radius;
   float face_size;
   float height_scale;
+
   int terrain_max_lod_level;
   int terrain_level_offset;
+
+  int texture_dimension;
+  int diffuse_texture_dimension_w_borders;
   int elevation_texture_dimension_w_borders;
 };
 

@@ -44,13 +44,13 @@ static constexpr long kFaceSize = 65536;
 static constexpr double kSphereRadius = kFaceSize / 2;
 
 static constexpr double kMtEverestHeight = 8848 * (kSphereRadius / 6371000);
-static constexpr double kScaleOfRealisticHeight = 32.0;
+static constexpr double kScaleOfRealisticHeight = 5.0;
 static constexpr double kMaxHeight = kScaleOfRealisticHeight * kMtEverestHeight;
 
 // Geometry subdivision. This practially contols zooming into the heightmap.
 // If for ex. this is three, that means that a 8x8 geometry (9x9 vertices)
 // corresponds to a 1x1 texture area (2x2 texels)
-static constexpr long kGeomDiv = 0;
+static constexpr long kGeomDiv = 2;
 
 static constexpr int kLevelOffset = 0;
 static constexpr int kDiffuseToElevationLevelOffset = 1;
