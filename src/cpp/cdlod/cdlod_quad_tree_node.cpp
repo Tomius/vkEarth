@@ -9,11 +9,7 @@
 
 CdlodQuadTreeNode::CdlodQuadTreeNode(double x, double z, CubeFace face,
                                      int level, CdlodQuadTreeNode* parent)
-    : x_(x), z_(z), face_(face), level_(level)
-    , bbox_{glm::vec3{x - size()/2, 0, z - size()/2},
-            glm::vec3{x + size()/2, 0, z + size()/2},
-            face, Settings::kFaceSize}
-    , parent_{parent}
+    : x_(x), z_(z), face_(face), level_(level), parent_{parent}
 {
   CalculateMinMax();
   RefreshMinMax();
@@ -225,6 +221,15 @@ bool CdlodQuadTreeNode::HasDiffuseTexture() const {
   return Settings::kLevelOffset <= DiffuseTextureLevel();
 }
 
+
+
+static void BinarySwap(std::vector<unsigned char>& data) {
+  assert(data.size() % 2 == 0);
+  for (int i = 0; i < data.size() / 2; ++i) {
+    std::swap(data[2*i], data[2*i + 1]);
+  }
+}
+
 void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
   if (parent_ && !parent_->texture_.is_loaded_to_memory) {
     parent_->LoadTexture(true);
@@ -248,6 +253,9 @@ void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
       std::vector<unsigned char> data;
       unsigned error = lodepng::decode(data, width, height,
                                        GetHeightMapPath(), LCT_RGBA, 16);
+      // TODO: IT'S NOT RGBA!!!
+      assert(data.size() == 8*width*height);
+      BinarySwap(data);
       if (error) {
         std::cerr << "Image decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
         std::terminate();
@@ -268,6 +276,8 @@ void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
       std::vector<unsigned char> data;
       unsigned error = lodepng::decode(data, width, height,
                                        GetDiffuseMapPath(), LCT_RGBA, 16);
+      // TODO: IT'S NOT 16 bit!!!
+      BinarySwap(data);
       if (error) {
         std::cerr << "Image decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
         std::terminate();
@@ -306,7 +316,6 @@ void CdlodQuadTreeNode::Upload(TextureHandler& texture_handler) {
       texture_.elevation.size = scale * size();
       texture_.elevation.position = glm::vec2(x_ - texture_.elevation.size/2,
                                               z_ - texture_.elevation.size/2);
-      // std::cout << texture_.elevation.position.x << ", " << texture_.elevation.position.x << " - " << texture_.elevation.size << std::endl;
 
       texture_.elevation_data.clear();
     }
@@ -360,7 +369,7 @@ void CdlodQuadTreeNode::CalculateMinMax() {
   auto& data = src->texture_.elevation_data;
   for (int x = min_coord.x; x < max_coord.x; ++x) {
     for (int y = min_coord.y; y < max_coord.y; ++y) {
-      uint16_t height = data[y*texSizeWBorder + x];
+      uint16_t height = data[(y*texSizeWBorder + x) * 4];
       texture_.min = std::min(texture_.min, height);
       texture_.max = std::max(texture_.max, height);
     }

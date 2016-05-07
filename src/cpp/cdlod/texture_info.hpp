@@ -9,7 +9,7 @@
 #include "common/settings.hpp"
 
 struct RGBPixel {
-  unsigned char r, g, b;
+  unsigned char r, g, b, a;
 };
 
 struct TextureBaseInfo {

@@ -63,14 +63,12 @@ layout (location = 10) out flat uint vNextDiffuseTexId;
 layout (location = 11) out flat vec3 vCurrentDiffuseTexPosAndSize;
 layout (location = 12) out flat vec3 vNextDiffuseTexPosAndSize;
 
-layout (location = 13) out vec2 vTexCoord;
-
 out gl_PerVertex {
   vec4 gl_Position;
 };
 
 // constants and aliases
-const float kMorphEnd = 0.95, kMorphStart = 0.65;
+const float kMorphEnd = 0.95, kMorphStart = 0.75;
 vec2 terrainOffset = aRenderData.xy;
 float terrainLevel = aRenderData.z;
 float terrainScale = pow(2, terrainLevel);
@@ -156,16 +154,11 @@ vec4 textureBicubic(sampler2D tex, vec2 texCoords) {
   return mix(mix(sample3, sample2, sx), mix(sample1, sample0, sx), sy);
 }
 
-vec2 GetTexcoord(vec2 pos) {
-  return (pos / uniforms.faceSize + vec2(3.0 / 262.0)) * vec2(256.0 / 262.0);
-}
-
 vec2 Terrain_nodeLocal2Global(vec2 nodeCoord) {
   return terrainOffset + terrainScale * nodeCoord;
 }
 
 float GetHeightFast(vec2 pos) {
-  // return 0.0;
   uint texid = aCurrentGeometryTextureId;
   vec3 texPosAndSize = aCurrentGeometryTexturePosAndSize;
   vec2 samplePos = (pos - texPosAndSize.xy) / texPosAndSize.z;
@@ -182,7 +175,6 @@ float GetHeightInternal(vec2 pos, uint texid, vec3 texPosAndSize) {
 }
 
 float GetHeight(vec2 pos, float morph) {
-  // return 0.0;
   float height0 =
     GetHeightInternal(pos, aCurrentGeometryTextureId,
                               aCurrentGeometryTexturePosAndSize);
@@ -212,7 +204,7 @@ float EstimateDistance(vec2 geomPos) {
   return length(estDiff);
 }
 
-vec3 ModelPos(vec2 m_pos) {
+vec4 ModelPos(vec2 m_pos) {
   vec2 pos = NodeLocal2Global(m_pos);
   float dist = EstimateDistance(pos);
   float morph = 0;
@@ -228,14 +220,15 @@ vec3 ModelPos(vec2 m_pos) {
   }
 
   float height = GetHeight(pos, morph);
-  return vec3(pos.x, height, pos.y);
+  return vec4(pos.x, height, pos.y, morph);
 }
 
 void main() {
-  vec3 modelPos = ModelPos(aPos);
-  vmPos = modelPos;
+  vec4 modelPos = ModelPos(aPos);
+  vmPos = modelPos.xyz;
+  vMorph = modelPos.w;
 
-  vec3 worldPos = WorldPos(modelPos);
+  vec3 worldPos = WorldPos(modelPos.xyz);
   vwPos = worldPos;
 
   vec3 cameraPos = (uniforms.cameraMatrix * vec4(worldPos, 1)).xyz;
@@ -247,7 +240,6 @@ void main() {
   gl_Position.y = -gl_Position.y;
 
   vFace = terrainFace;
-  vTexCoord = GetTexcoord(modelPos.xz);
 
   vCurrentNormalTexId = aCurrentNormalTextureId;
   vCurrentNormalTexPosAndSize = aCurrentNormalTexturePosAndSize;

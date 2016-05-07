@@ -221,11 +221,7 @@ void DemoScene::PrepareTextureImage(const unsigned char *tex_colors,
       for (int y = 0; y < tex_height; y++) {
           char *row = ((char *)data + layout.rowPitch() * y);
           for (int x = 0; x < tex_width; x++) {
-            for (int i = 0; i < 4; ++i) {
-              // todo
-              row[x*8 + 2*i] = tex_colors[(y*tex_width+x)*8 + 2*i+1];
-              row[x*8 + 2*i+1] = tex_colors[(y*tex_width+x)*8 + 2*i];
-            }
+            std::memcpy(&row[8*x], &tex_colors[(y*tex_width + x)*8], 8);
           }
       }
 

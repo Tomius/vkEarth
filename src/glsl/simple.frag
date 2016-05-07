@@ -19,8 +19,6 @@ layout (location = 10) in flat uint vNextDiffuseTexId;
 layout (location = 11) in flat vec3 vCurrentDiffuseTexPosAndSize;
 layout (location = 12) in flat vec3 vNextDiffuseTexPosAndSize;
 
-layout (location = 13) in vec2 vTexCoord;
-
 uniform sampler2D heightmap[2047];
 
 layout (std140, binding = 1) uniform bufferVals {
@@ -45,7 +43,7 @@ layout (std140, binding = 1) uniform bufferVals {
 
 layout (location = 0) out vec4 outColor;
 
-const float kMorphEnd = 0.95, kMorphStart = 0.65;
+const float kMorphEnd = 0.95, kMorphStart = 0.75;
 
 /* Cube 2 Sphere */
 
@@ -197,4 +195,5 @@ void main() {
   vec3 diffuse = GetDiffuseColor(vmPos.xz);
 
   outColor = vec4(luminance*diffuse, 1);
+  // outColor = 0.5*vec4(1.0, vMorph, 0.0, 1) + 0.5 * vec4(luminance*diffuse, 1);
 }

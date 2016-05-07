@@ -16,7 +16,7 @@ void Camera::ScreenResized(size_t width, size_t height) {
   height_ = height;
 }
 
-void Camera::Update() {
+void Camera::UpdateCache() {
   UpdateCameraMatrix();
   UpdateProjectionMatrix();
   UpdateFrustum();
@@ -142,7 +142,7 @@ void FreeFlyCamera::Update() {
   }
   transform().set_local_pos(local_pos);
 
-  Camera::Update();
+  Camera::UpdateCache();
 }
 
 ThirdPersonalCamera::ThirdPersonalCamera(GameObject* parent,
@@ -224,7 +224,7 @@ void ThirdPersonalCamera::Update() {
   glm::dvec3 pos = tpos - fwd*dist;
   transform().set_pos(pos);
 
-  Camera::Update();
+  Camera::UpdateCache();
 }
 
 void ThirdPersonalCamera::MouseScrolled(double, double yoffset) {

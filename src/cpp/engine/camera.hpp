@@ -62,8 +62,8 @@ class Camera : public GameObject {
   void set_z_far(double z_far) { z_far_ = z_far; }
 
  protected:
-  // it must be called through Derived::Update()
-  virtual void Update() override;
+  // it must be called through Update()
+  void UpdateCache();
 
  private:
   double fovy_, z_near_, z_far_, width_, height_;
