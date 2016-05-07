@@ -134,17 +134,19 @@ static void TrimRight(std::string& str) {
 
 template <typename T>
 static void PrintErrorLog(T& obj) {
-  std::string infoLog = obj.getInfoLog();
-  TrimRight(infoLog);
-  if (!infoLog.empty() && infoLog != "Warning, version 400 is not yet complete; "
-      "most version-specific features are present, but some are missing.") {
-    std::cerr << infoLog << std::endl;
+  std::string info_log = obj.getInfoLog();
+  TrimRight(info_log);
+  bool show_info_log = !info_log.empty() &&
+  info_log.rfind(" is not yet complete; most version-specific features are "
+                 "present, but some are missing.") == info_log.npos;
+  if (show_info_log) {
+    std::cerr << info_log << std::endl;
   }
 
-  std::string debugInfoLog = obj.getInfoDebugLog();
-  TrimRight(debugInfoLog);
-  if (!debugInfoLog.empty()) {
-    std::cerr << debugInfoLog << std::endl;
+  std::string debug_info_log = obj.getInfoDebugLog();
+  TrimRight(debug_info_log);
+  if (!debug_info_log.empty()) {
+    std::cerr << debug_info_log << std::endl;
   }
 }
 

@@ -54,8 +54,6 @@ public:
   virtual void ScreenResized(size_t width, size_t height) override;
 
 private:
-  bool kUseStagingBuffer = true;
-
   struct TextureObject textures_[Settings::kMaxTextureCount];
 
   struct {
@@ -95,7 +93,6 @@ private:
                            vk::ImageUsageFlags usage,
                            vk::MemoryPropertyFlags required_props,
                            vk::Format tex_format);
-  void PrepareTextures();
   void PrepareIndices();
   void PrepareVertices();
   void PrepareDescriptorLayout();

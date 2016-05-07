@@ -68,10 +68,6 @@ void DemoScene::BuildDrawCmd() {
                                 vk::DeviceSize{},
                                 vk::IndexType::eUint16);
 
-  if (Settings::kWireframe) {
-    vk_draw_cmd().setLineWidth(2.0f);
-  }
-
   vk_draw_cmd().drawIndexed(grid_mesh_.mesh_.index_count_,
                             grid_mesh_.mesh_.attribs_.size(), 0, 0, 0);
   vk_draw_cmd().endRenderPass();
@@ -244,24 +240,11 @@ void DemoScene::PrepareTextureImage(const unsigned char *tex_colors,
    * to add a mem ref */
 }
 
-void DemoScene::PrepareTextures() {
-  for (int i = 0; i < Settings::kMaxTextureCountTemp; i++) {
-    std::vector<unsigned char> image; //the raw pixels
-    unsigned width, height;
-    unsigned error = lodepng::decode(image, width, height,
-        "src/resources/gmted2010/" + std::to_string(i) + ".png", LCT_RGBA, 16);
-    if (error) {
-      std::cerr << "image decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
-      std::terminate();
-    }
-
-    SetupTexture(i, width, height, image.data());
-  }
-}
-
 void DemoScene::SetupTexture(size_t index, unsigned width, unsigned height,
                              const unsigned char* pixels) {
   int succesfully_removed = unused_indices_.erase(index);
+  bool first_texture = used_index_count_ == 0;
+
   assert(succesfully_removed);
   if (used_index_count_ <= index) {
     used_index_count_ = index + 1;
@@ -276,18 +259,7 @@ void DemoScene::SetupTexture(size_t index, unsigned width, unsigned height,
   const vk::Format tex_format = vk::Format::eR16G16B16A16Unorm;
   vk_gpu().getFormatProperties(tex_format, &props);
 
-  if ((props.linearTilingFeatures() &
-       vk::FormatFeatureFlagBits::eSampledImage) &&
-       !kUseStagingBuffer) {
-    /* Device can texture using linear textures */
-    PrepareTextureImage(pixels,
-                        width, height, &textures_[index],
-                        vk::ImageTiling::eLinear,
-                        vk::ImageUsageFlagBits::eSampled,
-                        vk::MemoryPropertyFlagBits::eHostVisible,
-                        tex_format);
-  } else if (props.optimalTilingFeatures() &
-             vk::FormatFeatureFlagBits::eSampledImage) {
+  if (props.optimalTilingFeatures() & vk::FormatFeatureFlagBits::eSampledImage) {
     /* Must use staging buffer to copy linear texture to optimized */
     TextureObject staging_texture;
 
@@ -337,20 +309,20 @@ void DemoScene::SetupTexture(size_t index, unsigned width, unsigned height,
     vk_device().destroyImage(staging_texture.image, nullptr);
     vk_device().freeMemory(staging_texture.mem, nullptr);
   } else {
-    /* Can't support vk::Format::eB8G8R8A8Unorm !? */
-    assert(!"No support for B8G8R8A8_UNORM as texture image format");
+    /* Can't support vk::Format::eR16G16B16A16Unorm !? */
+    assert(!"No support for eR16G16B16A16Unorm as texture image format");
   }
 
   const vk::SamplerCreateInfo sampler = vk::SamplerCreateInfo()
       .magFilter(vk::Filter::eLinear)
       .minFilter(vk::Filter::eLinear)
-      .mipmapMode(vk::SamplerMipmapMode::eLinear)
+      .mipmapMode(vk::SamplerMipmapMode::eNearest)
       .addressModeU(vk::SamplerAddressMode::eClampToEdge)
       .addressModeV(vk::SamplerAddressMode::eClampToEdge)
       .addressModeW(vk::SamplerAddressMode::eClampToEdge)
       .mipLodBias(0.0f)
-      .anisotropyEnable(VK_FALSE)
-      .maxAnisotropy(1)
+      .anisotropyEnable(VK_TRUE)
+      .maxAnisotropy(16)
       .compareOp(vk::CompareOp::eNever)
       .minLod(0.0f)
       .maxLod(0.0f)
@@ -380,11 +352,24 @@ void DemoScene::SetupTexture(size_t index, unsigned width, unsigned height,
   tex_descriptor_infos_[index].imageView(textures_[index].view);
   tex_descriptor_infos_[index].imageLayout(vk::ImageLayout::eGeneral);
 
+  size_t descriptor_count = used_index_count_;
+  if (first_texture) {
+    // fill all of the descriptors with the first (root) texture
+    // just to avoid warning for uninitialized descriptor slots, that are being
+    // used while rendering
+    descriptor_count = Settings::kMaxTextureCount;
+    for (int i = 0; i < descriptor_count; ++i) {
+      tex_descriptor_infos_[i].sampler(textures_[index].sampler);
+      tex_descriptor_infos_[i].imageView(textures_[index].view);
+      tex_descriptor_infos_[i].imageLayout(vk::ImageLayout::eGeneral);
+    }
+  }
+
   vk::WriteDescriptorSet writes[1];
 
   writes[0].dstBinding(0);
   writes[0].dstSet(desc_set_);
-  writes[0].descriptorCount(used_index_count_);
+  writes[0].descriptorCount(descriptor_count);
   writes[0].descriptorType(vk::DescriptorType::eCombinedImageSampler);
   writes[0].pImageInfo(tex_descriptor_infos_);
 
@@ -764,9 +749,11 @@ static vk::Pipeline PreparePipeline(
   ia.topology(vk::PrimitiveTopology::eTriangleList);
 
   if (Settings::kWireframe) {
+    rs.lineWidth(2.0);
     rs.polygonMode(vk::PolygonMode::eLine);
     rs.cullMode(vk::CullModeFlagBits::eNone);
   } else {
+    rs.lineWidth(1.0);
     rs.polygonMode(vk::PolygonMode::eFill);
     rs.cullMode(vk::CullModeFlagBits::eBack);
   }
@@ -793,12 +780,6 @@ static vk::Pipeline PreparePipeline(
   dynamicStateEnables[dynamic_state.dynamicStateCount()] =
       vk::DynamicState::eScissor;
   dynamic_state.dynamicStateCount(dynamic_state.dynamicStateCount() + 1);
-
-  if (Settings::kWireframe) {
-    dynamicStateEnables[dynamic_state.dynamicStateCount()] =
-        vk::DynamicState::eLineWidth;
-    dynamic_state.dynamicStateCount(dynamic_state.dynamicStateCount() + 1);
-  }
 
   ds.depthTestEnable(VK_TRUE);
   ds.depthWriteEnable(VK_TRUE);
@@ -889,8 +870,6 @@ void DemoScene::Prepare() {
   PrepareUniformBuffer();
   PrepareDescriptorPool();
   PrepareDescriptorSet();
-
-  PrepareTextures();
 
   PrepareRenderPass();
   pipeline_ = PreparePipeline(vk_device(), vertex_input_,
@@ -992,18 +971,19 @@ void DemoScene::Update() {
     quad_tree.SelectNodes(*scene()->camera(), grid_mesh_, thread_pool_, *this);
   }
 
-  if (grid_mesh_.mesh_.attribs_.size() > Settings::kMaxInstanceCount) {
-    std::cerr << "Number of instances used: " << grid_mesh_.mesh_.attribs_.size() << std::endl;
+  size_t instance_count = grid_mesh_.mesh_.attribs_.size();
+  if (instance_count > Settings::kMaxInstanceCount) {
+    std::cerr << "Number of instances used: " << instance_count << std::endl;
     std::terminate();
   }
 
   {
     PerInstanceAttributes *attribs = (PerInstanceAttributes*)
       vk_device().mapMemory(instance_attribs_.mem, 0,
-                            Settings::kMaxInstanceCount * sizeof(PerInstanceAttributes),
+                            instance_count * sizeof(PerInstanceAttributes),
                             vk::MemoryMapFlags{});
 
-    for (int i = 0; i < grid_mesh_.mesh_.attribs_.size(); ++i) {
+    for (int i = 0; i < instance_count; ++i) {
       attribs[i] = grid_mesh_.mesh_.attribs_[i];
     }
 

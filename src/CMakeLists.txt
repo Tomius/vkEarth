@@ -15,11 +15,17 @@ if (MSVC)
 endif()
 
 file(GLOB vkEarth_SOURCE "cpp/*.cpp" "cpp/*/*.cpp" "../deps/lodepng/lodepng.cpp")
-add_executable(vkEarth WIN32 ${vkEarth_SOURCE} ${ICON})
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
+    set (vkEarth_BINARY_NAME "vkEarthd")
+else()
+    set (vkEarth_BINARY_NAME "vkEarth")
+endif()
 
-target_include_directories(vkEarth PRIVATE "${VULKAN_INCLUDE_DIR}")
-target_link_libraries(vkEarth "${VULKAN_LIBRARY}")
-set(WINDOWS_BINARIES vkEarth)
+add_executable(${vkEarth_BINARY_NAME} WIN32 ${vkEarth_SOURCE} ${ICON})
+
+target_include_directories(${vkEarth_BINARY_NAME} PRIVATE "${VULKAN_INCLUDE_DIR}")
+target_link_libraries(${vkEarth_BINARY_NAME} "${VULKAN_LIBRARY}")
+set(WINDOWS_BINARIES ${vkEarth_BINARY_NAME})
 set(EXECUTABLE_OUTPUT_PATH ${vkEarth_SOURCE_DIR})
 
 # Copy shader codes

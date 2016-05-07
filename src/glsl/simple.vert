@@ -24,7 +24,7 @@ layout (location = 11) in vec3 aCurrentDiffuseTexturePosAndSize;
 layout (location = 12) in uint aNextDiffuseTextureId;
 layout (location = 13) in vec3 aNextDiffuseTexturePosAndSize;
 
-uniform sampler2D heightmap[2048];
+uniform sampler2D heightmap[2047];
 
 layout (std140, binding = 1) uniform bufferVals {
   mat4 cameraMatrix;
@@ -165,6 +165,7 @@ vec2 Terrain_nodeLocal2Global(vec2 nodeCoord) {
 }
 
 float GetHeightFast(vec2 pos) {
+  // return 0.0;
   uint texid = aCurrentGeometryTextureId;
   vec3 texPosAndSize = aCurrentGeometryTexturePosAndSize;
   vec2 samplePos = (pos - texPosAndSize.xy) / texPosAndSize.z;
@@ -181,6 +182,7 @@ float GetHeightInternal(vec2 pos, uint texid, vec3 texPosAndSize) {
 }
 
 float GetHeight(vec2 pos, float morph) {
+  // return 0.0;
   float height0 =
     GetHeightInternal(pos, aCurrentGeometryTextureId,
                               aCurrentGeometryTexturePosAndSize);
