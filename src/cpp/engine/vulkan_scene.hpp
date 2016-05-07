@@ -96,7 +96,7 @@ private:
   static vk::Instance CreateInstance(VulkanApplication& app);
 
   static vk::PhysicalDevice CreatePhysicalDevice(vk::Instance& instance,
-                                                 const VulkanApplication& app);
+                                                 VulkanApplication& app);
 
   static VkSurfaceKHR CreateSurface(const vk::Instance& instance,
                                     GLFWwindow* window);
@@ -126,8 +126,7 @@ private:
                                        VulkanScene& scene);
 
 #if VK_VALIDATE
-  static void CheckForMissingLayers(uint32_t check_count,
-                                    const char* const* check_names,
+  static void CheckForMissingLayers(std::vector<const char*>& check_names,
                                     uint32_t layer_count,
                                     vk::LayerProperties* layers);
 #endif // VK_VALIDATE

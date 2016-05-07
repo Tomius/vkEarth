@@ -144,7 +144,7 @@ void VulkanScene::SetImageLayout(const vk::Image& image,
         .image(image)
         .srcAccessMask(src_access)
         /* todo mip levels */
-        .subresourceRange({aspectMask, 0, 10, 0, 1});
+        .subresourceRange({aspectMask, 0, 1, 0, 1});
 
     if (new_image_layout == vk::ImageLayout::eTransferSrcOptimal) {
         /* Make sure anything that was copying from this image has completed */
@@ -207,8 +207,7 @@ vk::Instance VulkanScene::CreateInstance(VulkanApplication& app) {
                                                  instance_layers.get()));
 
 #if VK_VALIDATE
-      CheckForMissingLayers(app.instance_validation_layers.size(),
-                            app.instance_validation_layers.data(),
+      CheckForMissingLayers(app.instance_validation_layers,
                             all_instance_layer_count,
                             instance_layers.get());
 #endif
@@ -269,7 +268,7 @@ vk::Instance VulkanScene::CreateInstance(VulkanApplication& app) {
 *                   CreatePhysicalDevice              *
 *******************************************************/
 vk::PhysicalDevice VulkanScene::CreatePhysicalDevice(vk::Instance& instance,
-                                                     const VulkanApplication& app) {
+                                                     VulkanApplication& app) {
   /* Make initial call to query gpu_count, then second call for gpu info*/
   uint32_t gpu_count;
   vk::chk(instance.enumeratePhysicalDevices(&gpu_count, nullptr));
@@ -299,8 +298,7 @@ vk::PhysicalDevice VulkanScene::CreatePhysicalDevice(vk::Instance& instance,
                                                     device_layers.get()));
 
 #if VK_VALIDATE
-      CheckForMissingLayers(app.device_validation_layers.size(),
-                            app.device_validation_layers.data(),
+      CheckForMissingLayers(app.device_validation_layers,
                             device_layer_count,
                             device_layers.get());
 #endif
@@ -720,24 +718,19 @@ void VulkanScene::PrepareBuffers() {
 /******************************************************
 *                  CheckForMissingLayers              *
 *******************************************************/
-void VulkanScene::CheckForMissingLayers(uint32_t check_count,
-                                        const char* const* check_names,
+void VulkanScene::CheckForMissingLayers(std::vector<const char*>& check_names,
                                         uint32_t layer_count,
                                         vk::LayerProperties* layers) {
-  bool found_all = true;
-  for (uint32_t i = 0; i < check_count; i++) {
+  for (uint32_t i = 0; i < check_names.size(); i++) {
     bool found = false;
     for (uint32_t j = 0; !found && j < layer_count; j++) {
       found = !std::strcmp(check_names[i], layers[j].layerName());
     }
     if (!found) {
       std::cerr << "Cannot find layer: " << check_names[i] << std::endl;
-      found_all = false;
+      check_names.erase(check_names.begin() + i);
+      i--;
     }
-  }
-
-  if (!found_all) {
-    throw std::runtime_error("Couldn't find all requested validation layers.");
   }
 }
 
