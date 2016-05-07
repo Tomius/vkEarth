@@ -252,9 +252,8 @@ void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
       unsigned width, height;
       std::vector<unsigned char> data;
       unsigned error = lodepng::decode(data, width, height,
-                                       GetHeightMapPath(), LCT_RGBA, 16);
-      // TODO: IT'S NOT RGBA!!!
-      assert(data.size() == 8*width*height);
+                                       GetHeightMapPath(), LCT_GREY, 16);
+      assert(data.size() == 2*width*height);
       BinarySwap(data);
       if (error) {
         std::cerr << "Image decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
@@ -275,9 +274,7 @@ void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
       unsigned width, height;
       std::vector<unsigned char> data;
       unsigned error = lodepng::decode(data, width, height,
-                                       GetDiffuseMapPath(), LCT_RGBA, 16);
-      // TODO: IT'S NOT 16 bit!!!
-      BinarySwap(data);
+                                       GetDiffuseMapPath(), LCT_RGBA, 8);
       if (error) {
         std::cerr << "Image decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
         std::terminate();
@@ -310,6 +307,7 @@ void CdlodQuadTreeNode::Upload(TextureHandler& texture_handler) {
       texture_handler.SetupTexture(texture_.elevation.id,
                                    Settings::kElevationTexSizeWithBorders,
                                    Settings::kElevationTexSizeWithBorders,
+                                   vk::Format::eR16Unorm, 2,
                                    (const unsigned char*)texture_.elevation_data.data());
       double scale = static_cast<double>(Settings::kElevationTexSizeWithBorders)
                    / static_cast<double>(Settings::kTextureDimension);
@@ -325,6 +323,7 @@ void CdlodQuadTreeNode::Upload(TextureHandler& texture_handler) {
       texture_handler.SetupTexture(texture_.diffuse.id,
                                    Settings::kDiffuseTexSizeWithBorders,
                                    Settings::kDiffuseTexSizeWithBorders,
+                                   vk::Format::eR8G8B8A8Unorm, 4,
                                    (const unsigned char*)texture_.diffuse_data.data());
       double scale = static_cast<double>(Settings::kDiffuseTexSizeWithBorders)
                    / static_cast<double>(Settings::kTextureDimension);
@@ -369,7 +368,7 @@ void CdlodQuadTreeNode::CalculateMinMax() {
   auto& data = src->texture_.elevation_data;
   for (int x = min_coord.x; x < max_coord.x; ++x) {
     for (int y = min_coord.y; y < max_coord.y; ++y) {
-      uint16_t height = data[(y*texSizeWBorder + x) * 4];
+      uint16_t height = data[y*texSizeWBorder + x];
       texture_.min = std::min(texture_.min, height);
       texture_.max = std::max(texture_.max, height);
     }

@@ -95,7 +95,7 @@ private:
                            TextureObject *tex_obj, vk::ImageTiling tiling,
                            vk::ImageUsageFlags usage,
                            vk::MemoryPropertyFlags required_props,
-                           vk::Format tex_format);
+                           vk::Format tex_format, size_t byte_per_texel);
   void PrepareIndices();
   void PrepareVertices();
   void PrepareDescriptorLayout();
@@ -108,6 +108,7 @@ private:
   void Cleanup();
 
   void SetupTexture(size_t index, unsigned width, unsigned height,
+                    vk::Format format, size_t byte_per_texel,
                     const unsigned char* data) override;
   void FreeTexture(size_t index) override;
 

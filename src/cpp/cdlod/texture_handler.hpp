@@ -12,6 +12,7 @@ class TextureHandler {
   TextureHandler();
   size_t GetFirstUnusedTextureIndex();
   virtual void SetupTexture(size_t index, unsigned width, unsigned height,
+                            vk::Format format, size_t byte_per_texel,
                             const unsigned char* data) = 0;
   virtual void FreeTexture(size_t index) = 0;
 

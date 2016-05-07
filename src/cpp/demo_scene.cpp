@@ -176,7 +176,8 @@ void DemoScene::PrepareTextureImage(const unsigned char *tex_colors,
                                     TextureObject *tex_obj, vk::ImageTiling tiling,
                                     vk::ImageUsageFlags usage,
                                     vk::MemoryPropertyFlags required_props,
-                                    vk::Format tex_format) {
+                                    vk::Format tex_format,
+                                    size_t byte_per_texel) {
   tex_obj->tex_width = tex_width;
   tex_obj->tex_height = tex_height;
 
@@ -221,7 +222,9 @@ void DemoScene::PrepareTextureImage(const unsigned char *tex_colors,
       for (int y = 0; y < tex_height; y++) {
           char *row = ((char *)data + layout.rowPitch() * y);
           for (int x = 0; x < tex_width; x++) {
-            std::memcpy(&row[8*x], &tex_colors[(y*tex_width + x)*8], 8);
+            std::memcpy(&row[x * byte_per_texel],
+                        &tex_colors[(y*tex_width + x) * byte_per_texel],
+                        byte_per_texel);
           }
       }
 
@@ -237,6 +240,7 @@ void DemoScene::PrepareTextureImage(const unsigned char *tex_colors,
 }
 
 void DemoScene::SetupTexture(size_t index, unsigned width, unsigned height,
+                             vk::Format tex_format, size_t byte_per_texel,
                              const unsigned char* pixels) {
   int succesfully_removed = unused_indices_.erase(index);
   bool first_texture = used_index_count_ == 0;
@@ -252,7 +256,6 @@ void DemoScene::SetupTexture(size_t index, unsigned width, unsigned height,
   }
 
   vk::FormatProperties props;
-  const vk::Format tex_format = vk::Format::eR16G16B16A16Unorm;
   vk_gpu().getFormatProperties(tex_format, &props);
 
   if (props.optimalTilingFeatures() & vk::FormatFeatureFlagBits::eSampledImage) {
@@ -264,14 +267,14 @@ void DemoScene::SetupTexture(size_t index, unsigned width, unsigned height,
                          vk::ImageTiling::eLinear,
                          vk::ImageUsageFlagBits::eTransferSrc,
                          vk::MemoryPropertyFlagBits::eHostVisible,
-                         tex_format);
+                         tex_format, byte_per_texel);
 
     PrepareTextureImage(pixels,
         width, height, &textures_[index],
         vk::ImageTiling::eOptimal,
         (vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled),
         vk::MemoryPropertyFlagBits::eDeviceLocal,
-        tex_format);
+        tex_format, byte_per_texel);
 
     SetImageLayout(staging_texture.image,
                    vk::ImageAspectFlagBits::eColor,
