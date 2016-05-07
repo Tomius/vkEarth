@@ -54,6 +54,9 @@ public:
   virtual void ScreenResized(size_t width, size_t height) override;
 
 private:
+  engine::FreeFlyCamera* free_fly_camera_ = nullptr;
+  engine::ThirdPersonalCamera* tp_camera_ = nullptr;
+
   struct TextureObject textures_[Settings::kMaxTextureCount];
 
   struct {
@@ -107,6 +110,9 @@ private:
   void SetupTexture(size_t index, unsigned width, unsigned height,
                     const unsigned char* data) override;
   void FreeTexture(size_t index) override;
+
+  virtual void KeyAction(int key, int scancode, int action, int mods) override;
+  virtual void MouseScrolled(double xoffset, double yoffset) override;
 };
 
 #endif // DEMO_SCENE_HPP_

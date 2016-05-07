@@ -916,9 +916,13 @@ DemoScene::DemoScene(GLFWwindow *window)
       }
     , thread_pool_{std::max(std::thread::hardware_concurrency(), 2u) - 1} {
   Prepare();
-  set_camera(AddComponent<engine::FreeFlyCamera>(
-      glm::radians(60.0), 10, 1000000, glm::dvec3{-54483.2, 38919.9, 13576.9},
-      glm::dvec3{10, 0, 10}, 5000));
+
+  int radius = Settings::kSphereRadius;
+  tp_camera_ = AddComponent<engine::ThirdPersonalCamera>(
+        M_PI/3, 2, 3*radius, glm::vec3(-2*radius, 0, 0),
+        5, 1, 0.005, 4, radius, radius);
+  set_camera(tp_camera_);
+
   startTime = clock();
 }
 
@@ -944,6 +948,18 @@ void DemoScene::Render() {
 }
 
 void DemoScene::Update() {
+  {
+    double height = glm::length(camera()->transform().pos());
+    double z_far = 1000 * height, z_near = 1;
+    camera()->set_z_far(z_far);
+    camera()->set_z_near(z_near);
+    if (free_fly_camera_) {
+      auto t = free_fly_camera_->transform();
+      glm::vec3 new_up = glm::normalize(t.pos());
+      t.set_up(new_up);
+    }
+  }
+
   {
     UniformData* uniform_data = (UniformData*)
         vk_device().mapMemory(uniform_data_.mem, 0, sizeof(UniformData), vk::MemoryMapFlags{});
@@ -999,4 +1015,76 @@ void DemoScene::ScreenResizedClean() {
 void DemoScene::ScreenResized(size_t width, size_t height) {
   VulkanScene::ScreenResized(width, height);
   Prepare();
+}
+
+void DemoScene::KeyAction(int key, int scancode, int action, int mods) {
+  int radius = Settings::kSphereRadius;
+  if (action == GLFW_PRESS) {
+    if (key == GLFW_KEY_SPACE) {
+      if (free_fly_camera_) {
+        glm::dvec3 pos = free_fly_camera_->transform().pos();
+        std::cout << pos << std::endl;
+        std::cout << pos + free_fly_camera_->transform().forward() << std::endl;
+        double current_dist = glm::length(pos) - radius;
+        if (current_dist < 100) {
+          current_dist = radius + 100;
+          pos = current_dist * glm::normalize(pos);
+        }
+
+        tp_camera_ = AddComponent<engine::ThirdPersonalCamera>(
+            M_PI/3, 2, 3*radius, pos,
+            5, 1, 0.005, 4, radius, radius);
+        RemoveComponent(free_fly_camera_);
+        free_fly_camera_ = nullptr;
+        set_camera(tp_camera_);
+      } else {
+        free_fly_camera_ = AddComponent<engine::FreeFlyCamera>(
+          M_PI/3, 2, 3*radius, tp_camera_->transform().pos(), glm::vec3(), 10, 5);
+        glm::vec3 up{glm::normalize(free_fly_camera_->transform().pos())};
+        free_fly_camera_->transform().set_forward(-up + glm::vec3{0, 0.25, 0});
+        free_fly_camera_->transform().set_up(up);
+        RemoveComponent(tp_camera_);
+        tp_camera_ = nullptr;
+        set_camera(free_fly_camera_);
+      }
+    } else if (key == GLFW_KEY_KP_9) {
+      RemoveComponent(camera());
+      tp_camera_ = nullptr;
+
+      double old_radius = 27501;
+      double radius = Settings::kSphereRadius;
+      double scale = radius / old_radius;
+      free_fly_camera_ = AddComponent<engine::FreeFlyCamera>(
+          M_PI/3, 2, 3*radius, scale * glm::dvec3{-18829.6, 19925.4, 3163.6},
+          scale * glm::dvec3{-18829.101141, 19925.3065359, 3164.461629}, 0, 0);
+      set_camera(free_fly_camera_);
+    } else if (key == GLFW_KEY_KP_8) {
+      RemoveComponent(camera());
+      tp_camera_ = nullptr;
+
+      double old_radius = 27501;
+      double radius = Settings::kSphereRadius;
+      double scale = radius / old_radius;
+      free_fly_camera_ = AddComponent<engine::FreeFlyCamera>(
+          M_PI/3, 2, 3*radius, scale * glm::dvec3{-9943.69, 16404.8, 20361.8},
+          scale * glm::dvec3{-9942.71, 16404.6, 20361.7}, 50, 0);
+      set_camera(free_fly_camera_);
+    } else if (key == GLFW_KEY_KP_7) {
+      RemoveComponent(camera());
+      tp_camera_ = nullptr;
+
+      double radius = Settings::kSphereRadius;
+      free_fly_camera_ = AddComponent<engine::FreeFlyCamera>(
+          M_PI/3, 2, 3*radius, glm::dvec3{-22375.5, 23670.3, 3756.66},
+          glm::dvec3{-22374.9, 23670.6, 3757.41}, 50, 0);
+      set_camera(free_fly_camera_);
+    }
+  }
+}
+
+void DemoScene::MouseScrolled(double xoffset, double yoffset) {
+  if (free_fly_camera_) {
+    auto cam = free_fly_camera_;
+    cam->set_speed_per_sec(cam->speed_per_sec() * (yoffset > 0 ? 1.1 : 0.9));
+  }
 }

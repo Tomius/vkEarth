@@ -19,9 +19,14 @@ struct Plane {
 
   void Normalize() {
     double l = glm::length(normal);
-    assert(l > Settings::kEpsilon);
-    normal /= l;
-    dist /= l;
+    // assert(l > Settings::kEpsilon);
+    if (l <= Settings::kEpsilon) {
+      normal = glm::dvec3{};
+      dist = 0.0;
+    } else {
+      normal /= l;
+      dist /= l;
+    }
   }
 };
 
