@@ -8,7 +8,7 @@
 #include "common/glm.hpp"
 #include "common/settings.hpp"
 
-struct RGBPixel {
+struct RGBAPixel {
   unsigned char r, g, b, a;
 };
 
@@ -31,7 +31,7 @@ struct TextureInfo {
   CdlodQuadTreeNode* min_max_src = nullptr;
 
   std::vector<uint16_t> elevation_data;
-  std::vector<RGBPixel> diffuse_data;
+  std::vector<RGBAPixel> diffuse_data;
   bool is_loaded_to_gpu = false;
 
   std::mutex load_mutex;

@@ -2,7 +2,11 @@
 
 #include <cstring>
 #include <algorithm>
-#include <lodepng.h>
+#ifdef USE_IMAGEMAGICK
+  #include <Magick++.h>
+#else
+  #include <lodepng.h>
+#endif
 
 #include "cdlod/cdlod_quad_tree_node.hpp"
 #include "collision/cube2sphere.hpp"
@@ -221,15 +225,6 @@ bool CdlodQuadTreeNode::HasDiffuseTexture() const {
   return Settings::kLevelOffset <= DiffuseTextureLevel();
 }
 
-
-
-static void BinarySwap(std::vector<unsigned char>& data) {
-  assert(data.size() % 2 == 0);
-  for (int i = 0; i < data.size() / 2; ++i) {
-    std::swap(data[2*i], data[2*i + 1]);
-  }
-}
-
 void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
   if (parent_ && !parent_->texture_.is_loaded_to_memory) {
     parent_->LoadTexture(true);
@@ -249,12 +244,18 @@ void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
 
   if (!texture_.is_loaded_to_memory) {
     if (HasElevationTexture()) {
+#ifdef USE_IMAGEMAGICK
+      Magick::Image image{GetHeightMapPath()};
+      assert(image.columns() == Settings::kElevationTexSizeWithBorders);
+      assert(image.rows() == Settings::kElevationTexSizeWithBorders);
+      texture_.elevation_data.resize(image.columns() * image.rows());
+      image.write(0, 0, image.columns(), image.rows(),
+                  "R", MagickCore::ShortPixel, texture_.elevation_data.data());
+#else
       unsigned width, height;
       std::vector<unsigned char> data;
       unsigned error = lodepng::decode(data, width, height,
                                        GetHeightMapPath(), LCT_GREY, 16);
-      assert(data.size() == 2*width*height);
-      BinarySwap(data);
       if (error) {
         std::cerr << "Image decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
         std::terminate();
@@ -262,15 +263,30 @@ void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
 
       assert(width == Settings::kElevationTexSizeWithBorders);
       assert(height == Settings::kElevationTexSizeWithBorders);
+      assert(data.size() == 2*width*height);
+
+      // binary swap shorts
+      for (int i = 0; i < data.size() / 2; ++i) {
+        std::swap(data[2*i], data[2*i + 1]);
+      }
 
       size_t size_in_elements = data.size() / sizeof(texture_.elevation_data[0]);
       texture_.elevation_data.resize(size_in_elements);
       std::memcpy(texture_.elevation_data.data(), data.data(), data.size());
+#endif
 
       CalculateMinMax();
     }
 
     if (HasDiffuseTexture()) {
+#ifdef USE_IMAGEMAGICK
+      Magick::Image image{GetDiffuseMapPath()};
+      assert(image.columns() == Settings::kDiffuseTexSizeWithBorders);
+      assert(image.rows() == Settings::kDiffuseTexSizeWithBorders);
+      texture_.diffuse_data.resize(image.columns() * image.rows());
+      image.write(0, 0, image.columns(), image.rows(),
+                  "RGBA", MagickCore::CharPixel, texture_.diffuse_data.data());
+#else
       unsigned width, height;
       std::vector<unsigned char> data;
       unsigned error = lodepng::decode(data, width, height,
@@ -286,6 +302,7 @@ void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
       size_t size_in_elements = data.size() / sizeof(texture_.diffuse_data[0]);
       texture_.diffuse_data.resize(size_in_elements);
       std::memcpy(texture_.diffuse_data.data(), data.data(), data.size());
+#endif
     }
 
     texture_.is_loaded_to_memory = true;

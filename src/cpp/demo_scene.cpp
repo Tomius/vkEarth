@@ -14,7 +14,6 @@
 
 #include <vulkan/vk_cpp.hpp>
 #include <GLFW/glfw3.h>
-#include <lodepng.h>
 
 #include "engine/scene.hpp"
 #include "common/error_checking.hpp"

@@ -33,11 +33,13 @@ add_subdirectory(deps/glm)
 include_directories(SYSTEM deps/glm)
 
 include_directories(SYSTEM deps/vkcpp)
-include_directories(${vkEarth_SOURCE_DIR}/src/cpp)
 
-include_directories(SYSTEM deps/lodepng)
+if (USE_IMAGEMAGICK)
+  include_directories(SYSTEM deps/lodepng)
+endif()
 
 # This should be the last subdir / include
+include_directories(${vkEarth_SOURCE_DIR}/src/cpp)
 add_subdirectory(src)
 
 set(CMAKE_MODULE_PATH "${vkEarth_SOURCE_DIR}/deps/glfw/CMake/modules")
