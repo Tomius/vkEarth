@@ -34,7 +34,7 @@ include_directories(SYSTEM deps/glm)
 
 include_directories(SYSTEM deps/vkcpp)
 
-if (USE_IMAGEMAGICK)
+if (NOT USE_IMAGEMAGICK)
   include_directories(SYSTEM deps/lodepng)
 endif()
 

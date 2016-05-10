@@ -19,7 +19,7 @@ namespace Settings {
 static constexpr double kEpsilon = 1e-5;
 
 static constexpr int kMaxInstanceCount = 32*1024; // TODO
-static constexpr int kMaxTextureCount = 2*1024 - 1; // TODO
+static constexpr int kMaxTextureCount = 4*1024 - 1; // TODO
 
 static constexpr int kNodeDimensionExp = 5;
 static constexpr int kNodeDimension = 1 << kNodeDimensionExp;
@@ -53,7 +53,7 @@ static constexpr long kGeomDiv = 2;
 
 static constexpr int kLevelOffset = 0;
 static constexpr int kDiffuseToElevationLevelOffset = 1;
-static constexpr int kNormalToGeometryLevelOffset = 2;
+static constexpr int kNormalToGeometryLevelOffset = 3;
 
 static constexpr double kSmallestGeometryLodDistance = 2*kNodeDimension;
 static constexpr double kSmallestTextureLodDistance =

@@ -74,7 +74,8 @@ void DemoScene::BuildDrawCmd() {
   vk::ImageMemoryBarrier pre_present_barrier = vk::ImageMemoryBarrier()
       .srcAccessMask(vk::AccessFlagBits::eColorAttachmentWrite)
       .dstAccessMask(vk::AccessFlagBits::eMemoryRead)
-      .oldLayout(vk::ImageLayout::eColorAttachmentOptimal)
+      // .oldLayout(vk::ImageLayout::eColorAttachmentOptimal)
+      .oldLayout(vk::ImageLayout::ePresentSrcKHR)
       .newLayout(vk::ImageLayout::ePresentSrcKHR)
       .srcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
       .dstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
@@ -117,12 +118,12 @@ void DemoScene::Draw() {
 
   // Assume the command buffer has been run on current_buffer before so
   // we need to set the image layout back to COLOR_ATTACHMENT_OPTIMAL
-  SetImageLayout(vk_buffers()[vk_current_buffer()].image,
-                 vk::ImageAspectFlagBits::eColor,
-                 vk::ImageLayout::ePresentSrcKHR,
-                 vk::ImageLayout::eColorAttachmentOptimal,
-                 vk::AccessFlags{});
-  FlushInitCommand();
+  // SetImageLayout(vk_buffers()[vk_current_buffer()].image,
+  //                vk::ImageAspectFlagBits::eColor,
+  //                vk::ImageLayout::ePresentSrcKHR,
+  //                vk::ImageLayout::eColorAttachmentOptimal,
+  //                vk::AccessFlags{});
+  // FlushInitCommand();
 
   // Wait for the present complete semaphore to be signaled to ensure
   // that the image won't be rendered to until the presentation
@@ -596,8 +597,10 @@ void DemoScene::PrepareRenderPass() {
       .storeOp(vk::AttachmentStoreOp::eStore)
       .stencilLoadOp(vk::AttachmentLoadOp::eDontCare)
       .stencilStoreOp(vk::AttachmentStoreOp::eDontCare)
-      .initialLayout(vk::ImageLayout::eColorAttachmentOptimal)
-      .finalLayout(vk::ImageLayout::eColorAttachmentOptimal),
+      // .initialLayout(vk::ImageLayout::eColorAttachmentOptimal)
+      .initialLayout(vk::ImageLayout::ePresentSrcKHR)
+      // .finalLayout(vk::ImageLayout::eColorAttachmentOptimal),
+      .finalLayout(vk::ImageLayout::ePresentSrcKHR),
     vk::AttachmentDescription()
       .format(vk_depth_buffer().format)
       .samples(vk::SampleCountFlagBits::e1)
@@ -610,7 +613,8 @@ void DemoScene::PrepareRenderPass() {
   };
   const vk::AttachmentReference color_reference = vk::AttachmentReference()
       .attachment(0)
-      .layout(vk::ImageLayout::eColorAttachmentOptimal);
+      // .layout(vk::ImageLayout::eColorAttachmentOptimal);
+      .layout(vk::ImageLayout::ePresentSrcKHR);
   const vk::AttachmentReference depth_reference = vk::AttachmentReference()
       .attachment(1)
       .layout(vk::ImageLayout::eDepthStencilAttachmentOptimal);

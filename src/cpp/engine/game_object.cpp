@@ -4,13 +4,6 @@
 #include "engine/game_object.hpp"
 #include "engine/game_engine.hpp"
 
-#define _TRY_(YourCode) \
-  try { \
-    YourCode; \
-  } catch (const std::exception& ex) { \
-    std::cerr << "Exception: " << ex.what() << std::endl; \
-  } catch (...) {}
-
 namespace engine {
 
 GameObject::~GameObject() {
@@ -48,7 +41,7 @@ void GameObject::set_parent(GameObject* parent) {
 void GameObject::RenderAll() {
   if (!enabled_) { return; }
 
-  _TRY_(Render());
+  Render();
   for (auto& component : components_) {
     component->RenderAll();
   }
@@ -57,7 +50,7 @@ void GameObject::RenderAll() {
 void GameObject::Render2DAll() {
   if (!enabled_) { return; }
 
-  _TRY_(Render2D());
+  Render2D();
   for (auto& component : components_) {
     component->Render2DAll();
   }
@@ -69,13 +62,13 @@ void GameObject::ScreenResizedCleanAll() {
   for (auto& component : components_) {
     component->ScreenResizedCleanAll();
   }
-  _TRY_(ScreenResizedClean());
+  ScreenResizedClean();
 }
 
 void GameObject::ScreenResizedAll(size_t width, size_t height) {
   if (!enabled_) { return; }
 
-  _TRY_(ScreenResized(width, height));
+  ScreenResized(width, height);
   for (auto& component : components_) {
     component->ScreenResizedAll(width, height);
   }
@@ -85,7 +78,7 @@ void GameObject::UpdateAll() {
   if (!enabled_) { return; }
 
   InternalUpdate();
-  _TRY_(Update());
+  Update();
   for (auto& component : components_) {
     component->UpdateAll();
   }
@@ -94,7 +87,7 @@ void GameObject::UpdateAll() {
 void GameObject::KeyActionAll(int key, int scancode, int action, int mods) {
   if (!enabled_) { return; }
 
-  _TRY_(KeyAction(key, scancode, action, mods));
+  KeyAction(key, scancode, action, mods);
   for (auto& component : components_) {
     component->KeyActionAll(key, scancode, action, mods);
   }
@@ -103,7 +96,7 @@ void GameObject::KeyActionAll(int key, int scancode, int action, int mods) {
 void GameObject::CharTypedAll(unsigned codepoint) {
   if (!enabled_) { return; }
 
-  _TRY_(CharTyped(codepoint));
+  CharTyped(codepoint);
   for (auto& component : components_) {
     component->CharTypedAll(codepoint);
   }
@@ -112,7 +105,7 @@ void GameObject::CharTypedAll(unsigned codepoint) {
 void GameObject::MouseScrolledAll(double xoffset, double yoffset) {
   if (!enabled_) { return; }
 
-  _TRY_(MouseScrolled(xoffset, yoffset));
+  MouseScrolled(xoffset, yoffset);
   for (auto& component : components_) {
     component->MouseScrolledAll(xoffset, yoffset);
   }
@@ -121,7 +114,7 @@ void GameObject::MouseScrolledAll(double xoffset, double yoffset) {
 void GameObject::MouseButtonPressedAll(int button, int action, int mods) {
   if (!enabled_) { return; }
 
-  _TRY_(MouseButtonPressed(button, action, mods));
+  MouseButtonPressed(button, action, mods);
   for (auto& component : components_) {
     component->MouseButtonPressedAll(button, action, mods);
   }
@@ -130,7 +123,7 @@ void GameObject::MouseButtonPressedAll(int button, int action, int mods) {
 void GameObject::MouseMovedAll(double xpos, double ypos) {
   if (!enabled_) { return; }
 
-  _TRY_(MouseMoved(xpos, ypos));
+  MouseMoved(xpos, ypos);
   for (auto& component : components_) {
     component->MouseMovedAll(xpos, ypos);
   }

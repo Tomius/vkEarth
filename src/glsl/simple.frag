@@ -19,7 +19,7 @@ layout (location = 10) in flat uint vNextDiffuseTexId;
 layout (location = 11) in flat vec3 vCurrentDiffuseTexPosAndSize;
 layout (location = 12) in flat vec3 vNextDiffuseTexPosAndSize;
 
-uniform sampler2D heightmap[2047];
+uniform sampler2D heightmap[4*1024 - 1];
 
 layout (std140, binding = 1) uniform bufferVals {
   mat4 cameraMatrix;
@@ -189,8 +189,7 @@ vec3 GetDiffuseColor(vec2 pos) {
 }
 
 void main() {
-  // outColor = vec4(1.0);
-  float lighting = dot(GetNormal(vmPos.xz), normalize(vec3(1, 1, 1)));
+  float lighting = dot(GetNormal(vmPos.xz), normalize(vec3(-1, 0.1, 0)));
   float luminance = 0.2 + 0.8*max(lighting, 0.0) + 0.1 * (1+lighting)/2;
   vec3 diffuse = GetDiffuseColor(vmPos.xz);
 

@@ -23,7 +23,9 @@ GameEngine::GameEngine() {
 
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
-  window_ = glfwCreateWindow(600, 600, "Vulkan planetary CDLOD",
+  GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+  const GLFWvidmode *vidmode = glfwGetVideoMode(monitor);
+  window_ = glfwCreateWindow(vidmode->width, vidmode->height, "Vulkan planetary CDLOD",
                              nullptr, nullptr);
   if (!window_) {
     std::cerr << "Cannot create a window in which to draw!" << std::endl;

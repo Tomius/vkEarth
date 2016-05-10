@@ -24,7 +24,7 @@ layout (location = 11) in vec3 aCurrentDiffuseTexturePosAndSize;
 layout (location = 12) in uint aNextDiffuseTextureId;
 layout (location = 13) in vec3 aNextDiffuseTexturePosAndSize;
 
-uniform sampler2D heightmap[2047];
+uniform sampler2D heightmap[4*1024 - 1];
 
 layout (std140, binding = 1) uniform bufferVals {
   mat4 cameraMatrix;
