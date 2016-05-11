@@ -24,7 +24,7 @@ layout (location = 11) in vec3 aCurrentDiffuseTexturePosAndSize;
 layout (location = 12) in uint aNextDiffuseTextureId;
 layout (location = 13) in vec3 aNextDiffuseTexturePosAndSize;
 
-uniform sampler2D heightmap[4*1024 - 1];
+uniform sampler2D heightmap[8192 - 1];
 
 layout (std140, binding = 1) uniform bufferVals {
   mat4 cameraMatrix;
@@ -34,15 +34,15 @@ layout (std140, binding = 1) uniform bufferVals {
   float depthCoef;
 
   float terrainSmallestGeometryLodDistance;
+  float terrainSmallestTextureLodDistance;
   float terrainSphereRadius;
   float faceSize;
-  float heightScale;
 
+  float heightScale;
   int terrainMaxLodLevel;
   int terrainLevelOffset;
-
-  int textureDimension;
   int diffuseTextureDimensionWBorders;
+
   int elevationTextureDimensionWBorders;
 } uniforms;
 
@@ -68,7 +68,7 @@ out gl_PerVertex {
 };
 
 // constants and aliases
-const float kMorphEnd = 0.95, kMorphStart = 0.75;
+const float kMorphEnd = 0.95, kMorphStart = 0.65;
 vec2 terrainOffset = aRenderData.xy;
 float terrainLevel = aRenderData.z;
 float terrainScale = pow(2, terrainLevel);
@@ -177,14 +177,14 @@ float GetHeightInternal(vec2 pos, uint texid, vec3 texPosAndSize) {
 float GetHeight(vec2 pos, float morph) {
   float height0 =
     GetHeightInternal(pos, aCurrentGeometryTextureId,
-                              aCurrentGeometryTexturePosAndSize);
+                           aCurrentGeometryTexturePosAndSize);
   if (morph == 0.0 || terrainLevel < uniforms.terrainLevelOffset) {
     return height0;
   }
 
   float height1 =
     GetHeightInternal(pos, aNextGeometryTextureId,
-                              aNextGeometryTexturePosAndSize);
+                           aNextGeometryTexturePosAndSize);
 
   return mix(height0, height1, morph);
 }

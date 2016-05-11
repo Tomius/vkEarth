@@ -40,10 +40,6 @@ void QuadGridMesh::ClearRenderList() {
   mesh_.ClearRenderList();
 }
 
-// void QuadGridMesh::render() {
-//   mesh_.render();
-// }
-
 size_t QuadGridMesh::node_count() const {
   return mesh_.node_count();
 }

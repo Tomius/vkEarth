@@ -40,7 +40,7 @@ class CdlodQuadTreeNode {
   TextureInfo texture_;
 
   // If a node is not used for this much time (frames), it will be unloaded.
-  static const int kTimeToLiveInMemory = 1 << 6;
+  static const int kTimeToLiveInMemory = 1 << 5;
 
   double scale() const { return pow(2, level_); }
   double size() { return Settings::kNodeDimension * scale(); }

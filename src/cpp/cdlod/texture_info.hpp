@@ -17,6 +17,7 @@ struct TextureBaseInfo {
   glm::vec2 position; // top-left
   float size = 0;
 };
+static_assert(sizeof(TextureBaseInfo) == sizeof(unsigned) + sizeof(glm::vec3), "");
 
 class CdlodQuadTreeNode;
 

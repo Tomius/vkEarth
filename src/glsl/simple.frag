@@ -19,7 +19,7 @@ layout (location = 10) in flat uint vNextDiffuseTexId;
 layout (location = 11) in flat vec3 vCurrentDiffuseTexPosAndSize;
 layout (location = 12) in flat vec3 vNextDiffuseTexPosAndSize;
 
-uniform sampler2D heightmap[4*1024 - 1];
+uniform sampler2D heightmap[8192 - 1];
 
 layout (std140, binding = 1) uniform bufferVals {
   mat4 cameraMatrix;
@@ -29,21 +29,21 @@ layout (std140, binding = 1) uniform bufferVals {
   float depthCoef;
 
   float terrainSmallestGeometryLodDistance;
+  float terrainSmallestTextureLodDistance;
   float terrainSphereRadius;
   float faceSize;
-  float heightScale;
 
+  float heightScale;
   int terrainMaxLodLevel;
   int terrainLevelOffset;
-
-  int textureDimension;
   int diffuseTextureDimensionWBorders;
+
   int elevationTextureDimensionWBorders;
 } uniforms;
 
 layout (location = 0) out vec4 outColor;
 
-const float kMorphEnd = 0.95, kMorphStart = 0.75;
+const float kMorphEnd = 0.95, kMorphStart = 0.65;
 
 /* Cube 2 Sphere */
 
@@ -144,7 +144,7 @@ vec3 GetNormalModelSpaceInternal(vec2 pos, uint tex_id, vec3 tex_pos_and_size) {
 vec3 GetNormalModelSpace(vec2 pos) {
   float dist = length(vcPos);
   float next_dist = vNextNormalTexPosAndSize.z
-      / uniforms.textureDimension * uniforms.terrainSmallestGeometryLodDistance;
+      / uniforms.elevationTextureDimensionWBorders * uniforms.terrainSmallestTextureLodDistance;
   float morph = smoothstep(kMorphStart*next_dist, kMorphEnd*next_dist, dist);
   vec3 normal0 = GetNormalModelSpaceInternal(pos, vCurrentNormalTexId,
                                              vCurrentNormalTexPosAndSize);
@@ -162,9 +162,6 @@ vec3 GetNormal(vec2 pos) {
   return WorldPos(vmPos + GetNormalModelSpace(pos)) - WorldPos(vmPos);
 }
 
-// Color
-
-// todo remove code duplication
 vec3 GetColor(vec2 pos, uint tex_id, vec3 tex_pos_and_size) {
   vec2 samplePos = (pos - tex_pos_and_size.xy) / tex_pos_and_size.z;
   samplePos += 0.5 / uniforms.diffuseTextureDimensionWBorders;
@@ -174,7 +171,7 @@ vec3 GetColor(vec2 pos, uint tex_id, vec3 tex_pos_and_size) {
 vec3 GetDiffuseColor(vec2 pos) {
   float dist = length(vcPos);
   float next_dist = vNextDiffuseTexPosAndSize.z
-      / uniforms.textureDimension * uniforms.terrainSmallestGeometryLodDistance;
+      / uniforms.diffuseTextureDimensionWBorders * uniforms.terrainSmallestTextureLodDistance;
   float morph = smoothstep(kMorphStart*next_dist, kMorphEnd*next_dist, dist);
   vec3 diffuse0 = GetColor(pos, vCurrentDiffuseTexId,
                            vCurrentDiffuseTexPosAndSize);
