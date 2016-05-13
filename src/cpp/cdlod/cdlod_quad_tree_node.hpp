@@ -56,7 +56,7 @@ class CdlodQuadTreeNode {
   bool HasElevationTexture() const;
   bool HasDiffuseTexture() const;
 
-  void LoadTexture(bool synchronous_load);
+  void LoadTexture(TextureHandler& texture_handler, bool synchronous_load);
   void Upload(TextureHandler& texture_handler);
   void CalculateMinMax();
   void RefreshMinMax();

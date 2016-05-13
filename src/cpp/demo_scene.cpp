@@ -262,12 +262,11 @@ void DemoScene::SetupTexture(size_t index, unsigned width, unsigned height,
     /* Must use staging buffer to copy linear texture to optimized */
     TextureObject staging_texture;
 
-    PrepareTextureImage(pixels,
-                         width, height, &staging_texture,
-                         vk::ImageTiling::eLinear,
-                         vk::ImageUsageFlagBits::eTransferSrc,
-                         vk::MemoryPropertyFlagBits::eHostVisible,
-                         tex_format, byte_per_texel);
+    PrepareTextureImage(pixels, width, height, &staging_texture,
+                        vk::ImageTiling::eLinear,
+                        vk::ImageUsageFlagBits::eTransferSrc,
+                        vk::MemoryPropertyFlagBits::eHostVisible,
+                        tex_format, byte_per_texel);
 
     PrepareTextureImage(pixels,
         width, height, &textures_[index],
@@ -303,10 +302,10 @@ void DemoScene::SetupTexture(size_t index, unsigned width, unsigned height,
                    textures_[index].imageLayout,
                    vk::AccessFlagBits::eTransferWrite);
 
-    FlushInitCommand();
+    // FlushInitCommand();
 
-    vk_device().destroyImage(staging_texture.image, nullptr);
-    vk_device().freeMemory(staging_texture.mem, nullptr);
+    //vk_device().destroyImage(staging_texture.image, nullptr);
+    //vk_device().freeMemory(staging_texture.mem, nullptr);
   } else {
     /* Can't support vk::Format::eR16G16B16A16Unorm !? */
     assert(!"No support for eR16G16B16A16Unorm as texture image format");
@@ -351,28 +350,27 @@ void DemoScene::SetupTexture(size_t index, unsigned width, unsigned height,
   tex_descriptor_infos_[index].imageView(textures_[index].view);
   tex_descriptor_infos_[index].imageLayout(vk::ImageLayout::eGeneral);
 
-  size_t descriptor_count = used_index_count_;
   if (first_texture) {
     // fill all of the descriptors with the first (root) texture
     // just to avoid warning for uninitialized descriptor slots, that are being
     // used while rendering
-    descriptor_count = Settings::kMaxTextureCount;
+    size_t descriptor_count = Settings::kMaxTextureCount;
     for (int i = 0; i < descriptor_count; ++i) {
       tex_descriptor_infos_[i].sampler(textures_[index].sampler);
       tex_descriptor_infos_[i].imageView(textures_[index].view);
       tex_descriptor_infos_[i].imageLayout(vk::ImageLayout::eGeneral);
     }
+
+    vk::WriteDescriptorSet writes[1];
+
+    writes[0].dstBinding(0);
+    writes[0].dstSet(desc_set_);
+    writes[0].descriptorCount(descriptor_count);
+    writes[0].descriptorType(vk::DescriptorType::eCombinedImageSampler);
+    writes[0].pImageInfo(tex_descriptor_infos_);
+
+    vk_device().updateDescriptorSets(1, writes, 0, nullptr);
   }
-
-  vk::WriteDescriptorSet writes[1];
-
-  writes[0].dstBinding(0);
-  writes[0].dstSet(desc_set_);
-  writes[0].descriptorCount(descriptor_count);
-  writes[0].descriptorType(vk::DescriptorType::eCombinedImageSampler);
-  writes[0].pImageInfo(tex_descriptor_infos_);
-
-  vk_device().updateDescriptorSets(1, writes, 0, nullptr);
 }
 
 void DemoScene::FreeTexture(size_t index) {
@@ -984,29 +982,43 @@ void DemoScene::Update() {
   }
 
   // update instances to draw
-  thread_pool_.Clear();
-  grid_mesh_.ClearRenderList();
-  for (CdlodQuadTree& quad_tree : quad_trees_) {
-    quad_tree.SelectNodes(*scene()->camera(), grid_mesh_, thread_pool_, *this);
-  }
-
-  size_t instance_count = grid_mesh_.mesh_.attribs_.size();
-  if (instance_count > Settings::kMaxInstanceCount) {
-    std::cerr << "Number of instances used: " << instance_count << std::endl;
-    std::terminate();
-  }
-
-  {
-    PerInstanceAttributes *attribs = (PerInstanceAttributes*)
-      vk_device().mapMemory(instance_attribs_.mem, 0,
-                            instance_count * sizeof(PerInstanceAttributes),
-                            vk::MemoryMapFlags{});
-
-    for (int i = 0; i < instance_count; ++i) {
-      attribs[i] = grid_mesh_.mesh_.attribs_[i];
+  if (!freeze_scene_) {
+    thread_pool_.Clear();
+    grid_mesh_.ClearRenderList();
+    for (CdlodQuadTree& quad_tree : quad_trees_) {
+      quad_tree.SelectNodes(*scene()->camera(), grid_mesh_, thread_pool_, *this);
     }
 
-    vk_device().unmapMemory(instance_attribs_.mem);
+    size_t instance_count = grid_mesh_.mesh_.attribs_.size();
+    if (instance_count > Settings::kMaxInstanceCount) {
+      std::cerr << "Number of instances used: " << instance_count << std::endl;
+      std::terminate();
+    }
+
+    {
+      PerInstanceAttributes *attribs = (PerInstanceAttributes*)
+        vk_device().mapMemory(instance_attribs_.mem, 0,
+                              instance_count * sizeof(PerInstanceAttributes),
+                              vk::MemoryMapFlags{});
+
+      for (int i = 0; i < instance_count; ++i) {
+        attribs[i] = grid_mesh_.mesh_.attribs_[i];
+      }
+
+      vk_device().unmapMemory(instance_attribs_.mem);
+    }
+
+    vk::WriteDescriptorSet writes[1];
+
+    writes[0].dstBinding(0);
+    writes[0].dstSet(desc_set_);
+    writes[0].descriptorCount(used_index_count_);
+    writes[0].descriptorType(vk::DescriptorType::eCombinedImageSampler);
+    writes[0].pImageInfo(tex_descriptor_infos_);
+
+    vk_device().updateDescriptorSets(1, writes, 0, nullptr);
+
+    //FlushInitCommand();
   }
 }
 
@@ -1081,6 +1093,8 @@ void DemoScene::KeyAction(int key, int scancode, int action, int mods) {
           M_PI/3, 2, 3*radius, glm::dvec3{-22375.5, 23670.3, 3756.66},
           glm::dvec3{-22374.9, 23670.6, 3757.41}, 50, 0);
       set_camera(free_fly_camera_);
+    } else if (key == GLFW_KEY_F) {
+      freeze_scene_ = !freeze_scene_;
     }
   }
 }

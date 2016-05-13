@@ -35,6 +35,7 @@ VulkanScene::VulkanScene(GLFWwindow *window)
       .flags(vk::CommandPoolCreateFlagBits::eResetCommandBuffer);
 
   vk::chk(vk_device_.createCommandPool(&cmd_pool_info, nullptr, &vk_cmd_pool_));
+  vk::chk(vk_device_.createCommandPool(&cmd_pool_info, nullptr, &vk_cmd_pool_bg_thread_));
 
   const vk::CommandBufferAllocateInfo cmd = vk::CommandBufferAllocateInfo()
       .commandPool(vk_cmd_pool_)
@@ -57,6 +58,7 @@ VulkanScene::~VulkanScene() {
   }
   vk_device_.freeCommandBuffers(vk_cmd_pool_, 1, &vk_draw_cmd_);
   vk_device_.destroyCommandPool(vk_cmd_pool_, nullptr);
+  vk_device_.destroyCommandPool(vk_cmd_pool_bg_thread_, nullptr);
 
   vk_device_.destroyImageView(vk_depth_buffer_.view, nullptr);
   vk_device_.destroyImage(vk_depth_buffer_.image, nullptr);
@@ -82,6 +84,7 @@ void VulkanScene::ScreenResizedClean() {
   }
   vk_device_.freeCommandBuffers(vk_cmd_pool_, 1, &vk_draw_cmd_);
   vk_device_.destroyCommandPool(vk_cmd_pool_, nullptr);
+  vk_device_.destroyCommandPool(vk_cmd_pool_bg_thread_, nullptr);
 
   vk_device_.destroyImageView(vk_depth_buffer_.view, nullptr);
   vk_device_.destroyImage(vk_depth_buffer_.image, nullptr);
@@ -101,6 +104,7 @@ void VulkanScene::ScreenResized(size_t width, size_t height) {
       .flags(vk::CommandPoolCreateFlagBits::eResetCommandBuffer);
 
   vk::chk(vk_device_.createCommandPool(&cmd_pool_info, nullptr, &vk_cmd_pool_));
+  vk::chk(vk_device_.createCommandPool(&cmd_pool_info, nullptr, &vk_cmd_pool_bg_thread_));
 
   const vk::CommandBufferAllocateInfo cmd = vk::CommandBufferAllocateInfo()
       .commandPool(vk_cmd_pool_)

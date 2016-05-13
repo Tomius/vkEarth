@@ -97,7 +97,7 @@ void CdlodQuadTreeNode::SelectTexture(const glm::vec3& cam_pos,
 
   if (parent_ == nullptr) {
     if (!texture_.is_loaded_to_gpu) {
-      LoadTexture(true);
+      LoadTexture(texture_handler, true);
       Upload(texture_handler);
     }
 
@@ -153,7 +153,9 @@ void CdlodQuadTreeNode::SelectTexture(const glm::vec3& cam_pos,
     } else {
       // this one should be used, but not yet loaded -> start async load, but
       // make do with the parent for now.
-      thread_pool.Enqueue(level_, [this](){ LoadTexture(false); });
+      thread_pool.Enqueue(level_, [&](){
+        LoadTexture(texture_handler, false);
+      });
     }
   }
 
@@ -225,9 +227,10 @@ bool CdlodQuadTreeNode::HasDiffuseTexture() const {
   return Settings::kLevelOffset <= DiffuseTextureLevel();
 }
 
-void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
+void CdlodQuadTreeNode::LoadTexture(TextureHandler& texture_handler,
+                                    bool synchronous_load) {
   if (parent_ && !parent_->texture_.is_loaded_to_memory) {
-    parent_->LoadTexture(true);
+    parent_->LoadTexture(texture_handler, true);
   }
   if (texture_.is_loaded_to_memory) {
     return;
@@ -276,6 +279,13 @@ void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
 #endif
 
       CalculateMinMax();
+
+      texture_.elevation.id = texture_handler.GetFirstUnusedTextureIndex();
+      texture_handler.SetupTexture(texture_.elevation.id,
+                                   Settings::kElevationTexSizeWithBorders,
+                                   Settings::kElevationTexSizeWithBorders,
+                                   vk::Format::eR16Unorm, 2,
+                                   (const unsigned char*)texture_.elevation_data.data());
     }
 
     if (HasDiffuseTexture()) {
@@ -303,6 +313,13 @@ void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
       texture_.diffuse_data.resize(size_in_elements);
       std::memcpy(texture_.diffuse_data.data(), data.data(), data.size());
 #endif
+
+      texture_.diffuse.id = texture_handler.GetFirstUnusedTextureIndex();
+      texture_handler.SetupTexture(texture_.diffuse.id,
+                                   Settings::kDiffuseTexSizeWithBorders,
+                                   Settings::kDiffuseTexSizeWithBorders,
+                                   vk::Format::eR8G8B8A8Unorm, 4,
+                                   (const unsigned char*)texture_.diffuse_data.data());
     }
 
     texture_.is_loaded_to_memory = true;
@@ -312,7 +329,7 @@ void CdlodQuadTreeNode::LoadTexture(bool synchronous_load) {
 }
 
 void CdlodQuadTreeNode::Upload(TextureHandler& texture_handler) {
-  LoadTexture(true);
+  LoadTexture(texture_handler, true);
   if (parent_ && !parent_->texture_.is_loaded_to_gpu) {
     parent_->Upload(texture_handler);
   }
@@ -320,12 +337,6 @@ void CdlodQuadTreeNode::Upload(TextureHandler& texture_handler) {
   if (!texture_.is_loaded_to_gpu) {
     if (HasElevationTexture()) {
       RefreshMinMax();
-      texture_.elevation.id = texture_handler.GetFirstUnusedTextureIndex();
-      texture_handler.SetupTexture(texture_.elevation.id,
-                                   Settings::kElevationTexSizeWithBorders,
-                                   Settings::kElevationTexSizeWithBorders,
-                                   vk::Format::eR16Unorm, 2,
-                                   (const unsigned char*)texture_.elevation_data.data());
       double scale = static_cast<double>(Settings::kElevationTexSizeWithBorders)
                    / static_cast<double>(Settings::kTextureDimension);
       texture_.elevation.size = scale * size();
@@ -336,12 +347,6 @@ void CdlodQuadTreeNode::Upload(TextureHandler& texture_handler) {
     }
 
     if (HasDiffuseTexture()) {
-      texture_.diffuse.id = texture_handler.GetFirstUnusedTextureIndex();
-      texture_handler.SetupTexture(texture_.diffuse.id,
-                                   Settings::kDiffuseTexSizeWithBorders,
-                                   Settings::kDiffuseTexSizeWithBorders,
-                                   vk::Format::eR8G8B8A8Unorm, 4,
-                                   (const unsigned char*)texture_.diffuse_data.data());
       double scale = static_cast<double>(Settings::kDiffuseTexSizeWithBorders)
                    / static_cast<double>(Settings::kTextureDimension);
       texture_.diffuse.size = scale * size();

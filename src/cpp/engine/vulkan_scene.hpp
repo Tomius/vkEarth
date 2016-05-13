@@ -83,7 +83,7 @@ class VulkanScene : public engine::Scene {
   std::unique_ptr<SwapchainBuffers> vk_buffers_;
   uint32_t vk_current_buffer_ = 0;
 
-  vk::CommandPool vk_cmd_pool_;
+  vk::CommandPool vk_cmd_pool_, vk_cmd_pool_bg_thread_;
   vk::CommandBuffer vk_setup_cmd_;
   vk::CommandBuffer vk_draw_cmd_;
   DepthBuffer vk_depth_buffer_;

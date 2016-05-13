@@ -87,6 +87,7 @@ private:
   QuadGridMesh grid_mesh_{Settings::kNodeDimension};
   CdlodQuadTree quad_trees_[6];
   ThreadPool thread_pool_;
+  bool freeze_scene_ = false;
 
   void BuildDrawCmd();
   void Draw();
